@@ -10,64 +10,113 @@
 <body>
 <h1>라디오</h1>
 
-<table>
-	<tr>
-		<th scope="col"></td>
-		<th scope="col">M3U8</td>
-		<th scope="col">PLS</td>
-	</tr>
-	<tr>
-		<td>KBS 1라디오</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1radio">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1radio">▶️</a></td>
-	</tr>
-	<tr>
-		<td>KBS 2라디오</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=2radio">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=2radio">▶️</a></td>
-	</tr>
-	<tr>
-		<td>KBS 3라디오</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=3radio">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=3radio">▶️</a></td>
-	</tr>
-	<tr>
-		<td>KBS 1FM</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1fm">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1fm">▶️</a></td>
-	</tr>
-	<tr>
-		<td>KBS 2FM</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=2fm">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=2fm">▶️</a></td>
-	</tr>
-	<tr>
-		<td>KBS 한민족방송</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=hanminjok">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=hanminjok">▶️</a></td>
-	</tr>
-	<tr>
-		<td>MBC 표준FM</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=sfm">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=sfm">▶️</a></td>
-	</tr>
-	<tr>
-		<td>MBC FM4U</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=fm4u">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=fm4u">▶️</a></td>
-	</tr>
-	<tr>
-		<td>SBS 러브FM</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=sbs&ch=lovefm">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=sbs&ch=lovefm">▶️</a></td>
-	</tr>
-	<tr>
-		<td>SBS 파워FM</td>
-		<td><a href="https://radio.bsod.workers.dev/?stn=sbs&ch=powerfm">▶️</a></td>
-		<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=sbs&ch=powerfm">▶️</a></td>
-	</tr>
-</table>
+<div>
+	<ul class="nav">
+		<li class="navBtn"><a id="seoul-btn" class="activeBtn">서울</a></li>
+		<li class="navBtn"><a id="daejeon-btn">대전</a></li>
+	</ul>
+</div>
+
+<div class="wrapper">
+	<table id="seoul-list" class="activeList">
+		<tr>
+			<th scope="col">채널명</td>
+			<th scope="col">M3U8</td>
+			<th scope="col">PLS</td>
+		</tr>
+		<tr>
+			<td>KBS 1라디오</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1radio">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1radio">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS 2라디오</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=2radio">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=2radio">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS 3라디오</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=3radio">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=3radio">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS 1FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1fm">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1fm">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS 2FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=2fm">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=2fm">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS 한민족방송</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=hanminjok">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=hanminjok">▶️</a></td>
+		</tr>
+		<tr>
+			<td>MBC 표준FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=sfm">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=sfm">▶️</a></td>
+		</tr>
+		<tr>
+			<td>MBC FM4U</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=fm4u">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=fm4u">▶️</a></td>
+		</tr>
+		<tr>
+			<td>SBS 러브FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=sbs&ch=lovefm">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=sbs&ch=lovefm">▶️</a></td>
+		</tr>
+		<tr>
+			<td>SBS 파워FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=sbs&ch=powerfm">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=sbs&ch=powerfm">▶️</a></td>
+		</tr>
+	</table>
+
+	<table id="daejeon-list" class="hiddenList">
+		<tr>
+			<th scope="col">채널명</td>
+			<th scope="col">M3U8</td>
+			<th scope="col">PLS</td>
+		</tr>
+		<tr>
+			<td>KBS대전 1라디오</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1radio&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1radio&city=daejeon">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS대전 2라디오</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=2radio&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=2radio&city=daejeon">▶️</a></td>
+		</tr>
+		<tr>
+			<td>KBS대전 1FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=kbs&ch=1fm&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=kbs&ch=1fm&city=daejeon">▶️</a></td>
+		</tr>
+		<tr>
+			<td>대전MBC 표준FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=sfm&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=sfm&city=daejeon">▶️</a></td>
+		</tr>
+		<tr>
+			<td>대전MBC FM4U</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=mbc&ch=fm4u&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.pls?stn=mbc&ch=fm4ucity=daejeon">▶️</a></td>
+		</tr>
+		<tr>
+			<td>TJB 파워FM</td>
+			<td><a href="https://radio.bsod.workers.dev/?stn=sbs&ch=powerfm&city=daejeon">▶️</a></td>
+			<td><a href="https://radio.bsod.workers.dev/playback.?stn=sbs&ch=powerfm&city=daejeon">▶️</a></td>
+		</tr>
+	</table>
+</div>
+
 
 <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+<script type="text/javascript" src="./navi.js"></script>
 </body>
 </html>

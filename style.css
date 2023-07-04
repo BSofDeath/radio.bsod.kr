@@ -1,8 +1,28 @@
-body {
-    
-}
-
 table, th, td, tr {
     border-collapse: collapse;
     border: 1px solid black;
+}
+
+.nav {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.navBtn {
+    display: inline;
+    list-style-type: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.activeList {
+    display: inline-block;
+}
+
+.hiddenList {
+    display: none;
+}
+
+.activeBtn {
+    font-weight: bold;
 }
