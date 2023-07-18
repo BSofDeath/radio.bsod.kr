@@ -3,10 +3,14 @@ table, th, td, tr {
     border: 1px solid black;
 }
 
-table, table.hidden {
-    display: none;
-}
+a { text-decoration: none; }
 
-table.visible {
-    display: table-row;
-}
+table, table.hidden { display: none; }
+
+table.visible { display: table-row; }
+
+th { width: 50px; }
+
+td.title { width: 180px; }
+
+td.link { text-align: center; }
