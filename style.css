@@ -6,6 +6,7 @@ body {
 
 a {
     text-decoration: none;
+    color: #070B8A;
 }
 
 select {
@@ -102,5 +103,5 @@ th {
 }
 
 .copyright {
-    margin-top: 2rem;
+    margin: 2rem 0;
 }
