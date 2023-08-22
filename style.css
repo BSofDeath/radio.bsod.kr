@@ -55,10 +55,15 @@ select {
     background-position: right 8px center;
     background-size: 9px;
     color: #333;
+    vertical-align: text-bottom;
   }
   
 .selector:hover {
     border-color: #777;
+}
+
+.contents {
+    padding: 0 0.5rem;
 }
 
 table, table.hidden {
@@ -74,8 +79,8 @@ table, th, td, tr {
 }
 
 tr {
-    border-top: 1px solid #bbb;
-    border-bottom: 1px solid #bbb;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 tr.first {
@@ -88,12 +93,12 @@ td {
 }
 
 td.title {
-    width: 13rem;
-    padding: 0 6vw;
+    width: 17rem;
+    padding: 0 5vw;
 }
 
 th {
-    padding: 0.3rem 0.75rem;
+    padding: 0.3rem 0.2rem;
 }
 
 .copyright {
