@@ -1,18 +1,101 @@
-body { background-color: #FFF; }
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+body {
+    font-family: 'Pretendard', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+select {
+    box-sizing: border-box;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    
+    cursor: default;
+}
+
+.wrapper {
+    text-align: center;
+    justify-content: center;
+}
+
+.sitename:before {
+    content: "";
+    display: inline-block;
+    background-image: url(images/logo-darkTR.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+}
+
+.sitename {
+    display: inline-block;
+    margin-right: 21vw;
+}
+
+.selector {
+    width: 7.5rem;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.9rem;
+    padding: 5px 20px 5px 8px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23333' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 9px;
+    color: #333;
+  }
+  
+.selector:hover {
+    border-color: #777;
+}
+
+table, table.hidden {
+    display: none;
+}
+
+table.visible {
+    display: inline-block;
+}
 
 table, th, td, tr {
     border-collapse: collapse;
-    border: 1px solid #000;
 }
 
-a { text-decoration: none; }
+tr {
+    border-top: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+}
 
-table, table.hidden { display: none; }
+tr.first {
+    border: none;
+    padding: 0.3rem 0;
+}
 
-table.visible { display: table-row; }
+td {
+    padding: 0.3rem 0.75rem;
+}
 
-th { width: 50px; }
+td.title {
+    width: 13rem;
+    padding: 0 6vw;
+}
 
-td.title { width: 190px; }
+th {
+    padding: 0.3rem 0.75rem;
+}
 
-td.link { text-align: center; }
+.copyright {
+    margin-top: 2rem;
+}
