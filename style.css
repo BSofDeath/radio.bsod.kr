@@ -41,7 +41,7 @@ select {
 
 .sitename {
     display: inline-block;
-    margin-right: 21vw;
+    margin-right: 20vw;
 }
 
 .selector {
@@ -63,7 +63,7 @@ select {
     border-color: #777;
 }
 
-.contents {
+.wrapper {
     padding: 0 0.5rem;
 }
 
