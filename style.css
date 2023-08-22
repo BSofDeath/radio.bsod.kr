@@ -42,6 +42,7 @@ select {
 .sitename {
     display: inline-block;
     margin-right: 20vw;
+    font-size: 2rem;
 }
 
 .selector {
@@ -83,20 +84,22 @@ tr {
 
 tr.first {
     border: none;
-    padding: 0.3rem 0;
 }
 
-td {
-    padding: 0.3rem 0.75rem;
+td, th {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+th {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 td.title {
     width: 19rem;
-    padding: 0 4vw;
-}
-
-th {
-    padding: 0.3rem 0.2rem;
+    padding-left: 4vw;
+    padding-right: 4vw;
 }
 
 .copyright {
