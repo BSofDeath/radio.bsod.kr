@@ -63,16 +63,13 @@ select {
     border-color: #777;
 }
 
-.wrapper {
-    padding: 0 0.5rem;
-}
-
 table, table.hidden {
     display: none;
 }
 
 table.visible {
     display: inline-block;
+    padding: 0 1rem;
 }
 
 table, th, td, tr {
@@ -94,8 +91,8 @@ td {
 }
 
 td.title {
-    width: 17rem;
-    padding: 0 5vw;
+    width: 19rem;
+    padding: 0 4vw;
 }
 
 th {
