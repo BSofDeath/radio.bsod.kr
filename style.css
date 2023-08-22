@@ -28,6 +28,10 @@ select {
     justify-content: center;
 }
 
+.header {
+    margin: 2rem 0 1.5rem;
+}
+
 .sitename:before {
     content: "";
     display: inline-block;
@@ -42,7 +46,9 @@ select {
 .sitename {
     display: inline-block;
     margin-right: 20vw;
-    font-size: 2rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: black;
 }
 
 .selector {
@@ -94,6 +100,7 @@ td, th {
 th {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    font-weight: bold;
 }
 
 td.title {
