@@ -1,0 +1,53 @@
+#EXTM3U
+#EXTINF:-1,KBS 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio
+#EXTINF:-1,KBS 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio
+#EXTINF:-1,KBS 3라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=3radio
+#EXTINF:-1,KBS 1FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm
+#EXTINF:-1,KBS 2FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=2fm
+#EXTINF:-1,KBS 한민족방송
+https://radio.bsod.kr/stream/?stn=kbs&ch=hanminjok
+#EXTINF:-1,MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm
+#EXTINF:-1,MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u
+#EXTINF:-1,SBS 러브FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=lovefm
+#EXTINF:-1,SBS 파워FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm
+#EXTINF:-1,EBS FM
+https://radio.bsod.kr/stream/?stn=ebs
+#EXTINF:-1,OBS 라디오
+https://radio.bsod.kr/stream/?stn=obs
+#EXTINF:-1,iFM 경인방송
+https://radio.bsod.kr/stream/?stn=ifm
+#EXTINF:-1,YTN 라디오
+https://radio.bsod.kr/stream/?stn=ytn
+#EXTINF:-1,TBS FM
+https://radio.bsod.kr/stream/?stn=tbs&ch=fm
+#EXTINF:-1,TBS eFM
+https://radio.bsod.kr/stream/?stn=tbs&ch=efm
+#EXTINF:-1,TBN 경인교통방송
+https://radio.bsod.kr/stream/?stn=tbn
+#EXTINF:-1,CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm
+#EXTINF:-1,CBS 음악FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=mfm
+#EXTINF:-1,FEBC 서울극동방송
+https://radio.bsod.kr/stream/?stn=febc
+#EXTINF:-1,BBS 서울불교방송
+https://radio.bsod.kr/stream/?stn=bbs
+#EXTINF:-1,CPBC 가톨릭평화방송
+https://radio.bsod.kr/stream/?stn=cpbc
+#EXTINF:-1,WBS 서울원음방송
+https://radio.bsod.kr/stream/?stn=wbs
+#EXTINF:-1,국방FM
+https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,국악방송
+https://radio.bsod.kr/stream/?stn=kugak
+#EXTINF:-1,AFN Go Humphreys
+https://radio.bsod.kr/stream/?stn=afn&city=humphreys
