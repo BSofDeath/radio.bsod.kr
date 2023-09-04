@@ -1,0 +1,51 @@
+#EXTM3U
+#EXTINF:-1,KBS대구 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=daegu
+#EXTINF:-1,KBS대구 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=daegu
+#EXTINF:-1,KBS대구 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=daegu
+#EXTINF:-1,KBS안동 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=andong
+#EXTINF:-1,KBS포항 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=pohang
+#EXTINF:-1,대구MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=daegu
+#EXTINF:-1,대구MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=daegu
+#EXTINF:-1,안동MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=andong
+#EXTINF:-1,안동MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=andong
+#EXTINF:-1,포항MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=pohang
+#EXTINF:-1,포항MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=pohang
+#EXTINF:-1,TBC 드림FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=daegu
+#EXTINF:-1,EBS FM
+https://radio.bsod.kr/stream/?stn=ebs
+#EXTINF:-1,TBN 대구교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=daegu
+#EXTINF:-1,TBN 경북교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=gyeongbuk
+#EXTINF:-1,대구CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daegu
+#EXTINF:-1,대구CBS 음악FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=daegu
+#EXTINF:-1,포항CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=pohang
+#EXTINF:-1,FEBC 대구극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=daegu
+#EXTINF:-1,FEBC 포항극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=pohang
+#EXTINF:-1,BBS 대구불교방송
+https://radio.bsod.kr/stream/?stn=bbs&city=daegu
+#EXTINF:-1,CPBC 대구가톨릭평화방송
+https://radio.bsod.kr/stream/?stn=cpbc&city=daegu
+#EXTINF:-1,WBS 대구원음방송
+https://radio.bsod.kr/stream/?stn=wbs&city=daegu
+#EXTINF:-1,국방FM
+https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,AFN Go Daegu
+https://radio.bsod.kr/stream/?stn=afn&city=daegu

@@ -1,0 +1,23 @@
+#EXTM3U
+#EXTINF:-1,KBS제주 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=jeju
+#EXTINF:-1,KBS제주 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=jeju
+#EXTINF:-1,KBS제주 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=jeju
+#EXTINF:-1,제주MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=jeju
+#EXTINF:-1,제주MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=jeju
+#EXTINF:-1,JIBS 뉴파워FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=jeju
+#EXTINF:-1,EBS FM
+https://radio.bsod.kr/stream/?stn=ebs
+#EXTINF:-1,TBN 제주교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=jeju
+#EXTINF:-1,제주CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeju
+#EXTINF:-1,FEBC 제주극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=jeju
+#EXTINF:-1,국방FM
+https://radio.bsod.kr/stream/?stn=kookbang

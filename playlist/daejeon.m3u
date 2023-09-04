@@ -1,0 +1,23 @@
+#EXTM3U
+#EXTINF:-1,KBS대전 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=daejeon
+#EXTINF:-1,KBS대전 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=daejeon
+#EXTINF:-1,KBS대전 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=daejeon
+#EXTINF:-1,대전MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=daejeon
+#EXTINF:-1,대전MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=daejeon
+#EXTINF:-1,TJB 파워FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=daejeon
+#EXTINF:-1,EBS FM
+https://radio.bsod.kr/stream/?stn=ebs
+#EXTINF:-1,TBN 대전교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=daejeon
+#EXTINF:-1,대전CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daejeon
+#EXTINF:-1,FEBC 대전극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=daejeon
+#EXTINF:-1,국방FM
+https://radio.bsod.kr/stream/?stn=kookbang

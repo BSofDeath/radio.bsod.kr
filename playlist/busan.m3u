@@ -1,0 +1,61 @@
+#EXTM3U
+#EXTINF:-1,KBS부산 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=busan
+#EXTINF:-1,KBS부산 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=busan
+#EXTINF:-1,KBS부산 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=busan
+#EXTINF:-1,KBS창원 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=changwon
+#EXTINF:-1,KBS창원 2라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=changwon
+#EXTINF:-1,KBS창원 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=changwon
+#EXTINF:-1,KBS진주 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=jinju
+#EXTINF:-1,부산MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=busan
+#EXTINF:-1,부산MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=busan
+#EXTINF:-1,울산MBC 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=ulsan
+#EXTINF:-1,울산MBC FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=ulsan
+#EXTINF:-1,MBC경남 표준FM
+https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=changwon
+#EXTINF:-1,MBC경남 FM4U
+https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=changwon
+#EXTINF:-1,KNN 러브FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=lovefm&city=busan
+#EXTINF:-1,KNN 파워FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=busan
+#EXTINF:-1,UBC 그린FM
+https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=ulsan
+#EXTINF:-1,EBS FM
+https://radio.bsod.kr/stream/?stn=ebs
+#EXTINF:-1,TBN 부산교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=busan
+#EXTINF:-1,TBN 울산교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=ulsan
+#EXTINF:-1,TBN 경남교통방송
+https://radio.bsod.kr/stream/?stn=tbn&city=gyeongnam
+#EXTINF:-1,부산CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=busan
+#EXTINF:-1,부산CBS 음악FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=busan
+#EXTINF:-1,울산CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=ulsan
+#EXTINF:-1,경남CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=gyeongnam
+#EXTINF:-1,FEBC 부산극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=busan
+#EXTINF:-1,FEBC 울산극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=ulsan
+#EXTINF:-1,FEBC 창원극동방송
+https://radio.bsod.kr/stream/?stn=febc&city=changwon
+#EXTINF:-1,CPBC 부산가톨릭평화방송
+https://radio.bsod.kr/stream/?stn=cpbc&city=busan
+#EXTINF:-1,WBS 부산원음방송
+https://radio.bsod.kr/stream/?stn=wbs&city=busan
+#EXTINF:-1,국방FM
+https://radio.bsod.kr/stream/?stn=kookbang
