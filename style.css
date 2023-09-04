@@ -10,6 +10,10 @@ a {
     color: #070B8A;
 }
 
+p {
+    line-height: 50%;
+}
+
 select {
     box-sizing: border-box;
     -moz-appearance: none;
@@ -110,6 +114,52 @@ td.title {
     padding-right: 4vw;
 }
 
+.playlist {
+    display: block;
+}
+
+.playlist button {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.9rem;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+    padding: 0.35rem 0.75rem;
+    margin: 1rem 0 0;
+}
+
+.playlist button:hover {
+    -webkit-filter: brightness(90%);
+    filter: brightness(90%);
+
+    transition: filter 0.3s;
+    -webkit-transition: filter 0.3s;
+}
+
+.playlist a {
+    color: black;
+}
+
+.footer {
+    margin: 3rem 0;
+}
+
 .copyright {
-    margin: 2rem 0;
+    color: black;
+}
+
+.copyright a:hover {
+    text-decoration: underline;
+}
+
+.contact {
+    color: #999;
+}
+
+.contact a {
+    color: #999;
+}
+
+.contact a:hover {
+    text-decoration: underline;
 }

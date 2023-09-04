@@ -9,3 +9,10 @@ const showTable = (city) => {
     const target = document.getElementById(city);
     target.classList.replace('hidden', 'visible');
 }
+
+const getPlaylistLink = () => {
+    const city = document.getElementsByClassName('selector')[0].value;
+    const a = document.getElementsByClassName('playlist_link');
+    let result = "https://radio.bsod.kr/playlist/" + city + ".m3u";
+    a[0].href = result;
+}
