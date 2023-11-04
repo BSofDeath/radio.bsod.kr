@@ -63,9 +63,9 @@ Response에서 <code>channel.item[0].service_url</code> 변수에 접근하여 S
 HTML에 Streaming URL만 Plain Text로 포함되어 있으므로 text를 그대로 가져오면 됨.
 
 #### 채널코드 일람
-| | 표준FM | FM4U |
-|-|-------|-------|
-| 수도권 | <code>sfm</code> | <code>mfm</code> |<br>
+| | 표준FM | FM4U | 올댓뮤직 |
+|-|-------|-------|-------|
+| 수도권 | <code>sfm</code> | <code>mfm</code> | <code>chm</code> |<br>
 
 <br>
 
