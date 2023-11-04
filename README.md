@@ -74,16 +74,12 @@ HTML에 Streaming URL만 Plain Text로 포함되어 있으므로 text를 그대�
 |-----------|-----|-------------|
 | SBS 러브FM | https://apis.sbs.co.kr/play-api/1.0/livestream/powerpc/powerfm?protocol=hls&ssl=Y | API Response (Plain Text) |
 | SBS 파워FM | https://apis.sbs.co.kr/play-api/1.0/livestream/lovepc/lovefm?protocol=hls&ssl=Y | API Response (Plain Text) |
+| 고릴라디오M | https://apis.sbs.co.kr/play-api/1.0/livestream/sbsdmbpc/sbsdmb?protocol=hls&ssl=Y | API Response (Plain Text) |
 
 #### API Request 형식
-> <code>https://apis.sbs.co.kr/play-api/1.0/livestream/[채널코드]pc/[채널코드]fm?protocol=hls&ssl=Y</code>
+> <code>https://apis.sbs.co.kr/play-api/1.0/livestream/[채널코드]/[채널코드]fm?protocol=hls&ssl=Y</code>
 
 HTML에 Streaming URL만 Plain Text로 포함되어 있으므로 text를 그대로 가져오면 됨.
-
-#### 채널코드 일람
-| | 러브FM | 파워FM |
-|-|--------|--------|
-| 수도권 | <code>love</code> | <code>power</code> |<br>
 
 <br>
 
