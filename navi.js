@@ -1,17 +1,13 @@
 function changeTable() {
-    const table = document.getElementsByTagName('table');
     const selector = document.getElementById('selector');
-    const index = selector.selectedIndex;
-    const city = selector.options[index].value;
-
+    const table = document.getElementsByTagName('table');
+    
     for (let i = 0; i < table.length; i++) {
-        table[i].classList.add('hidden');
-        if (table[i].classList.contains('visible')) {
+        if (table[i].id === selector.value)
+            table[i].classList.add('visible');
+        else
             table[i].classList.remove('visible');
-        }
     }
-    const target = document.getElementById(city);
-    target.classList.replace('hidden', 'visible');
     localStorage.setItem('selectedValue', selector.value);
 }
 
@@ -25,9 +21,6 @@ function getPlaylistLink() {
 document.addEventListener('DOMContentLoaded', function () {
     var selector = document.getElementById('selector');
     var savedValue = localStorage.getItem('selectedValue');
-
-    // 저장된 값이 있다면 선택 옵션에 설정
-    if (savedValue) {
-        selector.value = savedValue;
-    }
+    if (savedValue) { selector.value = savedValue; }
+    changeTable();
 });

@@ -90,7 +90,7 @@ select {
     border-color: #777;
 }
 
-table, table.hidden {
+table {
     display: none;
 }
 
