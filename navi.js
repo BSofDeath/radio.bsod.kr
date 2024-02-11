@@ -12,6 +12,7 @@ function changeTable() {
     }
     const target = document.getElementById(city);
     target.classList.replace('hidden', 'visible');
+    localStorage.setItem('selectedValue', selector.value);
 }
 
 function getPlaylistLink() {
@@ -20,3 +21,13 @@ function getPlaylistLink() {
     let result = "https://radio.bsod.kr/playlist/" + city + ".m3u";
     a[0].href = result;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    var selector = document.getElementById('selector');
+    var savedValue = localStorage.getItem('selectedValue');
+
+    // 저장된 값이 있다면 선택 옵션에 설정
+    if (savedValue) {
+        selector.value = savedValue;
+    }
+});
