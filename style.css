@@ -10,6 +10,21 @@ a {
     color: #070B8A;
 }
 
+a.community {
+    text-decoration: underline;
+}
+
+td.community:before {
+    content: "　";
+    color: transparent;
+    background-image: url(images/community.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    vertical-align: text-center;
+    margin-right: 0.2em;
+}
+
 p {
     line-height: 50%;
 }
