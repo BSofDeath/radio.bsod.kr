@@ -71,7 +71,7 @@ select {
     color: black;
 }
 
-.selector {
+#selector {
     width: 7.5rem;
     font-family: 'Pretendard', sans-serif;
     font-size: 0.9rem;
@@ -86,7 +86,7 @@ select {
     vertical-align: text-bottom;
   }
   
-.selector:hover {
+#selector:hover {
     border-color: #777;
 }
 
