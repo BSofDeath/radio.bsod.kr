@@ -159,11 +159,8 @@ td.title {
     margin: 3rem 0 2.5rem 0;
 }
 
-.copyright {
-    color: black;
-}
-
-.copyright a:hover {
+.copyright a {
+    color: #040B8A;
     text-decoration: underline;
 }
 
@@ -173,6 +170,7 @@ td.title {
 
 .contact a {
     color: #999;
+    text-decoration: underline;
 }
 
 .contact a:hover {
