@@ -10,13 +10,14 @@ a {
     color: #070B8A;
 }
 
-a.community {
+.community a {
     text-decoration: underline;
 }
 
-td.community:before {
+.community::before {
     content: "　";
     color: transparent;
+    text-decoration: none;
     background-image: url(images/community.svg);
     background-size: contain;
     background-position: center;
@@ -129,21 +130,21 @@ td.title {
     padding-right: 4vw;
 }
 
-.playlist {
+.external {
     display: block;
+    margin-top: 0.5rem;
 }
 
-.playlist button {
+.external button {
     font-family: 'Pretendard', sans-serif;
     font-size: 0.9rem;
     border: 1px solid #999;
     border-radius: 5px;
     background-color: #f3f3f3;
     padding: 0.35rem 0.75rem;
-    margin: 1rem 0 0;
 }
 
-.playlist button:hover {
+.external button:hover {
     -webkit-filter: brightness(90%);
     filter: brightness(90%);
 
@@ -151,12 +152,12 @@ td.title {
     -webkit-transition: filter 0.3s;
 }
 
-.playlist a {
+.external a {
     color: black;
 }
 
 .footer {
-    margin: 3rem 0 2.5rem 0;
+    margin: 2.5rem 0 2.5rem 0;
 }
 
 .copyright a {

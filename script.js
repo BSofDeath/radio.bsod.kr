@@ -13,9 +13,16 @@ function changeTable() {
 
 function getPlaylistLink() {
     const selector = document.getElementById('selector');
-    const a = document.getElementsByClassName('playlist_link');
+    const a = document.getElementById('playlist_link');
     let result = "https://radio.bsod.kr/playlist/" + selector.value + ".m3u";
-    a[0].href = result;
+    a.href = result;
+}
+
+function getBatchLink() {
+    const selector = document.getElementById('selector');
+    const a = document.getElementById('batch_link');
+    let result = "https://radio.bsod.kr/vlc_batch/vlc-stream_" + selector.value + ".bat";
+    a.href = result;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
