@@ -130,26 +130,29 @@ td.title {
     padding-right: 4vw;
 }
 
+button {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.9rem;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+}
+
+button:hover {
+    filter: brightness(90%);
+    transition: filter 0.3s;
+
+    -webkit-filter: brightness(90%);
+    -webkit-transition: filter 0.3s;
+}
+
 .external {
     display: block;
     margin-top: 0.5rem;
 }
 
 .external button {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 0.9rem;
-    border: 1px solid #999;
-    border-radius: 5px;
-    background-color: #f3f3f3;
     padding: 0.35rem 0.75rem;
-}
-
-.external button:hover {
-    -webkit-filter: brightness(90%);
-    filter: brightness(90%);
-
-    transition: filter 0.3s;
-    -webkit-transition: filter 0.3s;
 }
 
 .external a {
