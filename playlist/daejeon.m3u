@@ -21,3 +21,9 @@ https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daejeon
 https://radio.bsod.kr/stream/?stn=febc&city=daejeon
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,금강FM
+https://radio.bsod.kr/stream/?stn=community&ch=keumkangfm
+#EXTINF:-1,세종FM
+https://radio.bsod.kr/stream/?stn=community&ch=sejongfm
+#EXTINF:-1,한밭FM
+https://radio.bsod.kr/stream/?stn=community&ch=hanbatfm

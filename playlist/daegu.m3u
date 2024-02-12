@@ -49,3 +49,13 @@ https://radio.bsod.kr/stream/?stn=wbs&city=daegu
 https://radio.bsod.kr/stream/?stn=kookbang
 #EXTINF:-1,AFN Go Daegu
 https://radio.bsod.kr/stream/?stn=afn&city=daegu
+#EXTINF:-1,성서공동체FM
+https://radio.bsod.kr/stream/?stn=community&ch=scnfm
+#EXTINF:-1,대구동구FM
+https://radio.bsod.kr/stream/?stn=community&ch=daegufm
+#EXTINF:-1,영주FM
+https://radio.bsod.kr/stream/?stn=community&ch=yeongjufm
+#EXTINF:-1,성주FM
+https://radio.bsod.kr/stream/?stn=community&ch=sjfm
+#EXTINF:-1,상주FM
+https://radio.bsod.kr/stream/?stn=community&ch=sangjufm

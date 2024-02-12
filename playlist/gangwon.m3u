@@ -5,6 +5,10 @@ https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=chuncheon
 https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=chuncheon
 #EXTINF:-1,KBS춘천 음악FM
 https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=chuncheon
+#EXTINF:-1,KBS강릉 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=gangneung
+#EXTINF:-1,KBS강릉 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=gangneung
 #EXTINF:-1,KBS원주 1라디오
 https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=wonju
 #EXTINF:-1,KBS원주 음악FM

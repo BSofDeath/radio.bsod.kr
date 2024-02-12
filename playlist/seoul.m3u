@@ -51,3 +51,15 @@ https://radio.bsod.kr/stream/?stn=kookbang
 https://radio.bsod.kr/stream/?stn=kugak
 #EXTINF:-1,AFN Go Humphreys
 https://radio.bsod.kr/stream/?stn=afn&city=humphreys
+#EXTINF:-1,관악FM
+https://radio.bsod.kr/stream/?stn=community&ch=gwanakfm
+#EXTINF:-1,마포FM
+https://radio.bsod.kr/stream/?stn=community&ch=mapofm
+#EXTINF:-1,성남FM
+https://radio.bsod.kr/stream/?stn=community&ch=seongnamfm
+#EXTINF:-1,서대문FM
+https://radio.bsod.kr/stream/?stn=community&ch=sdmfm
+#EXTINF:-1,수원FM
+https://radio.bsod.kr/stream/?stn=community&ch=sonefm
+#EXTINF:-1,GO구리FM
+https://radio.bsod.kr/stream/?stn=community&ch=gurifm

@@ -59,3 +59,7 @@ https://radio.bsod.kr/stream/?stn=cpbc&city=busan
 https://radio.bsod.kr/stream/?stn=wbs&city=busan
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,연제공동체라디오
+https://radio.bsod.kr/stream/?stn=community&ch=yeonjefm
+#EXTINF:-1,남해FM
+https://radio.bsod.kr/stream/?stn=community&ch=namhaefm

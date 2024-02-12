@@ -47,3 +47,9 @@ https://radio.bsod.kr/stream/?stn=cpbc&city=gwangju
 https://radio.bsod.kr/stream/?stn=wbs&city=gwangju
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,광주FM
+https://radio.bsod.kr/stream/?stn=community&ch=kjfm
+#EXTINF:-1,GBS고려방송
+https://radio.bsod.kr/stream/?stn=community&ch=crfm
+#EXTINF:-1,순천FM
+https://radio.bsod.kr/stream/?stn=community&ch=suncheonfm
