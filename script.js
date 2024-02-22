@@ -8,6 +8,9 @@ function changeTable() {
         else
             table[i].classList.remove('visible');
     }
+    getPlaylistLink();
+    getBatchLink();
+    
     localStorage.setItem('selectedValue', selector.value);
 }
 
