@@ -15,10 +15,14 @@ https://radio.bsod.kr/stream/?stn=kbs&ch=hanminjok
 https://radio.bsod.kr/stream/?stn=mbc&ch=sfm
 #EXTINF:-1,MBC FM4U
 https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u
+#EXTINF:-1,MBC mini 올댓뮤직
+https://radio.bsod.kr/stream/?stn=mbc&ch=chm
 #EXTINF:-1,SBS 러브FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=lovefm
 #EXTINF:-1,SBS 파워FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm
+#EXTINF:-1,SBS 고릴라디오M
+https://radio.bsod.kr/stream/?stn=sbs&ch=dmb
 #EXTINF:-1,EBS FM
 https://radio.bsod.kr/stream/?stn=ebs
 #EXTINF:-1,OBS 라디오
