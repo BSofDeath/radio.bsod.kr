@@ -31,6 +31,8 @@ https://radio.bsod.kr/stream/?stn=ebs
 https://radio.bsod.kr/stream/?stn=tbn&city=gwangju
 #EXTINF:-1,광주CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=gwangju
+#EXTINF:-1,광주CBS 음악FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=gwangju
 #EXTINF:-1,전남CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeonnam
 #EXTINF:-1,FEBC 광주극동방송
