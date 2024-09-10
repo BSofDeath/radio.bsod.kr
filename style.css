@@ -1,13 +1,15 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
 
 body {
-    font-family: 'Pretendard', sans-serif;
+    font-family: "Pretendard", sans-serif;
     background-color: #fff;
+    text-align: center;
+    justify-content: center;
 }
 
 a {
     text-decoration: none;
-    color: #070B8A;
+    color: #070b8a;
 }
 
 .community a {
@@ -40,13 +42,8 @@ select {
     border: none;
     padding: 0;
     margin: 0;
-    
-    cursor: default;
-}
 
-.wrapper {
-    text-align: center;
-    justify-content: center;
+    cursor: default;
 }
 
 .header {
@@ -74,7 +71,7 @@ select {
 
 #selector {
     width: 7.5rem;
-    font-family: 'Pretendard', sans-serif;
+    font-family: "Pretendard", sans-serif;
     font-size: 0.9rem;
     padding: 5px 20px 5px 8px;
     border: 1px solid #999;
@@ -85,8 +82,8 @@ select {
     background-size: 9px;
     color: #333;
     vertical-align: text-bottom;
-  }
-  
+}
+
 #selector:hover {
     border-color: #777;
 }
@@ -100,7 +97,10 @@ table.visible {
     padding: 0 1rem;
 }
 
-table, th, td, tr {
+table,
+th,
+td,
+tr {
     border-collapse: collapse;
 }
 
@@ -113,7 +113,8 @@ tr.first {
     border: none;
 }
 
-td, th {
+td,
+th {
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
 }
@@ -131,7 +132,7 @@ td.title {
 }
 
 button {
-    font-family: 'Pretendard', sans-serif;
+    font-family: "Pretendard", sans-serif;
     font-size: 0.9rem;
     border: 1px solid #999;
     border-radius: 5px;
@@ -164,7 +165,7 @@ button:hover {
 }
 
 .copyright a {
-    color: #040B8A;
+    color: #040b8a;
     text-decoration: underline;
 }
 
