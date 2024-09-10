@@ -13,14 +13,14 @@ function changeTable() {
 }
 
 function getPlaylistLink() {
-    const selector = document.getElementById("selector");
+    const selector = document.getElementById("city-select");
     const a = document.getElementById("playlist_link");
     let result = "https://radio.bsod.kr/playlist/" + selector.value + ".m3u";
     a.href = result;
 }
 
 function getBatchLink() {
-    const selector = document.getElementById("selector");
+    const selector = document.getElementById("city-select");
     const a = document.getElementById("batch_link");
     let result =
         "https://radio.bsod.kr/vlc_batch/vlc-stream_" + selector.value + ".bat";
@@ -28,7 +28,7 @@ function getBatchLink() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    var selector = document.getElementById("selector");
+    var selector = document.getElementById("city-select");
     var savedValue = localStorage.getItem("selectedValue");
     if (savedValue) {
         selector.value = savedValue;
