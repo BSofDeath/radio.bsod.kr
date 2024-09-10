@@ -50,7 +50,7 @@ header {
     margin: none;
 }
 
-.title:before {
+.site-name:before {
     content: "";
     display: inline-block;
     background-image: url(images/logo-darkTR.svg);
@@ -61,7 +61,7 @@ header {
     vertical-align: text-bottom;
 }
 
-.title {
+.site-name {
     display: inline-block;
     margin-right: 20vw;
     font-size: 1.9rem;
@@ -109,7 +109,7 @@ tr {
     border-bottom: 1px solid #ccc;
 }
 
-tr.title-row {
+tr.site-name-row {
     border: none;
 }
 
