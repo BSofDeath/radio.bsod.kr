@@ -109,7 +109,7 @@ tr {
     border-bottom: 1px solid #ccc;
 }
 
-tr.first {
+tr.title-row {
     border: none;
 }
 
