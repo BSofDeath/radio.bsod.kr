@@ -147,16 +147,16 @@ button:hover {
     -webkit-transition: filter 0.3s;
 }
 
-.external {
+.playlist {
     display: block;
     margin-top: 0.5rem;
 }
 
-.external button {
+.playlist button {
     padding: 0.35rem 0.75rem;
 }
 
-.external a {
+.playlist a {
     color: black;
 }
 
