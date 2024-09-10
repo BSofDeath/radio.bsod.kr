@@ -50,7 +50,7 @@ select {
     margin: 2rem 0 1.5rem;
 }
 
-.sitename:before {
+.title:before {
     content: "";
     display: inline-block;
     background-image: url(images/logo-darkTR.svg);
@@ -61,7 +61,7 @@ select {
     vertical-align: text-bottom;
 }
 
-.sitename {
+.title {
     display: inline-block;
     margin-right: 20vw;
     font-size: 1.9rem;
