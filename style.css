@@ -79,12 +79,13 @@ button:hover {
     -webkit-transition: filter 0.3s;
 }
 
-header {
-    margin: none;
+header,
+footer {
+    margin: 2rem 0;
 }
 
-footer {
-    margin: none;
+article {
+    margin: 1rem 0;
 }
 
 #city-select {
@@ -144,11 +145,11 @@ footer {
 .button-area {
     display: grid;
     place-items: center;
-    margin: none;
 }
 
 .button-area button {
     padding: 0.35rem 0.75rem;
+    margin: 0.35rem;
 }
 
 .button-area a {
