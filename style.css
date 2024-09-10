@@ -148,7 +148,8 @@ button:hover {
 }
 
 .playlist {
-    display: block;
+    display: grid;
+    place-items: center;
     margin-top: 0.5rem;
 }
 
