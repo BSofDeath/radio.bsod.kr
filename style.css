@@ -12,11 +12,11 @@ a {
     color: #070b8a;
 }
 
-.community a {
+.channel-community a {
     text-decoration: underline;
 }
 
-.community::before {
+.channel-community::before {
     content: "　";
     color: transparent;
     text-decoration: none;
