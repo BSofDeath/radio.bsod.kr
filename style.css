@@ -46,8 +46,8 @@ select {
     cursor: default;
 }
 
-.header {
-    margin: 2rem 0 1.5rem;
+header {
+    margin: none;
 }
 
 .title:before {
@@ -150,7 +150,7 @@ button:hover {
 .playlist {
     display: grid;
     place-items: center;
-    margin-top: 0.5rem;
+    margin: none;
 }
 
 .playlist button {
@@ -162,7 +162,7 @@ button:hover {
 }
 
 footer {
-    margin: 2.5rem 0 2.5rem 0;
+    margin: none;
 }
 
 .copyright a {
