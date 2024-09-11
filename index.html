@@ -32,12 +32,14 @@
         <meta name="msapplication-TileImage" content="../assets/favicon-144.png" />
         <meta name="msapplication-config" content="../assets/browserconfig.xml" />
 
-        <!-- MS Clarity tag -->
-        <script src="../clarity.js"></script>
-
-        <!-- Google tag (gtag.js) -->
+        <!-- Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-E26S19D0QV"></script>
-        <script src="../gtag.js"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag("js", new Date());
+            gtag("config", "G-E26S19D0QV");
+        </script>
     </head>
     <body>
         <!--- 헤더 영역 --->
