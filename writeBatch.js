@@ -15,6 +15,5 @@ start vlc --sout #transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=
     a.download = "vlc-stream_" + selectedCity.value + ".bat";
     a.click();
 
-    document.removeChild(a);
     URL.revokeObjectURL(url);
 });
