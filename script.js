@@ -7,7 +7,6 @@ function changeTable() {
         else table[i].classList.remove("visible");
     }
     getPlaylistLink();
-    getBatchLink();
 
     localStorage.setItem("selectedValue", selector.value);
 }
@@ -16,14 +15,6 @@ function getPlaylistLink() {
     const selector = document.getElementById("city-select");
     const a = document.getElementById("playlist-button");
     let result = "https://radio.bsod.kr/playlist/" + selector.value + ".m3u";
-    a.href = result;
-}
-
-function getBatchLink() {
-    const selector = document.getElementById("city-select");
-    const a = document.getElementById("batch-button");
-    let result =
-        "https://radio.bsod.kr/vlc_batch/vlc-stream_" + selector.value + ".bat";
     a.href = result;
 }
 
