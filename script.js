@@ -6,16 +6,8 @@ function changeTable() {
         if (table[i].id === selector.value) table[i].classList.add("visible");
         else table[i].classList.remove("visible");
     }
-    getPlaylistLink();
 
     localStorage.setItem("selectedValue", selector.value);
-}
-
-function getPlaylistLink() {
-    const selector = document.getElementById("city-select");
-    const a = document.getElementById("playlist-button");
-    let result = "https://radio.bsod.kr/playlist/" + selector.value + ".m3u";
-    a.href = result;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
