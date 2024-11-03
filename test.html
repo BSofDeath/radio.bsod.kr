@@ -73,6 +73,7 @@
                 width: auto;
                 max-width: 100%;
                 background-color: #f7f7f7;
+                border-radius: 5px;
                 padding: 1em;
                 margin-bottom: 1em;
                 text-align: left;
@@ -156,20 +157,16 @@
         </style>
 
         <!-- Scripts -->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video-js.min.css"
-            rel="stylesheet"
-        />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-                const selector = document.getElementById("citySelector");
-                const lastSelectedCity =
-                    localStorage.getItem("lastSelectedCity");
+            const selector = document.getElementById("citySelector");
+            const lastSelectedCity = localStorage.getItem("lastSelectedCity");
 
-                if (lastSelectedCity) selector.value = lastSelectedCity;
-                selector.dispatchEvent(new Event("change"));
-            });
+            if (lastSelectedCity) 
+                selector.value = lastSelectedCity;
+            selector.dispatchEvent(new Event("change"));
+        });
         </script>
     </head>
     <body>
@@ -178,43 +175,37 @@
             <a class="site-name" href="..">라디오</a>
         </header>
 
-        <section>
-            <video
-                id="player"
-                class="video-js vjs-default-skin vjs-big-play-centered"
-            ></video>
-            <script>
-                const player = videojs("player", {
-                    sources: [],
-                    controls: true,
-                });
+        <section id="nowPlaying">
+            <h3>현재 선택된 채널</h3>
+            <p id="nowPlayingTitle" href=""></p>
+            <a id="nowPlayingUrl" href=""></a>
+        </section>
 
-                function changeSource({ stn, ch = "", city = "" }) {
-                    const nowPlayingTitle =
-                        document.getElementById("nowPlayingTitle");
-                    const nowPlayingUrl =
-                        document.getElementById("nowPlayingUrl");
+        <section>
+            <audio id="player" controls>
+            <script>
+                function changeSource({stn, ch = "", city = ""}) {
+                    const player = document.getElementById("player");
+                    const nowPlayingTitle = document.getElementById("nowPlayingTitle");
+                    const nowPlayingUrl = document.getElementById("nowPlayingUrl");
 
                     /* 채널 목록에서 새로 선택한 채널 강조표시 */
                     let innerHTMLQuery;
                     if (city)
-                        innerHTMLQuery = ch
-                            ? `a[href="javascript:changeSource({stn:'${stn}', ch:'${ch}', city:'${city}'})"]`
-                            : `a[href="javascript:changeSource({stn:'${stn}', city:'${city}'})"]`;
+                        innerHTMLQuery = ch ? 
+                            `a[href="javascript:changeSource({stn:'${stn}', ch:'${ch}', city:'${city}'})"]` : 
+                            `a[href="javascript:changeSource({stn:'${stn}', city:'${city}'})"]`;
                     else
-                        innerHTMLQuery = ch
-                            ? `a[href="javascript:changeSource({stn:'${stn}', ch:'${ch}'})"]`
-                            : `a[href="javascript:changeSource({stn:'${stn}'})"]`;
+                        innerHTMLQuery = ch ? 
+                            `a[href="javascript:changeSource({stn:'${stn}', ch:'${ch}'})"]` : 
+                            `a[href="javascript:changeSource({stn:'${stn}'})"]`;
 
-                    const targetChannelContainer =
-                        document.getElementsByClassName("visible")[0];
-                    const selectedChannel =
-                        targetChannelContainer.querySelector(innerHTMLQuery);
-
-                    document
-                        .querySelectorAll(".channel")
-                        .forEach((item) => item.classList.remove("tuned"));
-                    selectedChannel.classList.add("tuned");
+                    const targetChannelContainer = document.getElementsByClassName("visible")[0];
+                    const selectedChannel = targetChannelContainer.querySelector(innerHTMLQuery);
+                    
+                    document.querySelectorAll(".channel").forEach(item =>
+                        item.classList.remove("tuned"));
+                    selectedChannel.classList.add('tuned');
 
                     /* 플레이어 초기화 */
                     player.pause();
@@ -225,44 +216,39 @@
                     /* 새로운 스트림 가져오기 준비 */
                     const requestUrl = new URL("https://radio.bsod.kr/stream/");
                     requestUrl.searchParams.append("stn", stn);
-                    if (ch) {
-                        requestUrl.searchParams.append("ch", ch);
-                    }
-                    if (city) {
-                        requestUrl.searchParams.append("city", city);
-                    }
+                    if (ch) { requestUrl.searchParams.append("ch", ch); }
+                    if (city) { requestUrl.searchParams.append("city", city); }
 
                     /* 새로운 스트림 가져오기 */
-                    fetch(requestUrl, { redirect: "follow" })
-                        .then((response) => {
-                            const contentType =
-                                response.headers.get("Content-Type") ===
-                                "audio/aacp"
-                                    ? "audio/aac"
-                                    : response.headers.get("Content-Type");
-                            const fetchedUrl = response.url;
+                    fetch(requestUrl, { redirect: "follow" }).then((response) => {
+                        const contentType = response.headers.get("Content-Type") === "audio/aacp" 
+                                            ? "audio/aac" 
+                                            : response.headers.get("Content-Type");
+                        const fetchedUrl = response.url;
 
-                            nowPlayingTitle.innerHTML =
-                                selectedChannel.innerHTML;
-                            nowPlayingUrl.innerHTML = fetchedUrl.split("?")[1]
-                                ? `${fetchedUrl.split("?")[0]}…`
-                                : fetchedUrl;
-                            nowPlayingUrl.href = fetchedUrl;
+                        nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
+                        nowPlayingUrl.innerHTML = fetchedUrl.split("?")[1] ? `${fetchedUrl.split("?")[0]}…` : fetchedUrl;
+                        nowPlayingUrl.href = fetchedUrl;
 
-                            player.src({ src: fetchedUrl, type: contentType });
-                            player.play();
-                        })
-                        .catch((error) => {
-                            nowPlayingTitle.innerHTML = "재생할 수 없습니다.";
-                        });
+                        if (Hls.isSupported() && contentType === "application/vnd.apple.mpegurl") {
+                            const hls = new Hls();
+                            hls.loadSource(fetchedUrl);
+                            hls.attachMedia(player);
+                            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                player.play();
+                            }); // HLS 스트림의 경우
+                        } else if (player.canPlayType(contentType)) {
+                            player.src = fetchedUrl;
+                            player.addEventListener('loadedmetadata', function() {
+                                player.play();
+                            }); // 비-HLS 스트림의 경우
+                        }     
+                    })
+                    .catch((error) => {
+                        nowPlayingTitle.innerHTML = "재생할 수 없습니다.";
+                    });
                 }
             </script>
-        </section>
-
-        <section id="nowPlaying">
-            <h3>현재 선택된 채널</h3>
-            <p id="nowPlayingTitle" href=""></p>
-            <a id="nowPlayingUrl" href=""></a>
         </section>
 
         <section>
@@ -280,1042 +266,242 @@
                     <option value="jeju">제주</option>
                 </select>
                 <script>
-                    document
-                        .getElementById("citySelector")
-                        .addEventListener("change", function () {
-                            const containers = Array.from(
-                                document.getElementsByClassName(
-                                    "channelContainer"
-                                )
-                            );
-                            containers.forEach((element) => {
-                                if (element.id === this.value)
-                                    element.classList.add("visible");
-                                else element.classList.remove("visible");
-                            });
-                            localStorage.setItem(
-                                "lastSelectedCity",
-                                this.value
-                            );
+                    document.getElementById("citySelector").addEventListener("change", function () {
+                        const containers = Array.from(document.getElementsByClassName("channelContainer"));
+                        containers.forEach((element) => {
+                            if (element.id === this.value) 
+                                element.classList.add("visible");
+                            else 
+                                element.classList.remove("visible");
                         });
+                        localStorage.setItem("lastSelectedCity", this.value);
+                    });
                 </script>
             </nav>
             <article id="seoul" class="channelContainer visible">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio'})"
-                    >KBS 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio'})"
-                    >KBS 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'3radio'})"
-                    >KBS 3라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm'})"
-                    >KBS 1FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2fm'})"
-                    >KBS 2FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'hanminjok'})"
-                    >KBS 한민족방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm'})"
-                    >MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u'})"
-                    >MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'chm'})"
-                    >MBC mini 올댓뮤직</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'lovefm'})"
-                    >SBS 러브FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm'})"
-                    >SBS 파워FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'dmb'})"
-                    >SBS 고릴라디오M</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'obs'})"
-                    >OBS 라디오</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ifm'})"
-                    >iFM 경인방송</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ytn'})"
-                    >YTN 라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbs', ch:'fm'})"
-                    >TBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbs', ch:'efm'})"
-                    >TBS eFM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'tbn'})"
-                    >TBN 경인교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm'})"
-                    >CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'mfm'})"
-                    >CBS 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'febc'})"
-                    >FEBC 서울극동방송</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'bbs'})"
-                    >BBS 서울불교방송</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'cpbc'})"
-                    >CPBC 가톨릭평화방송</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'wbs'})"
-                    >WBS 서울원음방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'kugak'})"
-                    >국악방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'afn', city:'humphreys'})"
-                    >AFN FM Humphreys</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'gwanakfm'})"
-                    >관악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'mapofm'})"
-                    >마포FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'seongnamfm'})"
-                    >성남FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'sdmfm'})"
-                    >서대문FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'sonefm'})"
-                    >수원FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'gurifm'})"
-                    >GO구리FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'dwfm'})"
-                    >단원FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio'})">KBS 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio'})">KBS 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'3radio'})">KBS 3라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm'})">KBS 1FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2fm'})">KBS 2FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'hanminjok'})">KBS 한민족방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm'})">MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u'})">MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'chm'})">MBC mini 올댓뮤직</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'lovefm'})">SBS 러브FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm'})">SBS 파워FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'dmb'})">SBS 고릴라디오M</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'obs'})">OBS 라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'ifm'})">iFM 경인방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'ytn'})">YTN 라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbs', ch:'fm'})">TBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbs', ch:'efm'})">TBS eFM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn'})">TBN 경인교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm'})">CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'mfm'})">CBS 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc'})">FEBC 서울극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'bbs'})">BBS 서울불교방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cpbc'})">CPBC 가톨릭평화방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs'})">WBS 서울원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kugak'})">국악방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'afn', city:'humphreys'})">AFN FM Humphreys</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'gwanakfm'})">관악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'mapofm'})">마포FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'seongnamfm'})">성남FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'sdmfm'})">서대문FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'sonefm'})">수원FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'gurifm'})">GO구리FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'dwfm'})">단원FM</a>
             </article>
             <article id="busan" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'busan'})"
-                    >KBS부산 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'busan'})"
-                    >KBS부산 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'busan'})"
-                    >KBS부산 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'changwon'})"
-                    >KBS창원 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'changwon'})"
-                    >KBS창원 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'changwon'})"
-                    >KBS창원 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jinju'})"
-                    >KBS진주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'busan'})"
-                    >부산MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'busan'})"
-                    >부산MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'ulsan'})"
-                    >울산MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'ulsan'})"
-                    >울산MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'changwon'})"
-                    >MBC경남 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'changwon'})"
-                    >MBC경남 FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'lovefm', city:'busan'})"
-                    >KNN 러브FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'busan'})"
-                    >KNN 파워FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'ulsan'})"
-                    >UBC 그린FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'busan'})"
-                    >TBN 부산교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'ulsan'})"
-                    >TBN 울산교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'gyeongnam'})"
-                    >TBN 경남교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'busan'})"
-                    >부산CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'busan'})"
-                    >부산CBS 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'ulsan'})"
-                    >울산CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'gyeongnam'})"
-                    >경남CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'busan'})"
-                    >FEBC 부산극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'ulsan'})"
-                    >FEBC 울산극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'changwon'})"
-                    >FEBC 창원극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'bbs', city:'busan'})"
-                    >BBS 부산불교방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cpbc', city:'busan'})"
-                    >CPBC 부산가톨릭평화방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'wbs', city:'busan'})"
-                    >WBS 부산원음방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'yeonjefm'})"
-                    >연제공동체라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'namhaefm'})"
-                    >남해FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'busan'})">KBS부산 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'busan'})">KBS부산 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'busan'})">KBS부산 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'changwon'})">KBS창원 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'changwon'})">KBS창원 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'changwon'})">KBS창원 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jinju'})">KBS진주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'busan'})">부산MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'busan'})">부산MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'ulsan'})">울산MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'ulsan'})">울산MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'changwon'})">MBC경남 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'changwon'})">MBC경남 FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'lovefm', city:'busan'})">KNN 러브FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'busan'})">KNN 파워FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'ulsan'})">UBC 그린FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'busan'})">TBN 부산교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'ulsan'})">TBN 울산교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'gyeongnam'})">TBN 경남교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'busan'})">부산CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'busan'})">부산CBS 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'ulsan'})">울산CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'gyeongnam'})">경남CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'busan'})">FEBC 부산극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'ulsan'})">FEBC 울산극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'changwon'})">FEBC 창원극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'bbs', city:'busan'})">BBS 부산불교방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cpbc', city:'busan'})">CPBC 부산가톨릭평화방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs', city:'busan'})">WBS 부산원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'yeonjefm'})">연제공동체라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'namhaefm'})">남해FM</a>
             </article>
             <article id="daegu" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'daegu'})"
-                    >KBS대구 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'daegu'})"
-                    >KBS대구 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'daegu'})"
-                    >KBS대구 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'andong'})"
-                    >KBS안동 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'pohang'})"
-                    >KBS포항 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'daegu'})"
-                    >대구MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'daegu'})"
-                    >대구MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'andong'})"
-                    >안동MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'andong'})"
-                    >안동MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'pohang'})"
-                    >포항MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'pohang'})"
-                    >포항MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'daegu'})"
-                    >TBC 드림FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'daegu'})"
-                    >TBN 대구교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'gyeongbuk'})"
-                    >TBN 경북교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'daegu'})"
-                    >대구CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'daegu'})"
-                    >대구CBS 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'pohang'})"
-                    >포항CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'daegu'})"
-                    >FEBC 대구극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'pohang'})"
-                    >FEBC 포항극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'bbs', city:'daegu'})"
-                    >BBS 대구불교방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cpbc', city:'daegu'})"
-                    >CPBC 대구가톨릭평화방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'wbs', city:'daegu'})"
-                    >WBS 대구원음방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'afn', city:'daegu'})"
-                    >AFN FM Daegu</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'scnfm'})"
-                    >성서공동체FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'daegufm'})"
-                    >대구동구FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'yeongjufm'})"
-                    >영주FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'sjfm'})"
-                    >성주FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'sangjufm'})"
-                    >상주FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'daegu'})">KBS대구 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'daegu'})">KBS대구 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'daegu'})">KBS대구 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'andong'})">KBS안동 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'pohang'})">KBS포항 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'daegu'})">대구MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'daegu'})">대구MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'andong'})">안동MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'andong'})">안동MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'pohang'})">포항MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'pohang'})">포항MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'daegu'})">TBC 드림FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'daegu'})">TBN 대구교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'gyeongbuk'})">TBN 경북교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'daegu'})">대구CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'daegu'})">대구CBS 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'pohang'})">포항CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'daegu'})">FEBC 대구극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'pohang'})">FEBC 포항극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'bbs', city:'daegu'})">BBS 대구불교방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cpbc', city:'daegu'})">CPBC 대구가톨릭평화방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs', city:'daegu'})">WBS 대구원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'afn', city:'daegu'})">AFN FM Daegu</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'scnfm'})">성서공동체FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'daegufm'})">대구동구FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'yeongjufm'})">영주FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'sjfm'})">성주FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'sangjufm'})">상주FM</a>
             </article>
             <article id="gwangju" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'gwangju'})"
-                    >KBS광주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'gwangju'})"
-                    >KBS광주 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'gwangju'})"
-                    >KBS광주 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'mokpo'})"
-                    >KBS목포 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'mokpo'})"
-                    >KBS목포 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'suncheon'})"
-                    >KBS순천 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'gwangju'})"
-                    >광주MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'gwangju'})"
-                    >광주MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'mokpo'})"
-                    >목포MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'mokpo'})"
-                    >목포MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'yeosu'})"
-                    >여수MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'yeosu'})"
-                    >여수MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'gwangju'})"
-                    >KBC 마이FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'gwangju'})"
-                    >TBN 광주교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'gwangju'})"
-                    >광주CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'gwangju'})"
-                    >광주CBS 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeonnam'})"
-                    >전남CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'gwangju'})"
-                    >FEBC 광주극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'mokpo'})"
-                    >FEBC 목포극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'jeonnam'})"
-                    >FEBC 전남동부극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'bbs', city:'gwangju'})"
-                    >BBS 광주불교방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cpbc', city:'gwangju'})"
-                    >CPBC 광주가톨릭평화방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'wbs', city:'gwangju'})"
-                    >WBS 광주원음방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kugak', city:'gwangju'})"
-                    >광주국악방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'kjfm'})"
-                    >광주FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'crfm'})"
-                    >GBS고려방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', ch:'suncheonfm'})"
-                    >순천미디어네트워크</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'gwangju'})">KBS광주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'gwangju'})">KBS광주 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'gwangju'})">KBS광주 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'mokpo'})">KBS목포 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'mokpo'})">KBS목포 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'suncheon'})">KBS순천 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'gwangju'})">광주MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'gwangju'})">광주MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'mokpo'})">목포MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'mokpo'})">목포MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'yeosu'})">여수MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'yeosu'})">여수MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'gwangju'})">KBC 마이FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'gwangju'})">TBN 광주교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'gwangju'})">광주CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'mfm', city:'gwangju'})">광주CBS 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeonnam'})">전남CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'gwangju'})">FEBC 광주극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'mokpo'})">FEBC 목포극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'jeonnam'})">FEBC 전남동부극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'bbs', city:'gwangju'})">BBS 광주불교방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cpbc', city:'gwangju'})">CPBC 광주가톨릭평화방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs', city:'gwangju'})">WBS 광주원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kugak', city:'gwangju'})">광주국악방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'kjfm'})">광주FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'crfm'})">GBS고려방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', ch:'suncheonfm'})">순천미디어네트워크</a>
             </article>
             <article id="jeonbuk" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jeonju'})"
-                    >KBS전주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'jeonju'})"
-                    >KBS전주 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'jeonju'})"
-                    >KBS전주 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'jeonju'})"
-                    >전주MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'jeonju'})"
-                    >전주MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'jeonju'})"
-                    >JTV 매직FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'jeonbuk'})"
-                    >TBN 전북교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeonbuk'})"
-                    >전북CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'jeonbuk'})"
-                    >FEBC 전북극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'wbs' , city:'jeonbuk'})"
-                    >WBS 전북원음방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'afn', city:'kunsan'})"
-                    >AFN FM Kunsan</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', city:'jcfm'})"
-                    >전주FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jeonju'})">KBS전주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'jeonju'})">KBS전주 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'jeonju'})">KBS전주 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'jeonju'})">전주MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'jeonju'})">전주MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'jeonju'})">JTV 매직FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'jeonbuk'})">TBN 전북교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeonbuk'})">전북CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'jeonbuk'})">FEBC 전북극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs' , city:'jeonbuk'})">WBS 전북원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'afn', city:'kunsan'})">AFN FM Kunsan</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', city:'jcfm'})">전주FM</a>
             </article>
             <article id="daejeon" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'daejeon'})"
-                    >KBS대전 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'daejeon'})"
-                    >KBS대전 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'daejeon'})"
-                    >KBS대전 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'daejeon'})"
-                    >대전MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'daejeon'})"
-                    >대전MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'daejeon'})"
-                    >TJB 파워FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'daejeon'})"
-                    >TBN 대전교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'daejeon'})"
-                    >대전CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'daejeon'})"
-                    >FEBC 대전극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kugak', city:'daejeon'})"
-                    >대전국악방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', city:'keumkangfm'})"
-                    >금강FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', city:'sejongfm'})"
-                    >세종FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'community', city:'hanbatfm'})"
-                    >한밭FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'daejeon'})">KBS대전 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'daejeon'})">KBS대전 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'daejeon'})">KBS대전 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'daejeon'})">대전MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'daejeon'})">대전MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'daejeon'})">TJB 파워FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'daejeon'})">TBN 대전교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'daejeon'})">대전CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'daejeon'})">FEBC 대전극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kugak', city:'daejeon'})">대전국악방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', city:'keumkangfm'})">금강FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', city:'sejongfm'})">세종FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'community', city:'hanbatfm'})">한밭FM</a>
             </article>
             <article id="chungbuk" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'cheongju'})"
-                    >KBS청주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'cheongju'})"
-                    >KBS청주 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'cheongju'})"
-                    >KBS청주 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'cheongju'})"
-                    >MBC충북 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'cheongju'})"
-                    >MBC충북 FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'cheongju'})"
-                    >CJB 조이FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'chungbuk'})"
-                    >TBN 충북교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'cheongju'})"
-                    >충북CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'cheongju'})">KBS청주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'cheongju'})">KBS청주 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'cheongju'})">KBS청주 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'cheongju'})">MBC충북 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'cheongju'})">MBC충북 FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'cheongju'})">CJB 조이FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'chungbuk'})">TBN 충북교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'cheongju'})">충북CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
             </article>
             <article id="gangwon" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'chuncheon'})"
-                    >KBS춘천 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'chuncheon'})"
-                    >KBS춘천 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'chuncheon'})"
-                    >KBS춘천 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'gangneung'})"
-                    >KBS강릉 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'gangneung'})"
-                    >KBS강릉 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'wonju'})"
-                    >KBS원주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'wonju'})"
-                    >KBS원주 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'chuncheon'})"
-                    >춘천MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'chuncheon'})"
-                    >춘천MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'wonju'})"
-                    >원주MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'wonju'})"
-                    >원주MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'gangneung'})"
-                    >MBC강원영동 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'gangneung'})"
-                    >MBC강원영동 FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'chuncheon'})"
-                    >G1 프레쉬FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'gangwon'})"
-                    >TBN 강원교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'chuncheon'})"
-                    >춘천CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'youngdong'})"
-                    >강원영동CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'gangwon'})"
-                    >FEBC 영동극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'chuncheon'})">KBS춘천 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'chuncheon'})">KBS춘천 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'chuncheon'})">KBS춘천 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'gangneung'})">KBS강릉 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'gangneung'})">KBS강릉 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'wonju'})">KBS원주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'wonju'})">KBS원주 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'chuncheon'})">춘천MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'chuncheon'})">춘천MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'wonju'})">원주MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'wonju'})">원주MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'gangneung'})">MBC강원영동 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'gangneung'})">MBC강원영동 FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'chuncheon'})">G1 프레쉬FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'gangwon'})">TBN 강원교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'chuncheon'})">춘천CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'youngdong'})">강원영동CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'gangwon'})">FEBC 영동극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
             </article>
             <article id="jeju" class="channelContainer">
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jeju'})"
-                    >KBS제주 1라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'jeju'})"
-                    >KBS제주 2라디오</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'jeju'})"
-                    >KBS제주 음악FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'jeju'})"
-                    >제주MBC 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'jeju'})"
-                    >제주MBC FM4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'jeju'})"
-                    >JIBS 뉴파워FM</a
-                >
-                <a class="channel" href="javascript:changeSource({stn:'ebs'})"
-                    >EBS FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'tbn', city:'jeju'})"
-                    >TBN 제주교통방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeju'})"
-                    >제주CBS 표준FM</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'cbs', ch:'joy4u'})"
-                    >CBS JOY4U</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'febc', city:'jeju'})"
-                    >FEBC 제주극동방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'bbs', city:'jeju'})"
-                    >BBS 제주불교방송</a
-                >
-                <a
-                    class="channel"
-                    href="javascript:changeSource({stn:'kookbang'})"
-                    >국방FM</a
-                >
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1radio', city:'jeju'})">KBS제주 1라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'2radio', city:'jeju'})">KBS제주 2라디오</a>
+                <a class="channel" href="javascript:changeSource({stn:'kbs', ch:'1fm', city:'jeju'})">KBS제주 음악FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'sfm', city:'jeju'})">제주MBC 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'mbc', ch:'fm4u', city:'jeju'})">제주MBC FM4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'sbs', ch:'powerfm', city:'jeju'})">JIBS 뉴파워FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'ebs'})">EBS FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'tbn', city:'jeju'})">TBN 제주교통방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeju'})">제주CBS 표준FM</a>
+                <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
+                <a class="channel" href="javascript:changeSource({stn:'febc', city:'jeju'})">FEBC 제주극동방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'bbs', city:'jeju'})">BBS 제주불교방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
             </article>
         </section>
 
