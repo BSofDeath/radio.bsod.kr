@@ -227,6 +227,7 @@
                         const fetchedUrl = response.url;
 
                         nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
+                        document.title = selectedChannel.innerHTML;
                         nowPlayingUrl.innerHTML = fetchedUrl;
                         nowPlayingUrl.href = fetchedUrl;
 
@@ -251,6 +252,7 @@
                     })
                     .catch((error) => {
                         nowPlayingTitle.innerHTML = "재생할 수 없습니다.";
+                        document.title = "라디오";
                         return;
                     });   
                 }
