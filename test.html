@@ -214,7 +214,7 @@
                     nowPlayingTitle.innerHTML = "로드 중…";
 
                     /* 새로운 스트림 가져오기 준비 */
-                    const requestUrl = new URL("https://radio.bsod.kr/stream/");
+                    const requestUrl = new URL("https://radio.bsod.kr/stream/static");
                     requestUrl.searchParams.append("stn", stn);
                     if (ch) { requestUrl.searchParams.append("ch", ch); }
                     if (city) { requestUrl.searchParams.append("city", city); }
@@ -229,19 +229,25 @@
                         nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
                         nowPlayingUrl.innerHTML = fetchedUrl;
                         nowPlayingUrl.href = fetchedUrl;
+                        console.log(fetchedUrl);
 
-                        if (Hls.isSupported()) {
-                            const hls = new Hls();
-                            hls.loadSource(fetchedUrl);
-                            hls.attachMedia(player);
-                            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        if (contentType.includes("x-mpegURL") || contentType.includes("vnd.apple.mpegurl")) {
+                            // HLS 스트림 처리
+                            if (Hls.isSupported()) {
+                                const hls = new Hls();
+                                hls.loadSource(fetchedUrl);
+                                hls.attachMedia(player);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                                    player.play();
+                                });
+                            } else {
+                                player.src = fetchedUrl;
                                 player.play();
-                        }); // HLS 스트림의 경우
-                        } else if (player.canPlayType(contentType)) {
+                            }
+                        } else {
+                            // MPEG 또는 AAC 스트림 처리
                             player.src = fetchedUrl;
-                            player.addEventListener('loadedmetadata', function() {
-                                player.play();
-                            }); // 비-HLS 스트림의 경우
+                            player.play();
                         }
                     })
                     .catch((error) => {
