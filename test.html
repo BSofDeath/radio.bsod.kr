@@ -184,7 +184,7 @@
         <section>
             <audio id="player" controls>
             <script>
-                function changeSource({stn, ch = "", city = ""}) {
+                async function changeSource({stn, ch = "", city = ""}) {
                     const player = document.getElementById("player");
                     const nowPlayingTitle = document.getElementById("nowPlayingTitle");
                     const nowPlayingUrl = document.getElementById("nowPlayingUrl");
@@ -220,33 +220,34 @@
                     if (city) { requestUrl.searchParams.append("city", city); }
 
                     /* 새로운 스트림 가져오기 */
-                    fetch(requestUrl, { redirect: "follow" }).then((response) => {
+                    await fetch(requestUrl, { redirect: "follow" }).then((response) => {
                         const contentType = response.headers.get("Content-Type") === "audio/aacp" 
                                             ? "audio/aac" 
                                             : response.headers.get("Content-Type");
                         const fetchedUrl = response.url;
 
                         nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
-                        nowPlayingUrl.innerHTML = fetchedUrl.split("?")[1] ? `${fetchedUrl.split("?")[0]}…` : fetchedUrl;
+                        nowPlayingUrl.innerHTML = fetchedUrl;
                         nowPlayingUrl.href = fetchedUrl;
 
-                        if (Hls.isSupported() && contentType === "application/vnd.apple.mpegurl") {
+                        if (Hls.isSupported()) {
                             const hls = new Hls();
                             hls.loadSource(fetchedUrl);
                             hls.attachMedia(player);
                             hls.on(Hls.Events.MANIFEST_PARSED, function() {
                                 player.play();
-                            }); // HLS 스트림의 경우
+                        }); // HLS 스트림의 경우
                         } else if (player.canPlayType(contentType)) {
                             player.src = fetchedUrl;
                             player.addEventListener('loadedmetadata', function() {
                                 player.play();
                             }); // 비-HLS 스트림의 경우
-                        }     
+                        }
                     })
                     .catch((error) => {
                         nowPlayingTitle.innerHTML = "재생할 수 없습니다.";
-                    });
+                        return;
+                    });   
                 }
             </script>
         </section>
