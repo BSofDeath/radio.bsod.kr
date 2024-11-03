@@ -229,7 +229,6 @@
                         nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
                         nowPlayingUrl.innerHTML = fetchedUrl;
                         nowPlayingUrl.href = fetchedUrl;
-                        console.log(fetchedUrl);
 
                         if (contentType.includes("x-mpegURL") || contentType.includes("vnd.apple.mpegurl")) {
                             // HLS 스트림 처리
@@ -436,7 +435,7 @@
                 <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'sfm', city:'jeonbuk'})">전북CBS 표준FM</a>
                 <a class="channel" href="javascript:changeSource({stn:'cbs', ch:'joy4u'})">CBS JOY4U</a>
                 <a class="channel" href="javascript:changeSource({stn:'febc', city:'jeonbuk'})">FEBC 전북극동방송</a>
-                <a class="channel" href="javascript:changeSource({stn:'wbs' , city:'jeonbuk'})">WBS 전북원음방송</a>
+                <a class="channel" href="javascript:changeSource({stn:'wbs', city:'jeonbuk'})">WBS 전북원음방송</a>
                 <a class="channel" href="javascript:changeSource({stn:'kookbang'})">국방FM</a>
                 <a class="channel" href="javascript:changeSource({stn:'afn', city:'kunsan'})">AFN FM Kunsan</a>
                 <a class="channel" href="javascript:changeSource({stn:'community', city:'jcfm'})">전주FM</a>
