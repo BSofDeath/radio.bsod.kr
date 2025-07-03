@@ -156,6 +156,7 @@ nav {
 .button-area {
     display: grid;
     place-items: center;
+    margin-top: 2rem;
 }
 
 .button-area button {
