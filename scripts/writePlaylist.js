@@ -1,41 +1,89 @@
-document
-    .getElementById("playlist-button")
-    .addEventListener("click", function () {
-        const selectedCity = document.getElementById("city-select");
+function parseRadioUrl(hrefStr) {
+    const match = hrefStr.match(/\{([^}]+)\}/);
+    if (!match) return "";
 
-        const table = document.querySelector("table.visible");
-        const td = table.querySelectorAll("td.channel-name");
-        const a = table.querySelectorAll("a.channel-link");
+    const paramsStr = match[1];
 
-        const channels = [];
+    const params = {};
+    paramsStr.split(",").forEach((part) => {
+        const [key, value] = part
+            .split(":")
+            .map((s) => s.trim().replace(/['"]/g, ""));
+        params[key] = value;
+    });
 
-        if (td.length === a.length) {
-            td.forEach((td_item, index) => {
-                const a_item = a[index];
-                channels.push({
-                    name: td_item.textContent.trim(),
-                    link: a_item.href,
-                });
-            });
-        } else {
-            console.error("Arrays have different lengths");
-        }
+    const baseUrl = "https://radio.bsod.kr/stream/";
+    const queryString = new URLSearchParams(params).toString();
 
-        let m3u = "#EXTM3U";
-        channels.forEach((item) => {
-            m3u += "\n#EXTINF:-1," + item.name;
-            m3u += "\n" + item.link;
-        });
+    return `${baseUrl}?${queryString}`;
+}
 
-        const blob = new Blob([m3u], { type: "audio/x-mpegurl" });
-        const url = URL.createObjectURL(blob);
+document.getElementById("exportM3UBtn").addEventListener("click", function () {
+    const activeContainer = document.querySelector(".channelContainer.visible");
+    const channels = activeContainer.querySelectorAll(".channel");
 
-        const a_dest = document.createElement("a");
-        a_dest.href = url;
-        a_dest.download = selectedCity.value + ".m3u";
-        document.body.appendChild(a_dest);
-        a_dest.click();
+    if (!activeContainer) {
+        alert("비정상적인 접근입니다.");
+        return;
+    }
 
+    let m3u = "#EXTM3U";
+    channels.forEach((channel) => {
+        const name = channel.innerText.trim();
+        const link = parseRadioUrl(channel.getAttribute("href"));
+        m3u += `\r\n#EXTINF:-1,${name}\r\n${link}`;
+    });
+
+    const blob = new Blob([m3u], { type: "audio/x-mpegurl" });
+    const url = URL.createObjectURL(blob);
+
+    const a_dest = document.createElement("a");
+    a_dest.href = url;
+
+    a_dest.download = citySelector.value + ".m3u";
+    document.body.appendChild(a_dest);
+    a_dest.click();
+
+    setTimeout(() => {
         URL.revokeObjectURL(url);
         document.body.removeChild(a_dest);
+    }, 100);
+});
+
+document.getElementById("exportPLSBtn").addEventListener("click", function () {
+    const activeContainer = document.querySelector(".channelContainer.visible");
+    const channels = activeContainer.querySelectorAll(".channel");
+
+    if (!activeContainer) {
+        alert("비정상적인 접근입니다.");
+        return;
+    }
+
+    let pls = "[playlist]\n";
+    pls += `NumberOfEntries=${channels.length}\n\n`;
+    channels.forEach((channel, index) => {
+        const num = index + 1;
+        const name = channel.innerText.trim();
+        const link = parseRadioUrl(channel.getAttribute("href"));
+
+        pls += `File${num}=${link}\n`;
+        pls += `Title${num}=${name}\n`;
+        pls += `Length${num}=-1\n\n`;
     });
+    pls += "Version=2";
+
+    const blob = new Blob([pls], { type: "audio/x-scpls" });
+    const url = URL.createObjectURL(blob);
+
+    const a_dest = document.createElement("a");
+    a_dest.href = url;
+    a_dest.download = citySelector.value + ".pls";
+
+    document.body.appendChild(a_dest);
+    a_dest.click();
+
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a_dest);
+    }, 100);
+});
