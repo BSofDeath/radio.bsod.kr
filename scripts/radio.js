@@ -141,7 +141,7 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
 
         // 스트림 가져온 후 정보 업데이트
         nowPlayingUrl.style.display = "inline-block";
-        nowPlayingUrl.innerHTML = fetchedUrl.split("?")[0].toString();
+        nowPlayingUrl.innerHTML = fetchedUrl.toString();
         nowPlayingUrl.href = fetchedUrl;
 
         // 복사 버튼 이벤트 설정

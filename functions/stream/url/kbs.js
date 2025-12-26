@@ -8,6 +8,7 @@ const channelCodes = [
 ];
 const cityCodes = [
     { name: "KBS부산", code: "10_", param: "busan" },
+    { name: "KBS울산", code: "11_", param: "ulsan" },
     { name: "KBS창원", code: "20_", param: "changwon" },
     { name: "KBS진주", code: "21_", param: "jinju" },
     { name: "KBS대구", code: "30_", param: "daegu" },
@@ -19,6 +20,7 @@ const cityCodes = [
     { name: "KBS전주", code: "50_", param: "jeonju" },
     { name: "KBS대전", code: "60_", param: "daejeon" },
     { name: "KBS청주", code: "70_", param: "cheongju" },
+    { name: "KBS충주", code: "71_", param: "chungju" },
     { name: "KBS춘천", code: "80_", param: "chuncheon" },
     { name: "KBS강릉", code: "81_", param: "gangneung" },
     { name: "KBS원주", code: "82_", param: "wonju" },

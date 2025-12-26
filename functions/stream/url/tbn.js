@@ -9,6 +9,7 @@ export const tbnUrls = [
     { name: "TBN 전북교통방송", city: "jeonbuk", streamUrl: "https://5cc6beb04faf6.streamlock.net/jeonbuk/myStream/playlist.m3u8" },
     { name: "TBN 대전교통방송", city: "daejeon", streamUrl: "https://5cc6beb04faf6.streamlock.net/daejeon/myStream/playlist.m3u8" },
     { name: "TBN 충북교통방송", city: "chungbuk", streamUrl: "https://5cc6beb04faf6.streamlock.net/chungbuk/myStream/playlist.m3u8" },
+    { name: "TBN 충남교통방송", city: "chungnam", streamUrl: "https://5cc6beb04faf6.streamlock.net/chungnam/myStream/playlist.m3u8" },
     { name: "TBN 강원교통방송", city: "gangwon", streamUrl: "https://5cc6beb04faf6.streamlock.net/gangwon/myStream/playlist.m3u8" },
     { name: "TBN 경인교통방송", city: "jeju", streamUrl: "https://5cc6beb04faf6.streamlock.net/jeju/myStream/playlist.m3u8" },
 ];
