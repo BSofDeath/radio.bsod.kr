@@ -30,6 +30,7 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
 
     const playingCopyBtn = document.getElementById("playingCopyBtn");
     const staticCopyBtn = document.getElementById("staticCopyBtn");
+    const resetBtn = document.getElementById("resetBtn");
     const boraBtn = document.getElementById("boraBtn");
     boraBtn.innerHTML =
         bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
@@ -166,6 +167,33 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
                 staticCopyBtn.innerText = "고정 URL 복사";
             }, 1000);
         };
+
+        //초기화 버튼 이벤트 설정
+        resetBtn.onclick = () => {
+            document.title = "라디오";
+            nowPlayingTitle.innerHTML = "채널을 선택해 주세요.";
+
+            nowPlayingUrl.innerHTML = "";
+            nowPlayingUrl.href = "";
+            nowPlayingUrl.style.display = "none";
+            
+            staticUrl.innerHTML = "";
+            staticUrl.href = "";
+            staticUrl.style.display = "none";
+            
+            playingCopyBtn.style.display = "none";
+            staticCopyBtn.style.display = "none";
+            boraBtn.style.display = "none";
+
+            [player, vPlayer].forEach((p) => {
+                p.pause();
+                p.removeAttribute("src");
+                p.load();
+                p.style.display = "none";
+            });
+
+            selectedChannel.classList.remove("tuned");
+        }
     } catch (error) {
         document.title = "라디오";
         nowPlayingTitle.innerHTML +=

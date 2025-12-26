@@ -96,6 +96,18 @@ header {
     gap: 0.35rem;
 }
 
+.title-group {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+}
+
+.title-group h3 {
+    margin: 0;
+}
+
 .url-group {
     display: flex;
     align-items: center;
