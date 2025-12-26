@@ -81,6 +81,7 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     /* 초기 정보 업데이트 */
     document.title = selectedChannel.innerHTML;
     nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
+    staticUrl.style.display = "inline-block";
     staticUrl.innerHTML = requestUrl.toString();
     staticUrl.href = requestUrl;
     staticCopyBtn.style.display = "inline-block";
