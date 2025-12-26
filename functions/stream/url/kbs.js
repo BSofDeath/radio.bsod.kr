@@ -25,8 +25,10 @@ const cityCodes = [
     { name: "KBS제주", code: "90_", param: "jeju" },
 ];
 
-const createApiUrl = ({channelCode, cityCode = null}) => {
-    return `https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/${cityCode || ""}${channelCode}`;
+const createApiUrl = ({ channelCode, cityCode = null }) => {
+    return `https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/${
+        cityCode || ""
+    }${channelCode}`;
 };
 
 export const kbsUrls = [];
@@ -37,24 +39,39 @@ const setupKbsUrls = async () => {
             name: `KBS ${chItem.name}`,
             channel: chItem.param,
             city: null,
-            streamUrl: async () => {
+            streamUrl: async (bora = null) => {
                 try {
-                    const response = await fetch(createApiUrl({channelCode: chItem.code}));
+                    const response = await fetch(
+                        createApiUrl({ channelCode: chItem.code })
+                    );
                     const json = await response.json();
-                    return json.channel_item[0]?.service_url || null;
+                    const index =
+                        bora == "true" && json.channel_item.length > 1 ? 1 : 0;
+                    return json.channel_item[index]?.service_url || null;
                 } catch (e) {}
             },
         });
 
         for (const cityItem of cityCodes) {
-            if (chItem.param === "1radio" || chItem.param === "2radio" || chItem.param === "1fm") {
+            if (
+                chItem.param === "1radio" ||
+                chItem.param === "2radio" ||
+                chItem.param === "1fm"
+            ) {
                 kbsUrls.push({
-                    name: `${cityItem.name} ${chItem.name === "1FM" ? "음악FM" : chItem.name}`,
+                    name: `${cityItem.name} ${
+                        chItem.name === "1FM" ? "음악FM" : chItem.name
+                    }`,
                     channel: chItem.param,
                     city: cityItem.param,
                     streamUrl: async () => {
                         try {
-                            const response = await fetch(createApiUrl({channelCode: chItem.code, cityCode: cityItem.code}));
+                            const response = await fetch(
+                                createApiUrl({
+                                    channelCode: chItem.code,
+                                    cityCode: cityItem.code,
+                                })
+                            );
                             const json = await response.json();
                             return json.channel_item[0]?.service_url || null;
                         } catch (e) {}

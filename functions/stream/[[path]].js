@@ -12,6 +12,7 @@ export const onRequest = async (context) => {
     const station = params.get("stn");
     const channel = params.get("ch");
     const city = params.get("city");
+    const bora = params.get("bora");
 
     let location = null;
     let channelTitle = null;
@@ -22,6 +23,7 @@ export const onRequest = async (context) => {
                 station: station,
                 channel: channel,
                 city: city,
+                bora: bora,
             });
             channelTitle = await getName({
                 station: station,

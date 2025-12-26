@@ -20,7 +20,7 @@ document.getElementById("citySelector").addEventListener("change", function () {
 });
 
 // 스트림 변경 및 재생 기능
-async function changeSource({ stn, ch = "", city = "" }) {
+async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     const player = document.getElementById("player");
     const nowPlayingTitle = document.getElementById("nowPlayingTitle");
     const nowPlayingUrl = document.getElementById("nowPlayingUrl");
@@ -67,6 +67,9 @@ async function changeSource({ stn, ch = "", city = "" }) {
     }
     if (city) {
         requestUrl.searchParams.append("city", city);
+    }
+    if (bora) {
+        requestUrl.searchParams.append("bora", bora);
     }
 
     /* 새로운 스트림 가져오기 */
