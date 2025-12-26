@@ -91,6 +91,11 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     /* 스트림 가져오기 */
     try {
         const response = await fetch(requestUrl, { redirect: "follow" });
+
+        if (!response.ok) {
+            throw new Error("NETWORK_RESPONSE_NOT_OK");
+        }
+
         const fetchedUrl = response.url;
         const contentType = response.headers.get("Content-Type") || "";
 
