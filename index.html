@@ -13,6 +13,12 @@
         <header>
             <a class="site-name" href="..">라디오</a>
         </header>
+
+        <!--- 플레이어 --->
+        <section>
+            <audio id="player" controls></audio>
+            <video id="vPlayer" controls></video>
+        </section>
         
         <!--- 현재 선택된 채널 표시 --->
         <section id="nowPlaying">
@@ -27,12 +33,10 @@
                     <button id="staticCopyBtn">고정 URL 복사</button>
                     <a id="staticUrl" href=""></a>
                 </li>
+                <li>
+                    <button id="boraBtn">보이는 라디오로 전환</button>
+                </li>
             </ul>
-        </section>
-
-        <!--- 플레이어 --->
-        <section>
-            <audio id="player" controls></audio>
         </section>
 
         <!--- 채널 목록 영역 --->

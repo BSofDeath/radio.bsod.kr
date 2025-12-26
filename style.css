@@ -55,7 +55,9 @@ header {
     text-decoration: underline;
 }
 
-#player {
+#player,
+#vPlayer {
+    display: none;
     width: 100%;
 }
 
@@ -66,7 +68,7 @@ header {
     background-color: #f7f7f7;
     border-radius: 5px;
     padding: 1em;
-    margin-bottom: 1em;
+    margin: 1em 0;
     text-align: left;
     word-break: break-word;
 }
@@ -202,6 +204,10 @@ button:hover {
 #staticCopyBtn {
     display: none;
     margin-right: 0.35rem;
+}
+
+#boraBtn {
+    display: none;
 }
 
 @media (min-width: 576px) {
