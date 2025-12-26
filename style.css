@@ -12,78 +12,11 @@ body {
 }
 
 a {
-    text-decoration: none;
     color: #070b8a;
 }
 
 p {
     line-height: 50%;
-}
-
-select {
-    box-sizing: border-box;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
-
-    cursor: default;
-}
-
-table {
-    display: none;
-    width: 100%;
-    border-collapse: collapse;
-}
-
-tr {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-}
-
-td,
-th {
-    width: 10vw;
-    padding: 0.3rem 0.5rem 0.3rem;
-}
-
-th {
-    font-weight: bold;
-}
-
-table.visible {
-    display: block;
-}
-
-tr.title-row {
-    border: none;
-}
-
-td.channel-name {
-    width: 70vw;
-    padding: 0 4vw 0;
-}
-
-button {
-    font-family: "Pretendard", sans-serif;
-    font-size: 0.9rem;
-    border: 1px solid #999;
-    border-radius: 5px;
-    background-color: #f3f3f3;
-    color: black;
-    cursor: pointer;
-}
-
-button:hover {
-    filter: brightness(90%);
-    transition: filter 0.3s;
-
-    -webkit-filter: brightness(90%);
-    -webkit-transition: filter 0.3s;
 }
 
 header,
@@ -100,20 +33,17 @@ header {
     padding: 0 1rem;
 }
 
-nav {
-    margin: 1rem 0;
-}
-
 .site-name {
     font-size: 2rem;
     font-weight: 700;
     color: black;
+    text-decoration: none;
 }
 
 .site-name:before {
     content: "";
     display: inline-block;
-    background-image: url(images/logo-darkTR.svg);
+    background-image: url(https://radio.bsod.kr/images/logo-darkTR.svg);
     background-size: contain;
     background-repeat: no-repeat;
     width: 2rem;
@@ -121,36 +51,133 @@ nav {
     vertical-align: text-bottom;
 }
 
-#city-select {
-    width: 7.5rem;
-    font-family: "Pretendard", sans-serif;
-    font-size: 0.9rem;
-    padding: 7px 20px 7px 7px;
-    border: 1px solid #999;
+.copyright .contact a {
+    text-decoration: underline;
+}
+
+#player {
+    width: 100%;
+}
+
+#nowPlaying {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    background-color: #f7f7f7;
     border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+    word-break: break-word;
+}
+
+#nowPlaying > h3 {
+    margin: 0;
+}
+
+#nowPlayingUrl,
+#staticUrl {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    text-decoration: underline;
+}
+
+#nowPlayingUrlList {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0.5rem 0 0 0;
+    margin: 0;
+    gap: 0.35rem;
+}
+
+.url-group {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.url-group a {
+    padding-left: 0.25rem;
+}
+
+#citySelector {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23333' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
     background-size: 9px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    box-sizing: border-box;
     color: #333;
+    cursor: default;
+    font-family: "Pretendard", sans-serif;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.75rem;
+    width: 7.5rem;
 }
 
-#city-select:hover {
+#citySelector:hover {
     border-color: #777;
 }
 
-.channel-is-community a {
-    text-decoration: underline;
+#channelContainerHeader {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
 }
 
-.channel-is-community::before {
-    content: "　";
-    color: transparent;
+.channelContainer {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5em;
+}
+
+.visible {
+    display: grid;
+}
+
+.channel {
+    display: block;
+    background-color: #f1f3f4;
+    border-radius: 5px;
+    padding: 1em;
+    color: black;
     text-decoration: none;
-    background-image: url(images/community.svg);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+}
+
+.tuned {
+    color: #174ae4;
+    background-color: #e2e9ff;
+    font-weight: bold;
+}
+
+button {
+    font-family: "Pretendard", sans-serif;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+    color: black;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(90%);
+    transition: filter 0.3s;
+
+    -webkit-filter: brightness(90%);
+    -webkit-transition: filter 0.3s;
 }
 
 .button-area {
@@ -160,7 +187,6 @@ nav {
 }
 
 .button-area button {
-    padding: 0.35rem 0.75rem;
     margin: 0.35rem;
 }
 
@@ -168,26 +194,22 @@ nav {
     color: black;
 }
 
-.copyright a {
-    color: #040b8a;
-    text-decoration: underline;
+#playingCopyBtn {
+    display: none;
+    margin-right: 0.35rem;
 }
 
-.contact {
-    color: #999;
-}
-
-.contact a {
-    color: #999;
-    text-decoration: underline;
-}
-
-.contact a:hover {
-    text-decoration: underline;
+#staticCopyBtn {
+    display: none;
+    margin-right: 0.35rem;
 }
 
 @media (min-width: 576px) {
     body {
         max-width: 576px;
+    }
+
+    .channelContainer {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
