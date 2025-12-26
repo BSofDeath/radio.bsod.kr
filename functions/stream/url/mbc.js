@@ -24,7 +24,7 @@ async function todayBSMBCdatecode () {
 export const mbcUrls = [
   /* MBC 표준FM */
   { name: "부산MBC 표준FM", channel: "sfm", city: "busan", streamUrl: async () => {
-    return "https://stream.bsmbc.com/live/BusanMBC_AM_onairstream." + await todayBSMBCdatecode() + "/playlist.m3u8"
+    return "https://brook.bsmbc.com/live/BusanMBC_AM_onairstream." + await todayBSMBCdatecode() + "/playlist.m3u8"
   } },
   { name: "울산MBC 표준FM", channel: "sfm", city: "ulsan", streamUrl: "https://5ddfd163bd00d.streamlock.net/STDFM/STDFM/playlist.m3u8" },
   { name: "MBC경남 표준FM", channel: "sfm", city: "changwon", streamUrl: "https://wowza.mbcgn.kr/MBCFM/TV2.stream/playlist.m3u8" },
@@ -49,7 +49,7 @@ export const mbcUrls = [
     } catch (e) { return null; }} },  // default
   /* MBC FM4U */
   { name: "부산MBC FM4U", channel: "fm4u", city: "busan", streamUrl: async () => {
-    return "https://stream.bsmbc.com/live/BusanMBC_FM_onairstream." + await todayBSMBCdatecode() + "/playlist.m3u8"
+    return "https://brook.bsmbc.com/live/BusanMBC_FM_onairstream." + await todayBSMBCdatecode() + "/playlist.m3u8"
   } },
   { name: "울산MBC FM4U", channel: "fm4u", city: "ulsan", streamUrl: "https://5ddfd163bd00d.streamlock.net/FM4U/FM4U/playlist.m3u8" },
   { name: "MBC경남 FM4U", channel: "fm4u", city: "changwon", streamUrl: "https://wowza.mbcgn.kr/MBCFM4U/TV3.stream/playlist.m3u8" },
