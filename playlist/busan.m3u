@@ -5,6 +5,8 @@ https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=busan
 https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=busan
 #EXTINF:-1,KBS부산 음악FM
 https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=busan
+#EXTINF:-1,KBS울산 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=ulsan
 #EXTINF:-1,KBS창원 1라디오
 https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=changwon
 #EXTINF:-1,KBS창원 2라디오
@@ -47,12 +49,16 @@ https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=busan
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=ulsan
 #EXTINF:-1,경남CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=gyeongnam
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 부산극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=busan
 #EXTINF:-1,FEBC 울산극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=ulsan
 #EXTINF:-1,FEBC 창원극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=changwon
+#EXTINF:-1,BBS 부산불교방송
+https://radio.bsod.kr/stream/?stn=bbs&city=busan
 #EXTINF:-1,CPBC 부산가톨릭평화방송
 https://radio.bsod.kr/stream/?stn=cpbc&city=busan
 #EXTINF:-1,WBS 부산원음방송

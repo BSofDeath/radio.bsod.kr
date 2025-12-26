@@ -5,6 +5,10 @@ https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=cheongju
 https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=cheongju
 #EXTINF:-1,KBS청주 음악FM
 https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=cheongju
+#EXTINF:-1,KBS충주 1라디오
+https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=chungju
+#EXTINF:-1,KBS충주 음악FM
+https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=chungju
 #EXTINF:-1,MBC충북 표준FM
 https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=cheongju
 #EXTINF:-1,MBC충북 FM4U
@@ -17,6 +21,8 @@ https://radio.bsod.kr/stream/?stn=ebs
 https://radio.bsod.kr/stream/?stn=tbn&city=chungbuk
 #EXTINF:-1,충북CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=cheongju
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
 #EXTINF:-1,옥천FM

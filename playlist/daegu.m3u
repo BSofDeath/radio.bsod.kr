@@ -35,6 +35,8 @@ https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daegu
 https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=daegu
 #EXTINF:-1,포항CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=pohang
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 대구극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=daegu
 #EXTINF:-1,FEBC 포항극동방송
@@ -47,7 +49,7 @@ https://radio.bsod.kr/stream/?stn=cpbc&city=daegu
 https://radio.bsod.kr/stream/?stn=wbs&city=daegu
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
-#EXTINF:-1,AFN Go Daegu
+#EXTINF:-1,AFN FM Daegu
 https://radio.bsod.kr/stream/?stn=afn&city=daegu
 #EXTINF:-1,성서공동체FM
 https://radio.bsod.kr/stream/?stn=community&ch=scnfm

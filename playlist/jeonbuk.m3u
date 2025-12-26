@@ -17,13 +17,15 @@ https://radio.bsod.kr/stream/?stn=ebs
 https://radio.bsod.kr/stream/?stn=tbn&city=jeonbuk
 #EXTINF:-1,전북CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeonbuk
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 전북극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=jeonbuk
 #EXTINF:-1,WBS 전북원음방송
 https://radio.bsod.kr/stream/?stn=wbs&city=jeonbuk
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
-#EXTINF:-1,AFN Go Kunsan
+#EXTINF:-1,AFN FM Kunsan
 https://radio.bsod.kr/stream/?stn=afn&city=kunsan
 #EXTINF:-1,전주FM
 https://radio.bsod.kr/stream/?stn=community&ch=jcfm

@@ -17,7 +17,11 @@ https://radio.bsod.kr/stream/?stn=ebs
 https://radio.bsod.kr/stream/?stn=tbn&city=jeju
 #EXTINF:-1,제주CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeju
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 제주극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=jeju
+#EXTINF:-1,BBS 제주불교방송
+https://radio.bsod.kr/stream/?stn=bbs&city=jeju
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang

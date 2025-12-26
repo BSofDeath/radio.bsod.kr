@@ -41,6 +41,8 @@ https://radio.bsod.kr/stream/?stn=tbn
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm
 #EXTINF:-1,CBS 음악FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=mfm
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 서울극동방송
 https://radio.bsod.kr/stream/?stn=febc
 #EXTINF:-1,BBS 서울불교방송
@@ -53,7 +55,7 @@ https://radio.bsod.kr/stream/?stn=wbs
 https://radio.bsod.kr/stream/?stn=kookbang
 #EXTINF:-1,국악방송
 https://radio.bsod.kr/stream/?stn=kugak
-#EXTINF:-1,AFN Go Humphreys
+#EXTINF:-1,AFN FM Humphreys
 https://radio.bsod.kr/stream/?stn=afn&city=humphreys
 #EXTINF:-1,관악FM
 https://radio.bsod.kr/stream/?stn=community&ch=gwanakfm

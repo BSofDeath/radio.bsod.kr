@@ -35,6 +35,8 @@ https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=gwangju
 https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=gwangju
 #EXTINF:-1,전남CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeonnam
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 광주극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=gwangju
 #EXTINF:-1,FEBC 목포극동방송
@@ -49,6 +51,8 @@ https://radio.bsod.kr/stream/?stn=cpbc&city=gwangju
 https://radio.bsod.kr/stream/?stn=wbs&city=gwangju
 #EXTINF:-1,국방FM
 https://radio.bsod.kr/stream/?stn=kookbang
+#EXTINF:-1,광주국악방송
+https://radio.bsod.kr/stream/?stn=kugak&city=gwangju
 #EXTINF:-1,광주FM
 https://radio.bsod.kr/stream/?stn=community&ch=kjfm
 #EXTINF:-1,GBS고려방송

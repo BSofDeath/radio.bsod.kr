@@ -33,6 +33,10 @@ https://radio.bsod.kr/stream/?stn=ebs
 https://radio.bsod.kr/stream/?stn=tbn&city=gangwon
 #EXTINF:-1,춘천CBS 표준FM
 https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=chuncheon
+#EXTINF:-1,강원영동CBS 표준FM
+https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=youngdong
+#EXTINF:-1,CBS JOY4U
+https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 영동극동방송
 https://radio.bsod.kr/stream/?stn=febc&city=gangwon
 #EXTINF:-1,국방FM
