@@ -18,7 +18,7 @@ export const cbsUrls = [
   { name: "CBS 음악FM", channel: "mfm", city: null, streamUrl: "https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8" },  // default
   { name: "부산CBS 음악FM", channel: "mfm", city: "busan", streamUrl: "https://m-aac.cbs.co.kr/busan981/_definst_/busan981.stream/playlist.m3u8" },
   { name: "대구CBS 음악FM", channel: "mfm", city: "daegu", streamUrl: "https://m-aac.cbs.co.kr/daegu939/_definst_/daegu939.stream/playlist.m3u8" },
-  { name: "광주CBS 음악FM", channel: "mfm", city: "gwangju", streamUrl: "http://m-aac.cbs.co.kr/gwangju939/_definst_/gwangju939.stream/playlist.m3u8" },
+  { name: "광주CBS 음악FM", channel: "mfm", city: "gwangju", streamUrl: "https://m-aac.cbs.co.kr/gwangju939/_definst_/gwangju939.stream/playlist.m3u8" },
   /* CBS JOY4U */
   { name: "CBS JOY4U", channel: "joy4u", city: null, streamUrl: "https://m-aac.cbs.co.kr/mweb_cbscmc/_definst_/cbscmc.stream/playlist.m3u8" },  // default
 ];
