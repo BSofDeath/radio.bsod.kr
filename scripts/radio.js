@@ -63,20 +63,10 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
         p.style.display = "none";
     });
 
-    nowPlayingUrl.innerHTML = "";
-    nowPlayingUrl.href = "";
-    nowPlayingTitle.innerHTML = "연결 중…";
-
-    staticUrl.innerHTML = "";
-    staticUrl.href = "";
-
-    playingCopyBtn.style.display = "none";
-    staticCopyBtn.style.display = "none";
-    boraBtn.style.display = "none";
-
-    /* 새로운 스트림 가져오기 준비 */
+    /* 스트림 가져오기 준비 */
     const requestUrl = new URL("https://radio.bsod.kr/stream/");
     requestUrl.searchParams.append("stn", stn);
+
     if (ch) {
         requestUrl.searchParams.append("ch", ch);
     }
@@ -87,6 +77,18 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
         requestUrl.searchParams.append("bora", bora);
     }
 
+    /* 초기 정보 업데이트 */
+    document.title = selectedChannel.innerHTML;
+    nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
+    staticUrl.innerHTML = requestUrl.toString();
+    staticUrl.href = requestUrl;
+    staticCopyBtn.style.display = "inline-block";
+
+    nowPlayingUrl.style.display = "none";
+    playingCopyBtn.style.display = "none";
+    boraBtn.style.display = "none";
+
+    /* 스트림 가져오기 */
     try {
         const response = await fetch(requestUrl, { redirect: "follow" });
         const fetchedUrl = response.url;
@@ -100,7 +102,12 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
                 const isBora = bora === "true" ? "" : "true";
                 if (isBora === "true") boraBtn.innerText = "일반 라디오로 전환";
                 else boraBtn.innerText = "보이는 라디오로 전환";
-                changeSource({ stn: stn, ch: ch, city: city, bora: isBora });
+                changeSource({
+                    stn: stn,
+                    ch: ch,
+                    city: city,
+                    bora: isBora,
+                });
             };
         }
 
@@ -132,15 +139,10 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
             player.play();
         }
 
-        // 정보 업데이트
-        nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
-        document.title = selectedChannel.innerHTML;
-
+        // 스트림 가져온 후 정보 업데이트
+        nowPlayingUrl.style.display = "inline-block";
         nowPlayingUrl.innerHTML = fetchedUrl.split("?")[0].toString();
-        staticUrl.innerHTML = requestUrl.toString();
-
         nowPlayingUrl.href = fetchedUrl;
-        staticUrl.href = requestUrl;
 
         // 복사 버튼 이벤트 설정
         playingCopyBtn.style.display = "inline-block";
@@ -160,8 +162,9 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
             }, 1000);
         };
     } catch (error) {
-        nowPlayingTitle.innerHTML = "재생할 수 없습니다.";
         document.title = "라디오";
+        nowPlayingTitle.innerHTML +=
+            "<br><span style='color:red;'>현재 창에서 해당 채널을 재생할 수 없습니다.<br>브라우저 보안 정책으로 인한 오류일 수 있으니 아래의 [고정 URL]을 클릭해 새 창에서 다시 시도해 주세요.</span>";
         return;
     }
 }
