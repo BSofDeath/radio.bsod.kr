@@ -82,8 +82,9 @@ export const mbcUrls = [
   /* MBC 보이는 라디오 */
   { name: "MBC 보이는 라디오", channel: "bora", city: null, streamUrl: async () => {
     try {
-      const response = await fetch("https://sminiplay.imbc.com/boraplay.ashx");
-      const url = await response.text();
+      const response = await fetch("https://sminiplay.imbc.com/boraplay.ashx?agent=webapp&callback=__boraplay");
+      let url = await response.text();
+      url = url.replace('__boraplay({\n\t"BoraURL":\n"', '').replace('"\n\t}\n);', '')
       return url;
     } catch (e) { return null; }} },  // default
 ];
