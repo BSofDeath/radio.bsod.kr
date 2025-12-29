@@ -1,9 +1,11 @@
 export const sbsUrls = [
   /* SBS 러브FM */
   { name: "KNN 러브FM", channel: "lovefm", city: "busan", streamUrl: "https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8" },
-  { name: "SBS 러브FM", channel: "lovefm", city: null, streamUrl: async () => {
+  { name: "SBS 러브FM", channel: "lovefm", city: null, streamUrl: async (bora = false) => {
     try {
-      const response = await fetch("https://apis.sbs.co.kr/play-api/1.0/livestream/lovepc/lovefm?protocol=hls&ssl=Y");
+      const response = bora 
+      ? "https://apis.sbs.co.kr/play-api/1.0/livestream/visuallove/visuallove4?protocol=hls&ssl=Y"
+      : "https://apis.sbs.co.kr/play-api/1.0/livestream/lovepc/lovefm?protocol=hls&ssl=Y";
       const url = await response.text();
       return url;
     } catch (e) { return null; }} },  // default
@@ -17,9 +19,11 @@ export const sbsUrls = [
   { name: "CJB 조이FM", channel: "powerfm", city: "cheongju", streamUrl: "https://wowza1.cjb.co.kr/live/cjbradio/playlist.m3u8" },
   { name: "G1 프레쉬FM", channel: "powerfm", city: "chuncheon", streamUrl: "http://61.82.49.4:1935/fm/_definst_/myStream/playlist.m3u8" },
   { name: "JIBS 뉴파워FM", channel: "powerfm", city: "jeju", streamUrl: "http://123.140.197.22/stream/2/play.m3u8" },
-  { name: "SBS 파워FM", channel: "powerfm", city: null, streamUrl: async () => {
+  { name: "SBS 파워FM", channel: "powerfm", city: null, streamUrl: async (bora = false) => {
     try {
-      const response = await fetch("https://apis.sbs.co.kr/play-api/1.0/livestream/powerpc/powerfm?protocol=hls&ssl=Y");
+      const response = bora
+      ? "https://apis.sbs.co.kr/play-api/1.0/livestream/visualpower/visualpower4?protocol=hls&ssl=Y"
+      : "https://apis.sbs.co.kr/play-api/1.0/livestream/powerpc/powerfm?protocol=hls&ssl=Y";
       const url = await response.text();
       return url;
     } catch (e) { return null; }} },  // default
