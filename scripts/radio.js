@@ -129,8 +129,16 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
         const contentType = response.headers.get("Content-Type") || "";
 
         // [보이는 라디오] 버튼 표시 여부 결정
-        const targetChannels = ["1radio", "2radio", "2fm"];
-        if (targetChannels.includes(ch) && city === "") {
+        const targetChannels = [
+            { stn: "kbs", ch: "1radio" },
+            { stn: "kbs", ch: "2radio" },
+            { stn: "kbs", ch: "2fm" },
+            { stn: "sbs", ch: "lovefm" },
+            { stn: "sbs", ch: "powerfm" },
+        ]
+        const isTarget = targetChannels.some(item => item.stn === stn && item.ch === ch);
+        
+        if (isTarget && city === "") {
             boraBtn.style.display = "inline-block";
             boraBtn.onclick = () => {
                 const isBora = bora === "true" ? "" : "true";
