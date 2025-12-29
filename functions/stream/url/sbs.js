@@ -3,9 +3,10 @@ export const sbsUrls = [
   { name: "KNN 러브FM", channel: "lovefm", city: "busan", streamUrl: "https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8" },
   { name: "SBS 러브FM", channel: "lovefm", city: null, streamUrl: async (bora = null) => {
     try {
-      const response = bora == "true" 
+      const endpoint = bora == "true" 
       ? "https://apis.sbs.co.kr/play-api/1.0/livestream/visuallove/visuallove4?protocol=hls&ssl=Y"
       : "https://apis.sbs.co.kr/play-api/1.0/livestream/lovepc/lovefm?protocol=hls&ssl=Y";
+      const response = await fetch(endpoint);
       const url = await response.text();
       return url;
     } catch (e) { return null; }} },  // default
@@ -21,9 +22,10 @@ export const sbsUrls = [
   { name: "JIBS 뉴파워FM", channel: "powerfm", city: "jeju", streamUrl: "http://123.140.197.22/stream/2/play.m3u8" },
   { name: "SBS 파워FM", channel: "powerfm", city: null, streamUrl: async (bora = null) => {
     try {
-      const response = bora == "true"
+      const endpoint = bora == "true"
       ? "https://apis.sbs.co.kr/play-api/1.0/livestream/visualpower/visualpower4?protocol=hls&ssl=Y"
       : "https://apis.sbs.co.kr/play-api/1.0/livestream/powerpc/powerfm?protocol=hls&ssl=Y";
+      const response = await fetch(endpoint);
       const url = await response.text();
       return url;
     } catch (e) { return null; }} },  // default
