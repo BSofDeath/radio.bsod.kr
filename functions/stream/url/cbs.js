@@ -3,7 +3,7 @@ export const cbsUrls = [
   { name: "CBS 표준FM", channel: "sfm", city: null, streamUrl: async (bora = null) => {
     try {
       const url = bora == "true" 
-      ? "https://event-live2.cbs.co.kr/cbs-event2/_definst_/cbs-event2.stream/playlist.m3u8"
+      ? "https://event-aac.cbs.co.kr/fm/_definst_/fm.stream/playlist.m3u8"
       : "https://m-aac.cbs.co.kr/mweb_cbs981/_definst_/cbs981.stream/playlist.m3u8";
       return url;
     } catch (e) { return null; }} },  // default
