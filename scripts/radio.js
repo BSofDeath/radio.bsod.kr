@@ -135,6 +135,7 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
             { stn: "kbs", ch: "2fm" },
             { stn: "sbs", ch: "lovefm" },
             { stn: "sbs", ch: "powerfm" },
+            { stn: "cbs", ch: "sfm" },
         ]
         const isTarget = targetChannels.some(item => item.stn === stn && item.ch === ch);
         
