@@ -2,11 +2,9 @@ export const cbsUrls = [
   /* CBS 표준FM */
   { name: "CBS 표준FM", channel: "sfm", city: null, streamUrl: async (bora = null) => {
     try {
-      const endpoint = bora == "true" 
+      const url = bora == "true" 
       ? "https://event-live2.cbs.co.kr/cbs-event2/_definst_/cbs-event2.stream/playlist.m3u8"
       : "https://m-aac.cbs.co.kr/mweb_cbs981/_definst_/cbs981.stream/playlist.m3u8";
-      const response = await fetch(endpoint);
-      const url = await response.text();
       return url;
     } catch (e) { return null; }} },  // default
   { name: "부산CBS 표준FM", channel: "sfm", city: "busan", streamUrl: "https://m-aac.cbs.co.kr/busan939/_definst_/busan939.stream/playlist.m3u8" },
