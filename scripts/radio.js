@@ -136,8 +136,9 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
             { stn: "sbs", ch: "lovefm" },
             { stn: "sbs", ch: "powerfm" },
             { stn: "cbs", ch: "sfm" },
+            { stn: "ifm", ch: null },
         ]
-        const isTarget = targetChannels.some(item => item.stn === stn && item.ch === ch);
+        const isTarget = targetChannels.some(item => item.ch != null ? item.stn === stn && item.ch === ch : item.stn === stn);
         
         if (isTarget && city === "") {
             boraBtn.style.display = "inline-block";
