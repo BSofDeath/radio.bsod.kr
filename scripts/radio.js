@@ -65,7 +65,7 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     });
 
     /* 스트림 가져오기 준비 */
-    const requestUrl = new URL("https://radio.bsod.kr/stream/");
+    const requestUrl = new URL(`https://${window.location.host}/stream/`);
     requestUrl.searchParams.append("stn", stn);
 
     if (ch) {
