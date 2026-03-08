@@ -28,7 +28,7 @@ const cityCodes = [
 ];
 
 const createApiUrl = ({ channelCode, cityCode = null }) => {
-    return `https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/${
+    return `https://kbs-api-proxy.bsod.workers.dev/${
         cityCode || ""
     }${channelCode}`;
 };
