@@ -9,7 +9,7 @@ export const communityUrls = [
     { name: "옥천FM", channel: "obn", streamUrl: "http://icecast.radios.kr:8000/obn" },
     { name: "세종FM", channel: "sejongfm", streamUrl: "http://icecast.radios.kr:8000/sejongfm" },
     { name: "GBS고려방송", channel: "crfm", streamUrl: "http://icecast.radios.kr:8000/crfm" },
-    { name: "한밭FM", channel: "hanbatfm", streamUrl: "http://icecast.radios.kr:8000/hanbatfm" },
+    { name: "한밭FM", channel: "hanbatfm", streamUrl: "http://115.68.194.186:8000/hanbatfm" },
     { name: "성주FM", channel: "sjfm", streamUrl: "http://icecast.radios.kr:8000/sjfm" },
     { name: "남해FM", channel: "namhaefm", streamUrl: "http://icecast.radios.kr:8000/namhaefm" },
     { name: "상주FM", channel: "sangjufm", streamUrl: "http://icecast.radios.kr:8000/sangjufm" },
