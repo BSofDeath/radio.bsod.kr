@@ -12,5 +12,5 @@ export const commonUrls = [
     { name: "국방FM", station: "kookbang", streamUrl: "https://mediaworks.dema.mil.kr/live_edge/audio.sdp/playlist.m3u8" },
     { name: "Arirang Radio", station: "arirang", streamUrl: "https://amdlive-ch03-ctnd-com.akamaized.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8"},
     { name: "부산영어방송", station: "befm", streamUrl: "https://live.cdn.smilecdn.com/befm905_live/live/playlist.m3u8"},
-    { name: "글로벌광주방송", station: "ggn", streamUrl: "http://media.ggn.or.kr:1935/gfnlive/myStream/playlist.m3u8" },
+    { name: "글로벌광주방송", station: "ggn", streamUrl: "http://media.ggn.or.kr:8080/live" },
 ];

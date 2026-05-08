@@ -13,7 +13,7 @@ export const sbsUrls = [
   /* SBS 파워FM */
   { name: "KNN 파워FM", channel: "powerfm", city: "busan", streamUrl: "https://stream1.knn.co.kr/hls/lb9ezl87d37uu0vy65bb_pfm/index.m3u8" },
   { name: "UBC 그린FM", channel: "powerfm", city: "ulsan", streamUrl: "https://stream.ubc.co.kr/hls/ubcfmstream/index.m3u8" },
-  { name: "TBC 드림FM", channel: "powerfm", city: "daegu", streamUrl: "http://203.251.91.227:6888/live/radio-eorn-xlqltl-dbekftks-001/stream.m3u8" },
+  { name: "TBC 드림FM", channel: "powerfm", city: "daegu", streamUrl: "http://203.251.91.122:1935/on-air-Backup/fm/playlist.m3u8" },
   { name: "KBC 마이FM", channel: "powerfm", city: "gwangju", streamUrl: "https://vod.ikbc.co.kr/KBCFM/kbcra_aac/playlist.m3u8" },
   { name: "JTV 매직FM", channel: "powerfm", city: "jeonju", streamUrl: "http://61.85.197.53:1935/jtv_radio/myStream/playlist.m3u8" },
   { name: "TJB 파워FM", channel: "powerfm", city: "daejeon", streamUrl: "https://vod.tjb.co.kr/radiolive/_definst_/radio_64k/playlist.m3u8" },
