@@ -28,7 +28,9 @@ const cityCodes = [
 ];
 
 const createApiUrl = ({ channelCode, cityCode = null }) => {
-    return `/api/kbs/${cityCode || ""}${channelCode}`;
+    return `https://kbs-api-proxy.bsod.workers.dev/${
+        cityCode || ""
+    }${channelCode}`;
 };
 
 export const kbsUrls = [];
