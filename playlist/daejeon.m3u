@@ -12,7 +12,9 @@ https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=daejeon
 #EXTINF:-1,TJB 파워FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=daejeon
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 대전교통방송
 https://radio.bsod.kr/stream/?stn=tbn&city=daejeon
 #EXTINF:-1,TBN 충남교통방송

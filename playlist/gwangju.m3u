@@ -26,7 +26,9 @@ https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=yeosu
 #EXTINF:-1,KBC 마이FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=gwangju
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 광주교통방송
 https://radio.bsod.kr/stream/?stn=tbn&city=gwangju
 #EXTINF:-1,광주CBS 표준FM

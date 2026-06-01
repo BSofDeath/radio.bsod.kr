@@ -23,6 +23,7 @@ export async function getUrl({
         kbs: kbsUrls,
         mbc: mbcUrls,
         sbs: sbsUrls,
+        ebs: ebsUrls,
         tbs: tbsUrls,
         tbn: tbnUrls,
         cbs: cbsUrls,

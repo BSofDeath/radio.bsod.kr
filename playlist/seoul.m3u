@@ -24,7 +24,9 @@ https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm
 #EXTINF:-1,SBS 고릴라디오M
 https://radio.bsod.kr/stream/?stn=sbs&ch=dmb
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,OBS 라디오
 https://radio.bsod.kr/stream/?stn=obs
 #EXTINF:-1,iFM 경인방송

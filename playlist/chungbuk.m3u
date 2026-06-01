@@ -16,7 +16,9 @@ https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=cheongju
 #EXTINF:-1,CJB 조이FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=cheongju
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 충북교통방송
 https://radio.bsod.kr/stream/?stn=tbn&city=chungbuk
 #EXTINF:-1,충북CBS 표준FM
