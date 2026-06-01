@@ -1,6 +1,7 @@
 import { kbsUrls } from "./url/kbs.js";
 import { mbcUrls } from "./url/mbc.js";
 import { sbsUrls } from "./url/sbs.js";
+import { ebsUrls } from "./url/ebs.js";
 import { tbsUrls } from "./url/tbs.js";
 import { tbnUrls } from "./url/tbn.js";
 import { cbsUrls } from "./url/cbs.js";
