@@ -34,7 +34,9 @@ https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=busan
 #EXTINF:-1,UBC 그린FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=ulsan
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 부산교통방송
 https://radio.bsod.kr/stream/?stn=tbn&city=busan
 #EXTINF:-1,TBN 울산교통방송

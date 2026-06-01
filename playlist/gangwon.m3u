@@ -28,7 +28,9 @@ https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=gangneung
 #EXTINF:-1,G1 프레쉬FM
 https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=chuncheon
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs
+https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+#EXTINF:-1,EBS 반디 외국어 전문
+https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 강원교통방송
 https://radio.bsod.kr/stream/?stn=tbn&city=gangwon
 #EXTINF:-1,춘천CBS 표준FM
