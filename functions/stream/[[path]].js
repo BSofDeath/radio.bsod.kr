@@ -1,3 +1,4 @@
+import { getCachedUrl } from "./getCachedUrl.js";
 import { getUrl } from "./getUrl.js";
 import { getName } from "./getName.js";
 import { createPlsFile } from "./createPlsFile.js";
@@ -19,17 +20,11 @@ export const onRequest = async (context) => {
 
     if (station != null || channel != null || city != null) {
         try {
-            location = await getUrl({
-                station: station,
-                channel: channel,
-                city: city,
-                bora: bora,
-            });
-            channelTitle = await getName({
-                station: station,
-                channel: channel,
-                city: city,
-            });
+            location = await getCachedUrl(
+                { station, channel, city, bora },
+                context
+            );
+            channelTitle = await getName({ station, channel, city });
         } catch (e) {
             location = null;
             channelTitle = null;
