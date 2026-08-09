@@ -33,8 +33,6 @@ export const onRequest = async (context) => {
 
     if (location != null) {
         switch (pathname) {
-            case "/stream/player.html":
-                return createNewTabPlayer(location, channelTitle);
             case "/stream/playback.pls":
                 return createPlsFile(location, channelTitle);
             case "/stream/static":
