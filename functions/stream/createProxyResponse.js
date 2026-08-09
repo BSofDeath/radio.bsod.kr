@@ -1,4 +1,8 @@
 export async function createProxyResponnse (location, request) {
+    const parsedUrl = new URL(location);
+    if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
+        return new Response("Invalid URL", { status: 400 });
+    }
     const response = await fetch(location, {
       method: request.method,
       headers: request.headers,
