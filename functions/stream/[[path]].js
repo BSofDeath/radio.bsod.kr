@@ -33,11 +33,13 @@ export const onRequest = async (context) => {
 
     if (location != null) {
         switch (pathname) {
-            case "/stream/playback.pls":
-                return createPlsFile(location, channelTitle);
-            case "/stream/static":
-                return await createProxyResponnse(location, request);
-            default:
+            // case "/stream/player.html":
+            //     return createNewTabPlayer(location, channelTitle);
+            // case "/stream/playback.pls":
+            //     return createPlsFile(location, channelTitle);
+            // case "/stream/static":
+            //     return await createProxyResponnse(location, request);
+            case "/stream":
                 return new Response(null, {
                     status: 302,
                     headers: {
