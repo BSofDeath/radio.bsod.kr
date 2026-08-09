@@ -12,7 +12,7 @@ function parseRadioUrl(hrefStr) {
         params[key] = value;
     });
 
-    const baseUrl = "https://radio.bsod.kr/stream/";
+    const baseUrl = "https://radio.bsod.kr/stream";
     const queryString = new URLSearchParams(params).toString();
 
     return `${baseUrl}?${queryString}`;
