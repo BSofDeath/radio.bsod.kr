@@ -1,65 +1,65 @@
 #EXTM3U
 #EXTINF:-1,KBS대구 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=daegu
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=daegu
 #EXTINF:-1,KBS대구 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=daegu
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio&city=daegu
 #EXTINF:-1,KBS대구 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=daegu
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=daegu
 #EXTINF:-1,KBS안동 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=andong
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=andong
 #EXTINF:-1,KBS포항 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=pohang
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=pohang
 #EXTINF:-1,대구MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=daegu
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=daegu
 #EXTINF:-1,대구MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=daegu
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=daegu
 #EXTINF:-1,안동MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=andong
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=andong
 #EXTINF:-1,안동MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=andong
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=andong
 #EXTINF:-1,포항MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=pohang
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=pohang
 #EXTINF:-1,포항MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=pohang
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=pohang
 #EXTINF:-1,TBC 드림FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=daegu
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm&city=daegu
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 대구교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=daegu
+https://radio.bsod.kr/stream?stn=tbn&city=daegu
 #EXTINF:-1,TBN 경북교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=gyeongbuk
+https://radio.bsod.kr/stream?stn=tbn&city=gyeongbuk
 #EXTINF:-1,대구CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daegu
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=daegu
 #EXTINF:-1,대구CBS 음악FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=daegu
+https://radio.bsod.kr/stream?stn=cbs&ch=mfm&city=daegu
 #EXTINF:-1,포항CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=pohang
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=pohang
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 대구극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=daegu
+https://radio.bsod.kr/stream?stn=febc&city=daegu
 #EXTINF:-1,FEBC 포항극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=pohang
+https://radio.bsod.kr/stream?stn=febc&city=pohang
 #EXTINF:-1,BBS 대구불교방송
-https://radio.bsod.kr/stream/?stn=bbs&city=daegu
+https://radio.bsod.kr/stream?stn=bbs&city=daegu
 #EXTINF:-1,CPBC 대구가톨릭평화방송
-https://radio.bsod.kr/stream/?stn=cpbc&city=daegu
+https://radio.bsod.kr/stream?stn=cpbc&city=daegu
 #EXTINF:-1,WBS 대구원음방송
-https://radio.bsod.kr/stream/?stn=wbs&city=daegu
+https://radio.bsod.kr/stream?stn=wbs&city=daegu
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang
 #EXTINF:-1,AFN FM Daegu
-https://radio.bsod.kr/stream/?stn=afn&city=daegu
+https://radio.bsod.kr/stream?stn=afn&city=daegu
 #EXTINF:-1,성서공동체FM
-https://radio.bsod.kr/stream/?stn=community&ch=scnfm
+https://radio.bsod.kr/stream?stn=community&ch=scnfm
 #EXTINF:-1,대구동구FM
-https://radio.bsod.kr/stream/?stn=community&ch=daegufm
+https://radio.bsod.kr/stream?stn=community&ch=daegufm
 #EXTINF:-1,영주FM
-https://radio.bsod.kr/stream/?stn=community&ch=yeongjufm
+https://radio.bsod.kr/stream?stn=community&ch=yeongjufm
 #EXTINF:-1,성주FM
-https://radio.bsod.kr/stream/?stn=community&ch=sjfm
+https://radio.bsod.kr/stream?stn=community&ch=sjfm
 #EXTINF:-1,상주FM
-https://radio.bsod.kr/stream/?stn=community&ch=sangjufm
+https://radio.bsod.kr/stream?stn=community&ch=sangjufm

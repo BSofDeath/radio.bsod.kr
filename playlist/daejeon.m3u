@@ -1,37 +1,37 @@
 #EXTM3U
 #EXTINF:-1,KBS대전 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=daejeon
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=daejeon
 #EXTINF:-1,KBS대전 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=daejeon
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio&city=daejeon
 #EXTINF:-1,KBS대전 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=daejeon
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=daejeon
 #EXTINF:-1,대전MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=daejeon
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=daejeon
 #EXTINF:-1,대전MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=daejeon
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=daejeon
 #EXTINF:-1,TJB 파워FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=daejeon
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm&city=daejeon
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 대전교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=daejeon
+https://radio.bsod.kr/stream?stn=tbn&city=daejeon
 #EXTINF:-1,TBN 충남교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=chungnam
+https://radio.bsod.kr/stream?stn=tbn&city=chungnam
 #EXTINF:-1,대전CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=daejeon
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=daejeon
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 대전극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=daejeon
+https://radio.bsod.kr/stream?stn=febc&city=daejeon
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang
 #EXTINF:-1,대전국악방송
-https://radio.bsod.kr/stream/?stn=kugak&city=daejeon
+https://radio.bsod.kr/stream?stn=kugak&city=daejeon
 #EXTINF:-1,금강FM
-https://radio.bsod.kr/stream/?stn=community&ch=keumkangfm
+https://radio.bsod.kr/stream?stn=community&ch=keumkangfm
 #EXTINF:-1,세종FM
-https://radio.bsod.kr/stream/?stn=community&ch=sejongfm
+https://radio.bsod.kr/stream?stn=community&ch=sejongfm
 #EXTINF:-1,한밭FM
-https://radio.bsod.kr/stream/?stn=community&ch=hanbatfm
+https://radio.bsod.kr/stream?stn=community&ch=hanbatfm

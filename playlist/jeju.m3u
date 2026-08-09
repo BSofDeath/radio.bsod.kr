@@ -1,29 +1,29 @@
 #EXTM3U
 #EXTINF:-1,KBS제주 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=jeju
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=jeju
 #EXTINF:-1,KBS제주 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=jeju
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio&city=jeju
 #EXTINF:-1,KBS제주 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=jeju
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=jeju
 #EXTINF:-1,제주MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=jeju
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=jeju
 #EXTINF:-1,제주MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=jeju
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=jeju
 #EXTINF:-1,JIBS 뉴파워FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=jeju
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm&city=jeju
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 제주교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=jeju
+https://radio.bsod.kr/stream?stn=tbn&city=jeju
 #EXTINF:-1,제주CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeju
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=jeju
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 제주극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=jeju
+https://radio.bsod.kr/stream?stn=febc&city=jeju
 #EXTINF:-1,BBS 제주불교방송
-https://radio.bsod.kr/stream/?stn=bbs&city=jeju
+https://radio.bsod.kr/stream?stn=bbs&city=jeju
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang

@@ -1,63 +1,63 @@
 #EXTM3U
 #EXTINF:-1,KBS광주 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=gwangju
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=gwangju
 #EXTINF:-1,KBS광주 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=gwangju
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio&city=gwangju
 #EXTINF:-1,KBS광주 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=gwangju
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=gwangju
 #EXTINF:-1,KBS목포 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=mokpo
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=mokpo
 #EXTINF:-1,KBS목포 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=mokpo
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=mokpo
 #EXTINF:-1,KBS순천 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=suncheon
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=suncheon
 #EXTINF:-1,광주MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=gwangju
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=gwangju
 #EXTINF:-1,광주MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=gwangju
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=gwangju
 #EXTINF:-1,목포MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=mokpo
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=mokpo
 #EXTINF:-1,목포MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=mokpo
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=mokpo
 #EXTINF:-1,여수MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=yeosu
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=yeosu
 #EXTINF:-1,여수MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=yeosu
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=yeosu
 #EXTINF:-1,KBC 마이FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=gwangju
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm&city=gwangju
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 광주교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=gwangju
+https://radio.bsod.kr/stream?stn=tbn&city=gwangju
 #EXTINF:-1,광주CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=gwangju
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=gwangju
 #EXTINF:-1,광주CBS 음악FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=mfm&city=gwangju
+https://radio.bsod.kr/stream?stn=cbs&ch=mfm&city=gwangju
 #EXTINF:-1,전남CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=jeonnam
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=jeonnam
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 광주극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=gwangju
+https://radio.bsod.kr/stream?stn=febc&city=gwangju
 #EXTINF:-1,FEBC 목포극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=mokpo
+https://radio.bsod.kr/stream?stn=febc&city=mokpo
 #EXTINF:-1,FEBC 전남동부극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=jeonnam
+https://radio.bsod.kr/stream?stn=febc&city=jeonnam
 #EXTINF:-1,BBS 광주불교방송
-https://radio.bsod.kr/stream/?stn=bbs&city=gwangju
+https://radio.bsod.kr/stream?stn=bbs&city=gwangju
 #EXTINF:-1,CPBC 광주가톨릭평화방송
-https://radio.bsod.kr/stream/?stn=cpbc&city=gwangju
+https://radio.bsod.kr/stream?stn=cpbc&city=gwangju
 #EXTINF:-1,WBS 광주원음방송
-https://radio.bsod.kr/stream/?stn=wbs&city=gwangju
+https://radio.bsod.kr/stream?stn=wbs&city=gwangju
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang
 #EXTINF:-1,광주국악방송
-https://radio.bsod.kr/stream/?stn=kugak&city=gwangju
+https://radio.bsod.kr/stream?stn=kugak&city=gwangju
 #EXTINF:-1,광주FM
-https://radio.bsod.kr/stream/?stn=community&ch=kjfm
+https://radio.bsod.kr/stream?stn=community&ch=kjfm
 #EXTINF:-1,GBS고려방송
-https://radio.bsod.kr/stream/?stn=community&ch=crfm
+https://radio.bsod.kr/stream?stn=community&ch=crfm
 #EXTINF:-1,순천미디어네트워크
-https://radio.bsod.kr/stream/?stn=community&ch=suncheonfm
+https://radio.bsod.kr/stream?stn=community&ch=suncheonfm

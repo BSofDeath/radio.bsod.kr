@@ -1,47 +1,47 @@
 #EXTM3U
 #EXTINF:-1,KBS춘천 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=chuncheon
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=chuncheon
 #EXTINF:-1,KBS춘천 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio&city=chuncheon
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio&city=chuncheon
 #EXTINF:-1,KBS춘천 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=chuncheon
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=chuncheon
 #EXTINF:-1,KBS강릉 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=gangneung
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=gangneung
 #EXTINF:-1,KBS강릉 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=gangneung
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=gangneung
 #EXTINF:-1,KBS원주 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio&city=wonju
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio&city=wonju
 #EXTINF:-1,KBS원주 음악FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm&city=wonju
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm&city=wonju
 #EXTINF:-1,춘천MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=chuncheon
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=chuncheon
 #EXTINF:-1,춘천MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=chuncheon
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=chuncheon
 #EXTINF:-1,원주MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=wonju
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=wonju
 #EXTINF:-1,원주MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=wonju
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=wonju
 #EXTINF:-1,MBC강원영동 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm&city=gangneung
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm&city=gangneung
 #EXTINF:-1,MBC강원영동 FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u&city=gangneung
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u&city=gangneung
 #EXTINF:-1,G1 프레쉬FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm&city=chuncheon
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm&city=chuncheon
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,TBN 강원교통방송
-https://radio.bsod.kr/stream/?stn=tbn&city=gangwon
+https://radio.bsod.kr/stream?stn=tbn&city=gangwon
 #EXTINF:-1,춘천CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=chuncheon
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=chuncheon
 #EXTINF:-1,강원영동CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm&city=youngdong
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm&city=youngdong
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 강원극동방송
-https://radio.bsod.kr/stream/?stn=febc&city=gangwon
+https://radio.bsod.kr/stream?stn=febc&city=gangwon
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang
 #EXTINF:-1,태백FM
-https://radio.bsod.kr/stream/?stn=community&ch=taebaekfm
+https://radio.bsod.kr/stream?stn=community&ch=taebaekfm

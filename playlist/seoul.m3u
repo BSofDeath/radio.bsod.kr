@@ -1,75 +1,75 @@
 #EXTM3U
 #EXTINF:-1,KBS 1라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=1radio
+https://radio.bsod.kr/stream?stn=kbs&ch=1radio
 #EXTINF:-1,KBS 2라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=2radio
+https://radio.bsod.kr/stream?stn=kbs&ch=2radio
 #EXTINF:-1,KBS 3라디오
-https://radio.bsod.kr/stream/?stn=kbs&ch=3radio
+https://radio.bsod.kr/stream?stn=kbs&ch=3radio
 #EXTINF:-1,KBS 1FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=1fm
+https://radio.bsod.kr/stream?stn=kbs&ch=1fm
 #EXTINF:-1,KBS 2FM
-https://radio.bsod.kr/stream/?stn=kbs&ch=2fm
+https://radio.bsod.kr/stream?stn=kbs&ch=2fm
 #EXTINF:-1,KBS 한민족방송
-https://radio.bsod.kr/stream/?stn=kbs&ch=hanminjok
+https://radio.bsod.kr/stream?stn=kbs&ch=hanminjok
 #EXTINF:-1,MBC 표준FM
-https://radio.bsod.kr/stream/?stn=mbc&ch=sfm
+https://radio.bsod.kr/stream?stn=mbc&ch=sfm
 #EXTINF:-1,MBC FM4U
-https://radio.bsod.kr/stream/?stn=mbc&ch=fm4u
+https://radio.bsod.kr/stream?stn=mbc&ch=fm4u
 #EXTINF:-1,MBC mini 올댓뮤직
-https://radio.bsod.kr/stream/?stn=mbc&ch=chm
+https://radio.bsod.kr/stream?stn=mbc&ch=chm
 #EXTINF:-1,SBS 러브FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=lovefm
+https://radio.bsod.kr/stream?stn=sbs&ch=lovefm
 #EXTINF:-1,SBS 파워FM
-https://radio.bsod.kr/stream/?stn=sbs&ch=powerfm
+https://radio.bsod.kr/stream?stn=sbs&ch=powerfm
 #EXTINF:-1,SBS 고릴라디오M
-https://radio.bsod.kr/stream/?stn=sbs&ch=dmb
+https://radio.bsod.kr/stream?stn=sbs&ch=dmb
 #EXTINF:-1,EBS FM
-https://radio.bsod.kr/stream/?stn=ebs&ch=fm
+https://radio.bsod.kr/stream?stn=ebs&ch=fm
 #EXTINF:-1,EBS 반디 외국어 전문
-https://radio.bsod.kr/stream/?stn=ebs&ch=bandi
+https://radio.bsod.kr/stream?stn=ebs&ch=bandi
 #EXTINF:-1,OBS 라디오
-https://radio.bsod.kr/stream/?stn=obs
+https://radio.bsod.kr/stream?stn=obs
 #EXTINF:-1,iFM 경인방송
-https://radio.bsod.kr/stream/?stn=ifm
+https://radio.bsod.kr/stream?stn=ifm
 #EXTINF:-1,YTN 라디오
-https://radio.bsod.kr/stream/?stn=ytn
+https://radio.bsod.kr/stream?stn=ytn
 #EXTINF:-1,TBS FM
-https://radio.bsod.kr/stream/?stn=tbs&ch=fm
+https://radio.bsod.kr/stream?stn=tbs&ch=fm
 #EXTINF:-1,TBS eFM
-https://radio.bsod.kr/stream/?stn=tbs&ch=efm
+https://radio.bsod.kr/stream?stn=tbs&ch=efm
 #EXTINF:-1,TBN 경인교통방송
-https://radio.bsod.kr/stream/?stn=tbn
+https://radio.bsod.kr/stream?stn=tbn
 #EXTINF:-1,CBS 표준FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=sfm
+https://radio.bsod.kr/stream?stn=cbs&ch=sfm
 #EXTINF:-1,CBS 음악FM
-https://radio.bsod.kr/stream/?stn=cbs&ch=mfm
+https://radio.bsod.kr/stream?stn=cbs&ch=mfm
 #EXTINF:-1,CBS JOY4U
-https://radio.bsod.kr/stream/?stn=cbs&ch=joy4u
+https://radio.bsod.kr/stream?stn=cbs&ch=joy4u
 #EXTINF:-1,FEBC 서울극동방송
-https://radio.bsod.kr/stream/?stn=febc
+https://radio.bsod.kr/stream?stn=febc
 #EXTINF:-1,BBS 서울불교방송
-https://radio.bsod.kr/stream/?stn=bbs
+https://radio.bsod.kr/stream?stn=bbs
 #EXTINF:-1,CPBC 가톨릭평화방송
-https://radio.bsod.kr/stream/?stn=cpbc
+https://radio.bsod.kr/stream?stn=cpbc
 #EXTINF:-1,WBS 서울원음방송
-https://radio.bsod.kr/stream/?stn=wbs
+https://radio.bsod.kr/stream?stn=wbs
 #EXTINF:-1,국방FM
-https://radio.bsod.kr/stream/?stn=kookbang
+https://radio.bsod.kr/stream?stn=kookbang
 #EXTINF:-1,국악방송
-https://radio.bsod.kr/stream/?stn=kugak
+https://radio.bsod.kr/stream?stn=kugak
 #EXTINF:-1,AFN FM Humphreys
-https://radio.bsod.kr/stream/?stn=afn&city=humphreys
+https://radio.bsod.kr/stream?stn=afn&city=humphreys
 #EXTINF:-1,관악FM
-https://radio.bsod.kr/stream/?stn=community&ch=gwanakfm
+https://radio.bsod.kr/stream?stn=community&ch=gwanakfm
 #EXTINF:-1,마포FM
-https://radio.bsod.kr/stream/?stn=community&ch=mapofm
+https://radio.bsod.kr/stream?stn=community&ch=mapofm
 #EXTINF:-1,성남FM
-https://radio.bsod.kr/stream/?stn=community&ch=seongnamfm
+https://radio.bsod.kr/stream?stn=community&ch=seongnamfm
 #EXTINF:-1,서대문FM
-https://radio.bsod.kr/stream/?stn=community&ch=sdmfm
+https://radio.bsod.kr/stream?stn=community&ch=sdmfm
 #EXTINF:-1,수원FM
-https://radio.bsod.kr/stream/?stn=community&ch=sonefm
+https://radio.bsod.kr/stream?stn=community&ch=sonefm
 #EXTINF:-1,GO구리FM
-https://radio.bsod.kr/stream/?stn=community&ch=gurifm
+https://radio.bsod.kr/stream?stn=community&ch=gurifm
 #EXTINF:-1,단원FM
-https://radio.bsod.kr/stream/?stn=community&ch=dwfm
+https://radio.bsod.kr/stream?stn=community&ch=dwfm
