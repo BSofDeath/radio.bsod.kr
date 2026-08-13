@@ -1,6 +1,6 @@
 import { getUrl } from "./getUrl.js";
 
-const CACHE_TTL_SECONDS = 21600; // 6시간
+const CACHE_TTL_SECONDS = 43140; // 약 11시간 59분
 
 function buildCacheKey({ station, channel, city, bora }) {
     return `stream:${station ?? ""}:${channel ?? ""}:${city ?? ""}:${bora ?? ""}`;
