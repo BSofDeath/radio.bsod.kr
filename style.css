@@ -61,6 +61,28 @@ header {
     width: 100%;
 }
 
+#caution {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    background-color: #ffebee;
+    border-radius: 5px;
+    padding: 1em;
+    margin: 1em 0;
+    text-align: left;
+}
+
+#caution p {
+    display: block;
+    color: #d32f2f;
+    font-weight: bold;
+    margin: 0;
+}
+
+#caution p.not-bottom {
+    margin-bottom: 0.5em;
+}
+
 #nowPlaying {
     display: block;
     width: auto;
