@@ -55,6 +55,7 @@ export const onRequest = async (context) => {
                                             params: {
                                                 stream_id: [station, channel, city].filter(Boolean).join("_"),
                                                 channel_name: channelTitle ?? "unknown",
+                                                engagement_time_msec: 1,
                                             },
                                         },
                                     ],
