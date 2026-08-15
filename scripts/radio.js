@@ -119,7 +119,12 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
 
     /* 스트림 가져오기 */
     try {
-        const response = await fetch(requestUrl, { redirect: "follow" });
+        const { cid, sid } = await getGaIds();
+        const fetchUrl = new URL(requestUrl.toString());
+        if (cid) fetchUrl.searchParams.append("cid", cid);
+        if (sid) fetchUrl.searchParams.append("sid", sid);
+
+        const response = await fetch(fetchUrl, { redirect: "follow" });
 
         if (!response.ok) {
             throw new Error("NETWORK_RESPONSE_NOT_OK");

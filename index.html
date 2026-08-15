@@ -6,9 +6,10 @@
         <meta name="description" content="국내 모든 라디오 방송국의 실시간 스트리밍을 한 곳에서 청취할 수 있는 웹사이트입니다." />
         <title>라디오</title>
         <link rel="stylesheet" href="../style.css" />
-        <!-- Microsoft Clarity tag -->
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <script src="../scripts/gaHelpers.js" defer></script>
         <script src="../scripts/radio.js" defer></script>
+        <!-- Microsoft Clarity tag -->
         <script type="text/javascript">
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -22,7 +23,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-E26S19D0QV');
         </script>
     </head>

@@ -14,6 +14,8 @@ export const onRequest = async (context) => {
     const channel = params.get("ch");
     const city = params.get("city");
     const bora = params.get("bora");
+    const gaClientId = params.get("cid"); // GA client_id
+    const gaSessionId = params.get("sid"); // GA session_id
 
     let location = null;
     let channelTitle = null;
@@ -41,20 +43,23 @@ export const onRequest = async (context) => {
             //     return await createProxyResponnse(location, request);
             case "/stream":
                 if (env.GA_MEASUREMENT_ID && env.GA_MP_SECRET) {
+                    const visitorIp = request.headers.get("CF-Connecting-IP");
+
                     context.waitUntil(
                         fetch(
                             `https://www.google-analytics.com/mp/collect?measurement_id=${env.GA_MEASUREMENT_ID}&api_secret=${env.GA_MP_SECRET}`,
                             {
                                 method: "POST",
                                 body: JSON.stringify({
-                                    client_id: crypto.randomUUID(),
-                                    ip_override: request.headers.get("CF-Connecting-IP") || "unknown",
+                                    client_id: gaClientId || crypto.randomUUID(),
+                                    ...(visitorIp ? { ip_override: visitorIp } : {}),
                                     events: [
                                         {
                                             name: "stream_request",
                                             params: {
                                                 stream_id: [station, channel, city].filter(Boolean).join("_"),
                                                 channel_name: channelTitle ?? "unknown",
+                                                ...(gaSessionId ? { session_id: gaSessionId } : {}),
                                                 engagement_time_msec: 1,
                                             },
                                         },
