@@ -40,11 +40,35 @@ export const onRequest = async (context) => {
             // case "/stream/static":
             //     return await createProxyResponnse(location, request);
             case "/stream":
+                if (env.GA_MEASUREMENT_ID && env.GA_MP_SECRET) {
+                    context.waitUntil(
+                        fetch(
+                            `https://www.google-analytics.com/mp/collect?measurement_id=${env.GA_MEASUREMENT_ID}&api_secret=${env.GA_MP_SECRET}`,
+                            {
+                                method: "POST",
+                                body: JSON.stringify({
+                                    client_id: crypto.randomUUID(),
+                                    ip_override: request.headers.get("CF-Connecting-IP") || "unknown",
+                                    events: [
+                                        {
+                                            name: "stream_request",
+                                            params: {
+                                                stream_id: [station, channel, city].filter(Boolean).join("_"),
+                                                channel_name: channelTitle ?? "unknown",
+                                            },
+                                        },
+                                    ],
+                                }),
+                            }
+                        )
+                    );
+                }
+
                 return new Response(null, {
                     status: 302,
                     headers: {
                         Location: location,
-                        "Access-Control-Allow-Origin": "*", // CORS 헤더 추가
+                        "Access-Control-Allow-Origin": "*",
                     },
                 });
         }
