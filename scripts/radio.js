@@ -19,6 +19,9 @@ document.getElementById("citySelector").addEventListener("change", function () {
     localStorage.setItem("lastSelectedCity", this.value);
 });
 
+// 현재 재생 중인 Hls 인스턴스를 추적 (채널 전환 시 반드시 destroy 후 새로 생성해야 함)
+let currentHls = null;
+
 // 스트림 변경 및 재생 기능
 async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     const player = document.getElementById("player");
@@ -57,6 +60,10 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
     selectedChannel.classList.add("tuned");
 
     /* 플레이어 초기화 */
+    if (currentHls) {
+        currentHls.destroy();
+        currentHls = null;
+    }
     [player, vPlayer].forEach((p) => {
         p.pause();
         p.removeAttribute("src");
@@ -107,6 +114,10 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
         staticCopyBtn.style.display = "none";
         boraBtn.style.display = "none";
 
+        if (currentHls) {
+            currentHls.destroy();
+            currentHls = null;
+        }
         [player, vPlayer].forEach((p) => {
             p.pause();
             p.removeAttribute("src");
@@ -119,6 +130,8 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
 
     /* 스트림 가져오기 */
     try {
+        // 화면에 노출/복사되는 requestUrl은 그대로 두고,
+        // 실제 요청에만 GA client_id/session_id를 붙인 별도 URL을 사용
         const { cid, sid } = await getGaIds();
         const fetchUrl = new URL(requestUrl.toString());
         if (cid) fetchUrl.searchParams.append("cid", cid);
@@ -168,9 +181,13 @@ async function changeSource({ stn, ch = "", city = "", bora = "" }) {
             contentType.includes("mpegurl") || fetchedUrl.includes(".m3u8");
         if (isHLS && Hls.isSupported()) {
             const hls = new Hls();
+            currentHls = hls;
             hls.loadSource(fetchedUrl);
 
             hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+                // 이 콜백이 실행되는 시점에 이미 다른 채널로 전환되어 hls가 교체/destroy 되었다면 무시
+                if (currentHls !== hls) return;
+
                 const hasVideo = data.levels.some((level) => {
                     return (
                         level.width > 0 ||

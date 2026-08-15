@@ -1,7 +1,7 @@
 const GA_MEASUREMENT_ID = "G-E26S19D0QV";
 const GA_IDS_TIMEOUT_MS = 800;
 
-function getGaIds() {
+function fetchGaIds() {
     return new Promise((resolve) => {
         if (typeof gtag !== "function") {
             resolve({ cid: null, sid: null });
@@ -14,7 +14,7 @@ function getGaIds() {
             settled = true;
             resolve(result);
         };
-        
+
         const cidPromise = new Promise((res) =>
             gtag("get", GA_MEASUREMENT_ID, "client_id", res)
         );
@@ -28,4 +28,13 @@ function getGaIds() {
 
         setTimeout(() => finish({ cid: null, sid: null }), GA_IDS_TIMEOUT_MS);
     });
+}
+
+let cachedGaIdsPromise = null;
+
+function getGaIds() {
+    if (!cachedGaIdsPromise) {
+        cachedGaIdsPromise = fetchGaIds();
+    }
+    return cachedGaIdsPromise;
 }
