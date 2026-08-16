@@ -12,9 +12,9 @@ async function todayBSMBCdatecode () {
     "8": "p",
     "9": "d",
   };
-  const strDate = ("" + today.getFullYear()).slice(2, 4)
-                + String(today.getMonth() + 1).padStart(2, "0")
-                + String(today.getDate()).padStart(2, "0");
+  const strDate = ("" + today.getUTCFullYear()).slice(2, 4)
+                + String(today.getUTCMonth() + 1).padStart(2, "0")
+                + String(today.getUTCDate()).padStart(2, "0");
 
   const convertedCode = Array.from(strDate).map((char) => datecodeMap[char] || char).join("");
   
