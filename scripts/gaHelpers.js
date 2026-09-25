@@ -1,36 +1,51 @@
-const GA_MEASUREMENT_ID = "G-E26S19D0QV";
-const GA_IDS_TIMEOUT_MS = 800;
+var GA_MEASUREMENT_ID = "G-E26S19D0QV";
+var GA_IDS_TIMEOUT_MS = 800;
 
 function fetchGaIds() {
-    return new Promise((resolve) => {
+    return new Promise(function (resolve) {
         if (typeof gtag !== "function") {
             resolve({ cid: null, sid: null });
             return;
         }
 
-        let settled = false;
-        const finish = (result) => {
+        var settled = false;
+        function finish(result) {
             if (settled) return;
             settled = true;
             resolve(result);
-        };
+        }
 
-        const cidPromise = new Promise((res) =>
-            gtag("get", GA_MEASUREMENT_ID, "client_id", res)
-        );
-        const sidPromise = new Promise((res) =>
-            gtag("get", GA_MEASUREMENT_ID, "session_id", res)
-        );
+        var cid = null;
+        var sid = null;
+        var doneCount = 0;
 
-        Promise.all([cidPromise, sidPromise])
-            .then(([cid, sid]) => finish({ cid: cid || null, sid: sid || null }))
-            .catch(() => finish({ cid: null, sid: null }));
+        function checkDone() {
+            doneCount += 1;
+            if (doneCount >= 2) {
+                finish({ cid: cid || null, sid: sid || null });
+            }
+        }
 
-        setTimeout(() => finish({ cid: null, sid: null }), GA_IDS_TIMEOUT_MS);
+        try {
+            gtag("get", GA_MEASUREMENT_ID, "client_id", function (value) {
+                cid = value;
+                checkDone();
+            });
+            gtag("get", GA_MEASUREMENT_ID, "session_id", function (value) {
+                sid = value;
+                checkDone();
+            });
+        } catch (e) {
+            finish({ cid: null, sid: null });
+        }
+
+        setTimeout(function () {
+            finish({ cid: null, sid: null });
+        }, GA_IDS_TIMEOUT_MS);
     });
 }
 
-let cachedGaIdsPromise = null;
+var cachedGaIdsPromise = null;
 
 function getGaIds() {
     if (!cachedGaIdsPromise) {

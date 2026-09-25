@@ -8,7 +8,6 @@ body {
     font-family: "Pretendard", sans-serif;
     font-size: 1rem;
     text-align: center;
-    justify-content: center;
 }
 
 a {
@@ -25,10 +24,17 @@ footer {
     margin: 2rem 0;
 }
 
+/* 구형 브라우저(iOS 9 Safari, EdgeHTML 등) 대응:
+   display:grid / grid-auto-flow 대신 flexbox 사용 */
 header {
-    display: grid;
-    grid-auto-flow: column;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
     padding: 0 1rem;
 }
@@ -104,25 +110,47 @@ header {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
     flex: 1;
     min-width: 0;
     text-decoration: underline;
 }
 
+/* flexbox의 gap 속성은 구형 브라우저에서 지원되지 않으므로
+   자식 요소 margin으로 간격을 대신 구현 */
 #nowPlayingUrlList {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
     flex-direction: column;
     list-style: none;
     padding: 0.5rem 0 0 0;
     margin: 0;
-    gap: 0.35rem;
+}
+
+#nowPlayingUrlList > li {
+    margin-bottom: 0.35rem;
+}
+
+#nowPlayingUrlList > li:last-child {
+    margin-bottom: 0;
 }
 
 .title-group {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
     justify-content: space-between;
     padding: 0;
     margin: 0;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
 }
 
@@ -131,7 +159,11 @@ header {
 }
 
 .url-group {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
     overflow: hidden;
 }
@@ -141,9 +173,9 @@ header {
 }
 
 #citySelector {
-    appearance: none;
-    -moz-appearance: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     background-color: transparent;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='292.4' height='292.4'%3E%3Cpath fill='%23333' d='M287 69.4a17.6 17.6 0 0 0-13-5.4H18.4c-5 0-9.3 1.8-12.9 5.4A17.6 17.6 0 0 0 0 82.2c0 5 1.8 9.3 5.4 12.9l128 127.9c3.6 3.6 7.8 5.4 12.8 5.4s9.2-1.8 12.8-5.4L287 95c3.5-3.5 5.4-7.8 5.4-12.8 0-5-1.9-9.2-5.5-12.8z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -165,30 +197,48 @@ header {
 }
 
 #channelContainerHeader {
-    display: grid;
-    grid-auto-flow: column;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
     padding: 0 1rem;
 }
 
+/* CSS Grid 대신 flexbox + margin 방식으로 2단 레이아웃 구현.
+   gap 미지원 브라우저(iOS 9 Safari 등)를 위해 각 .channel에
+   개별 margin을 주고, 컨테이너 양옆은 음수 margin으로 상쇄 */
 .channelContainer {
     display: none;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5em;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    margin: -0.25em;
 }
 
 .visible {
-    display: grid;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
 }
 
 .channel {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
     display: block;
     background-color: #f1f3f4;
     border-radius: 5px;
     padding: 1em;
     color: black;
     text-decoration: none;
+    margin: 0.25em;
+    /* 2열: 좌우 margin(0.25em * 2 = 0.5em)을 뺀 절반 너비 */
+    width: calc(50% - 0.5em);
 }
 
 .tuned {
@@ -216,9 +266,10 @@ button:hover {
     -webkit-transition: filter 0.3s;
 }
 
+/* place-items(grid)는 구형 브라우저 미지원이므로 text-align으로 대체.
+   버튼은 인라인 요소라 이것만으로 가운데 정렬이 충분함 */
 .button-area {
-    display: grid;
-    place-items: center;
+    text-align: center;
     margin-top: 2rem;
 }
 
@@ -249,7 +300,8 @@ button:hover {
         max-width: 576px;
     }
 
-    .channelContainer {
-        grid-template-columns: repeat(3, 1fr);
+    /* 3열: 좌우 margin(0.25em * 2 = 0.5em)을 뺀 1/3 너비 */
+    .channelContainer .channel {
+        width: calc(33.333% - 0.5em);
     }
 }
