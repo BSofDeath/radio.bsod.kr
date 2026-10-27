@@ -200,7 +200,7 @@ function changeSource(opts) {
     if (requestQuery) requestUrlStr += "?" + requestQuery;
 
     /* 초기 정보 업데이트 */
-    document.title = "▶ 현재 재생 중: " + selectedChannel.innerHTML;
+    document.title = selectedChannel.innerHTML + " | 라디오";
     nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
     staticUrl.style.display = "inline-block";
     staticUrl.innerHTML = requestUrlStr;
