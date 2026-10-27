@@ -250,15 +250,8 @@ function changeSource(opts) {
             "<br><span style='color:#ff2b4b;'>현재 창에서 해당 채널을 재생할 수 없습니다.<br>브라우저 보안 정책으로 인한 오류일 수 있으니 아래의 <b>고정 URL</b>을 클릭하여 새 창에서 다시 시도해 주세요.</span>";
     }
 
-    function proceedWithFetch(cid, sid) {
+    function proceedWithFetch() {
         var fetchUrlStr = requestUrlStr;
-        var extra = {};
-        if (cid) extra.cid = cid;
-        if (sid) extra.sid = sid;
-        var extraQuery = buildQueryString(extra);
-        if (extraQuery) {
-            fetchUrlStr += (fetchUrlStr.indexOf("?") === -1 ? "?" : "&") + extraQuery;
-        }
 
         simpleXhrGet(fetchUrlStr, function (err, result) {
             if (err) {
@@ -377,18 +370,5 @@ function changeSource(opts) {
         });
     }
 
-    // 화면에 노출/복사되는 requestUrl은 그대로 두고,
-    // 실제 요청에만 GA client_id/session_id를 붙인 별도 URL을 사용
-    if (typeof getGaIds === "function") {
-        getGaIds().then(
-            function (ids) {
-                proceedWithFetch(ids && ids.cid, ids && ids.sid);
-            },
-            function () {
-                proceedWithFetch(null, null);
-            }
-        );
-    } else {
-        proceedWithFetch(null, null);
-    }
+    proceedWithFetch();
 }

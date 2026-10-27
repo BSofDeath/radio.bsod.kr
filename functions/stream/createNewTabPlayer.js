@@ -8,15 +8,6 @@ export function createNewTabPlayer (url, title) {
             <title>${title}</title>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video-js.min.css" rel="stylesheet">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.8.1/video.min.js"></script>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-E26S19D0QV"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-                gtag("js", new Date());
-                gtag("config", "G-E26S19D0QV");
-            </script>
             <style>     
                 body, html {
                     height: 100%;
