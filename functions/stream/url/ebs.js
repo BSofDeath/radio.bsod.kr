@@ -10,7 +10,7 @@ export const ebsUrls = [
             const response = await fetch("https://www.ebs.co.kr/onair?channelCodeString=radio", { headers: MOCK_HEADERS });
             const html = await response.text();
             const match = html.match(/src:\s*'(https:\/\/liveotu\.ebs\.co\.kr\/[^']+)'/);
-            return match ? match[1] : null;
+            return match ? match[1] : "https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8";
         } catch (e) {
             return null;
         }
