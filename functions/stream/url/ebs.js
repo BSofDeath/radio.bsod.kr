@@ -7,7 +7,7 @@ const MOCK_HEADERS = {
 export const ebsUrls = [
     { name: "EBS FM", channel: "fm", streamUrl: async () => {
         try {
-            const response = await fetch("https://www.ebs.co.kr/onair?channelCodeString=radio", { headers: HEADERS });
+            const response = await fetch("https://www.ebs.co.kr/onair?channelCodeString=radio", { headers: MOCK_HEADERS });
             const html = await response.text();
             const match = html.match(/src:\s*'(https:\/\/liveotu\.ebs\.co\.kr\/[^']+)'/);
             return match ? match[1] : null;
