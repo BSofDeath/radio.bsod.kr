@@ -9,6 +9,8 @@
 //  4) (선택) 밴이 발생한 IP를 Cloudflare 계정의 IP 목록(blocked_ips)에 자동 등록
 //     → 목록을 참조하는 WAF 규칙 `ip.src in $blocked_ips` 가 영구 차단을 담당
 //     (enforce 모드에서만 동작. monitor 모드에서는 목록을 건드리지 않음)
+//     - 클라우드/호스팅 ASN(Oracle, AWS 등)에서 온 IP: 첫 위반부터 즉시 등록
+//     - 그 외(가정용 회선 등): 위반이 3회 누적되었을 때만 등록 (횟수는 KV 바인딩 RADIO_CACHE에 저장)
 //
 // 설정 (Pages → Settings → Variables and Secrets, 모두 선택사항)
 //  - RESEND_API_KEY    : Resend API 키 (Secret)
@@ -19,16 +21,18 @@
 //  - GUARD_MODE        : "enforce"(기본) | "monitor". monitor는 차단 없이 경보만 보냄.
 //  - GUARD_LIMIT_1S    : 1초 윈도우 한도 (기본 8)
 //  - GUARD_LIMIT_10S   : 10초 윈도우 한도 (기본 25)
-//  - GUARD_BAN_SEC     : 밴 지속 시간(초) (기본 3600)
+//  - GUARD_BAN_SEC     : 밴 지속 시간(초) (기본 86400 = 24시간)
 //  - CF_API_TOKEN      : Cloudflare API 토큰 (Secret). 권한: Account → Account Filter Lists → Edit
 //  - CF_ACCOUNT_ID     : Cloudflare 계정 ID
 //  - CF_BLOCKLIST_ID   : IP 목록(blocked_ips)의 ID
 //    (세 값이 모두 있어야 목록 자동 등록이 동작함)
 //  - GUARD_ALLOWLIST   : (선택) 절대 차단/등록하지 않을 IP. 쉼표로 구분. 예) "1.2.3.4,5.6.7.8"
+//  - GUARD_STRIKE_LIMIT: (선택) 가정용 회선을 목록에 등록하는 누적 위반 횟수 (기본 3)
+//  - GUARD_CLOUD_ASNS  : (선택) 클라우드로 취급할 ASN을 기본 목록에 추가. 쉼표로 구분. 예) "12345,67890"
 
 const DEFAULT_LIMIT_1S = 8;
 const DEFAULT_LIMIT_10S = 25;
-const DEFAULT_BAN_SEC = 3600;
+const DEFAULT_BAN_SEC = 86400; // 24시간
 const ALERT_COOLDOWN_SEC = 600;
 
 // isolate 메모리 안의 IP별 요청 시각 목록 (같은 isolate로 들어오는 요청끼리만 집계됨)
@@ -78,11 +82,11 @@ function isAllowlisted(env, ip) {
 }
 
 // Cloudflare IP 목록(blocked_ips)에 IP를 추가. 결과를 사람이 읽을 문장으로 돌려줌(메일에 기록).
-async function addToBlocklist(env, ip, reason, cf) {
+async function addToBlocklist(env, ip, reason, cf, why = "") {
     if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID || !env.CF_BLOCKLIST_ID) return null; // 미설정
     if (await caches.default.match(listedRequest(ip))) return "이미 등록 요청함 (24시간 내 중복 등록 생략)";
 
-    const comment = `auto ${kst(Date.now())} ${reason} AS${cf.asn ?? "?"} ${cf.asOrganization ?? ""}`.slice(0, 200);
+    const comment = `auto ${why} ${kst(Date.now())} ${reason} AS${cf.asn ?? "?"} ${cf.asOrganization ?? ""}`.slice(0, 200);
     try {
         const res = await fetch(
             `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/rules/lists/${env.CF_BLOCKLIST_ID}/items`,
@@ -105,6 +109,72 @@ async function addToBlocklist(env, ip, reason, cf) {
     } catch (e) {
         return `⚠️ 목록 추가 실패 (${e?.message ?? "네트워크 오류"})`;
     }
+}
+
+// 클라우드/호스팅 ASN: 사람이 직접 쓰는 회선이 아니라 서버에서 오는 요청으로 간주 (필요하면 GUARD_CLOUD_ASNS로 추가)
+const DEFAULT_CLOUD_ASNS = [
+    31898, // Oracle Cloud
+    16509, 14618, // Amazon AWS
+    396982, 15169, // Google Cloud
+    8075, // Microsoft Azure
+    14061, // DigitalOcean
+    63949, // Linode (Akamai)
+    16276, // OVH
+    24940, // Hetzner
+    20473, // Vultr
+    45102, 37963, // Alibaba Cloud
+    132203, // Tencent Cloud
+];
+
+const DEFAULT_STRIKE_LIMIT = 3;
+const STRIKE_TTL_SEC = 30 * 86400; // 위반 횟수는 마지막 위반 후 30일간 보관
+const STRIKE_GAP_MS = 10 * 60 * 1000; // 이 간격 안에 다시 걸린 것은 같은 사건으로 보고 1회만 계산 (데이터센터별 중복 밴 방지)
+
+function isCloudAsn(env, asn) {
+    const n = Number(asn);
+    if (!n) return false;
+    if (DEFAULT_CLOUD_ASNS.includes(n)) return true;
+    return (env.GUARD_CLOUD_ASNS ?? "").split(",").some((s) => Number(s.trim()) === n);
+}
+
+// 가정용 회선의 누적 위반 횟수를 KV에 기록하고 현재 횟수를 돌려줌. KV가 없거나 실패하면 null.
+async function recordStrike(env, ip) {
+    if (!env.RADIO_CACHE) return null;
+    const key = `strike:${ip}`;
+    const now = Date.now();
+    try {
+        const prev = await env.RADIO_CACHE.get(key, "json");
+        let count = prev?.count ?? 0;
+        if (!prev || now - prev.last > STRIKE_GAP_MS) {
+            count += 1;
+            await env.RADIO_CACHE.put(key, JSON.stringify({ count, last: now }), {
+                expirationTtl: STRIKE_TTL_SEC,
+            });
+        }
+        return count;
+    } catch (e) {
+        return null;
+    }
+}
+
+// 목록 등록 여부를 정책에 따라 결정하고, 결과를 메일에 적을 문장으로 돌려줌.
+//  - 클라우드 ASN: 즉시 등록 / 그 외: 누적 위반이 한도(기본 3회)에 도달했을 때만 등록
+async function decideAndList(env, ip, reason, cf) {
+    if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID || !env.CF_BLOCKLIST_ID) return null; // 목록 등록 미설정
+
+    if (isCloudAsn(env, cf.asn)) {
+        return `클라우드 ASN(AS${cf.asn}) → 즉시 등록: ${await addToBlocklist(env, ip, reason, cf, "cloud")}`;
+    }
+
+    const limit = Number(env.GUARD_STRIKE_LIMIT) || DEFAULT_STRIKE_LIMIT;
+    const strikes = await recordStrike(env, ip);
+    if (strikes === null) {
+        return "일반 회선: 위반 횟수를 저장할 KV(RADIO_CACHE)를 쓸 수 없어 등록하지 않음";
+    }
+    if (strikes < limit) {
+        return `일반 회선: 누적 위반 ${strikes}/${limit}회 → 아직 등록하지 않음`;
+    }
+    return `일반 회선: 누적 위반 ${strikes}회 (한도 ${limit}회) → 등록: ${await addToBlocklist(env, ip, reason, cf, `strike${strikes}`)}`;
 }
 
 async function sendAlert(env, request, ip, reason, counts, banSec, enforce, listResult) {
@@ -220,7 +290,7 @@ export const onRequest = async (context) => {
             (async () => {
                 if (enforce) await putMarker(banRequest(ip), banSec);
                 // 목록 등록 결과를 메일에 함께 적기 위해 등록 → 메일 순서로 실행
-                const listResult = enforce ? await addToBlocklist(env, ip, reason, request.cf ?? {}) : null;
+                const listResult = enforce ? await decideAndList(env, ip, reason, request.cf ?? {}) : null;
                 await sendAlert(env, request, ip, reason, counts, banSec, enforce, listResult);
             })()
         );
