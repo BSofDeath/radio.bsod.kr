@@ -6,6 +6,9 @@
 //  2) 밴된 IP는 [[path]].js(KV 조회, GA 전송)까지 가지 않고 즉시 403
 //  3) 밴이 발생하면 IP/국가/ASN/경로/UA 등 상세 정보를 이메일(Resend)로 발송
 //     (선택: Discord/Slack 웹훅 병행)
+//  4) (선택) 밴이 발생한 IP를 Cloudflare 계정의 IP 목록(blocked_ips)에 자동 등록
+//     → 목록을 참조하는 WAF 규칙 `ip.src in $blocked_ips` 가 영구 차단을 담당
+//     (enforce 모드에서만 동작. monitor 모드에서는 목록을 건드리지 않음)
 //
 // 설정 (Pages → Settings → Variables and Secrets, 모두 선택사항)
 //  - RESEND_API_KEY    : Resend API 키 (Secret)
@@ -17,6 +20,11 @@
 //  - GUARD_LIMIT_1S    : 1초 윈도우 한도 (기본 8)
 //  - GUARD_LIMIT_10S   : 10초 윈도우 한도 (기본 25)
 //  - GUARD_BAN_SEC     : 밴 지속 시간(초) (기본 3600)
+//  - CF_API_TOKEN      : Cloudflare API 토큰 (Secret). 권한: Account → Account Filter Lists → Edit
+//  - CF_ACCOUNT_ID     : Cloudflare 계정 ID
+//  - CF_BLOCKLIST_ID   : IP 목록(blocked_ips)의 ID
+//    (세 값이 모두 있어야 목록 자동 등록이 동작함)
+//  - GUARD_ALLOWLIST   : (선택) 절대 차단/등록하지 않을 IP. 쉼표로 구분. 예) "1.2.3.4,5.6.7.8"
 
 const DEFAULT_LIMIT_1S = 8;
 const DEFAULT_LIMIT_10S = 25;
@@ -61,7 +69,45 @@ async function putMarker(request, ttlSec) {
 
 const kst = (ms) => new Date(ms).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
-async function sendAlert(env, request, ip, reason, counts, banSec, enforce) {
+const LISTED_MARKER_TTL_SEC = 86400; // 같은 IP를 하루 안에 중복 등록하지 않도록 하는 표식
+const listedRequest = (ip) => new Request(`https://guard.invalid/listed/${encodeURIComponent(ip)}`);
+
+function isAllowlisted(env, ip) {
+    if (!env.GUARD_ALLOWLIST) return false;
+    return env.GUARD_ALLOWLIST.split(",").some((s) => s.trim() === ip);
+}
+
+// Cloudflare IP 목록(blocked_ips)에 IP를 추가. 결과를 사람이 읽을 문장으로 돌려줌(메일에 기록).
+async function addToBlocklist(env, ip, reason, cf) {
+    if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID || !env.CF_BLOCKLIST_ID) return null; // 미설정
+    if (await caches.default.match(listedRequest(ip))) return "이미 등록 요청함 (24시간 내 중복 등록 생략)";
+
+    const comment = `auto ${kst(Date.now())} ${reason} AS${cf.asn ?? "?"} ${cf.asOrganization ?? ""}`.slice(0, 200);
+    try {
+        const res = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/rules/lists/${env.CF_BLOCKLIST_ID}/items`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${env.CF_API_TOKEN}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([{ ip, comment }]),
+            }
+        );
+        const data = await res.json().catch(() => null);
+        if (res.ok && data?.success) {
+            await putMarker(listedRequest(ip), LISTED_MARKER_TTL_SEC);
+            return "blocked_ips 목록에 추가 요청 완료 (WAF 규칙에 반영되기까지 수 초~수십 초 소요)";
+        }
+        const msg = data?.errors?.map((e) => `${e.code}: ${e.message}`).join("; ") ?? `HTTP ${res.status}`;
+        return `⚠️ 목록 추가 실패 (${msg})`;
+    } catch (e) {
+        return `⚠️ 목록 추가 실패 (${e?.message ?? "네트워크 오류"})`;
+    }
+}
+
+async function sendAlert(env, request, ip, reason, counts, banSec, enforce, listResult) {
     const emailReady = env.RESEND_API_KEY && env.ALERT_EMAIL_TO && env.ALERT_EMAIL_FROM;
     if (!emailReady && !env.ALERT_WEBHOOK_URL) return;
     if (await caches.default.match(alertRequest(ip))) return; // 같은 IP 경보는 쿨다운 동안 1회
@@ -94,9 +140,11 @@ async function sendAlert(env, request, ip, reason, counts, banSec, enforce) {
         `Referer: ${h("referer")}`,
         `Accept-Language: ${h("accept-language")}`,
         ``,
-        `[차단 해제/영구 차단]`,
-        `영구 차단은 Cloudflare 대시보드 → Security → WAF → Custom rules 에서`,
-        `(ip.src eq ${ip}) 표현식으로 Block 규칙을 추가하세요.`,
+        `[영구 차단]`,
+        listResult
+            ? `IP 목록 자동 등록: ${listResult}`
+            : `IP 목록 자동 등록: 사용 안 함. 영구 차단하려면 blocked_ips 목록에 ${ip} 를 추가하세요.`,
+        `잘못 차단된 경우 Cloudflare 대시보드 → Manage Account → Configurations → Lists 에서 해당 IP를 삭제하세요.`,
     ].join("\n");
 
     const tasks = [];
@@ -139,6 +187,7 @@ export const onRequest = async (context) => {
 
     const ip = request.headers.get("CF-Connecting-IP");
     if (!ip) return next();
+    if (isAllowlisted(env, ip)) return next(); // 허용 목록 IP는 집계·차단 모두 제외
 
     const enforce = (env.GUARD_MODE ?? "enforce") !== "monitor";
     const limit1s = Number(env.GUARD_LIMIT_1S) || DEFAULT_LIMIT_1S;
@@ -168,10 +217,12 @@ export const onRequest = async (context) => {
     // 2) 한도 초과 → 밴 + 경보
     if (reason) {
         waitUntil(
-            Promise.all([
-                enforce ? putMarker(banRequest(ip), banSec) : Promise.resolve(),
-                sendAlert(env, request, ip, reason, counts, banSec, enforce),
-            ])
+            (async () => {
+                if (enforce) await putMarker(banRequest(ip), banSec);
+                // 목록 등록 결과를 메일에 함께 적기 위해 등록 → 메일 순서로 실행
+                const listResult = enforce ? await addToBlocklist(env, ip, reason, request.cf ?? {}) : null;
+                await sendAlert(env, request, ip, reason, counts, banSec, enforce, listResult);
+            })()
         );
         if (enforce) {
             return new Response("Too Many Requests", {
