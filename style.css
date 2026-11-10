@@ -39,14 +39,6 @@ header {
     padding: 0 1rem;
 }
 
-li {
-    margin: 0;
-    padding: 0;
-    min-height: 0;
-    line-height: 0;
-    height: auto;
-}
-
 .site-name {
     font-size: 2rem;
     font-weight: 700;
