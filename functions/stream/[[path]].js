@@ -1,9 +1,5 @@
-import { getCachedUrl } from "./getCachedUrl.js";
-import { getUrl } from "./getUrl.js";
+import { getUrlCached } from "./getUrlCached.js";
 import { getName } from "./getName.js";
-import { createPlsFile } from "./createPlsFile.js";
-import { createNewTabPlayer } from "./createNewTabPlayer.js";
-import { createProxyResponnse } from "./createProxyResponse.js";
 
 export const onRequest = async (context) => {
     const { request, env, ctx } = context;
@@ -20,7 +16,7 @@ export const onRequest = async (context) => {
 
     if (station != null || channel != null || city != null) {
         try {
-            location = await getCachedUrl(
+            location = await getUrlCached(
                 { station, channel, city, bora },
                 context
             );
@@ -33,12 +29,6 @@ export const onRequest = async (context) => {
 
     if (location != null) {
         switch (pathname) {
-            // case "/stream/player.html":
-            //     return createNewTabPlayer(location, channelTitle);
-            // case "/stream/playback.pls":
-            //     return createPlsFile(location, channelTitle);
-            // case "/stream/static":
-            //     return await createProxyResponnse(location, request);
             case "/stream":
                 return new Response(null, {
                     status: 302,
