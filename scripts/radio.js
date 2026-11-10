@@ -234,7 +234,7 @@ function changeSource(opts) {
     function onStreamError() {
         document.title = "라디오";
         nowPlayingTitle.innerHTML +=
-            "<br><span style='color:#ff2b4b;'>현재 창에서 해당 채널을 재생할 수 없습니다.<br>브라우저 보안 정책으로 인한 오류일 수 있으니 아래의 <b>고정 URL</b>을 클릭하여 새 창에서 다시 시도해 주세요.</span>";
+            "<br><span style='color:#ff2b4b;'>현재 스트림을 이용할 수 없습니다.</span>";
     }
 
     function proceedWithFetch() {
