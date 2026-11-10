@@ -148,10 +148,8 @@ function changeSource(opts) {
 
     var nowPlayingTitle = document.getElementById("nowPlayingTitle");
     var nowPlayingUrl = document.getElementById("nowPlayingUrl");
-    var staticUrl = document.getElementById("staticUrl");
 
     var playingCopyBtn = document.getElementById("playingCopyBtn");
-    var staticCopyBtn = document.getElementById("staticCopyBtn");
     var resetBtn = document.getElementById("resetBtn");
     var boraBtn = document.getElementById("boraBtn");
     boraBtn.innerHTML = bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
@@ -202,11 +200,6 @@ function changeSource(opts) {
     /* 초기 정보 업데이트 */
     document.title = selectedChannel.innerHTML + " | 라디오";
     nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
-    staticUrl.style.display = "inline-block";
-    staticUrl.innerHTML = requestUrlStr;
-    staticUrl.href = requestUrlStr;
-    staticCopyBtn.style.display = "inline-block";
-
     nowPlayingUrl.style.display = "none";
     playingCopyBtn.style.display = "none";
     boraBtn.style.display = "none";
@@ -219,13 +212,7 @@ function changeSource(opts) {
         nowPlayingUrl.innerHTML = "";
         nowPlayingUrl.href = "";
         nowPlayingUrl.style.display = "none";
-
-        staticUrl.innerHTML = "";
-        staticUrl.href = "";
-        staticUrl.style.display = "none";
-
         playingCopyBtn.style.display = "none";
-        staticCopyBtn.style.display = "none";
         boraBtn.style.display = "none";
 
         if (currentHls) {
@@ -355,17 +342,6 @@ function changeSource(opts) {
             playingCopyBtn.onclick = function () {
                 copyTextToClipboard(fetchedUrl.toString());
                 alert("URL이 클립보드에 복사되었습니다.");
-                setTimeout(function () {
-                    playingCopyBtn.innerText = "실제 URL 복사";
-                }, 1000);
-            };
-            staticCopyBtn.style.display = "inline-block";
-            staticCopyBtn.onclick = function () {
-                copyTextToClipboard(requestUrlStr);
-                alert("URL이 클립보드에 복사되었습니다.");
-                setTimeout(function () {
-                    staticCopyBtn.innerText = "고정 URL 복사";
-                }, 1000);
             };
         });
     }
