@@ -1,18 +1,18 @@
-import { kbsUrls } from "./template/kbs.js";
-import { mbcUrls } from "./template/mbc.js";
-import { sbsUrls } from "./template/sbs.js";
-import { ebsUrls } from "./template/ebs.js";
-import { tbsUrls } from "./template/tbs.js";
-import { tbnUrls } from "./template/tbn.js";
-import { cbsUrls } from "./template/cbs.js";
-import { febcUrls } from "./template/febc.js";
-import { bbsUrls } from "./template/bbs.js";
-import { cpbcUrls } from "./template/cpbc.js";
-import { wbsUrls } from "./template/wbs.js";
-import { kugakUrls } from "./template/kugak.js";
-import { afnUrls } from "./template/afn.js";
-import { commonUrls } from "./template/common.js";
-import { communityUrls } from "./template/community.js";
+import { kbsUrls } from "../template/kbs.js";
+import { mbcUrls } from "../template/mbc.js";
+import { sbsUrls } from "../template/sbs.js";
+import { ebsUrls } from "../template/ebs.js";
+import { tbsUrls } from "../template/tbs.js";
+import { tbnUrls } from "../template/tbn.js";
+import { cbsUrls } from "../template/cbs.js";
+import { febcUrls } from "../template/febc.js";
+import { bbsUrls } from "../template/bbs.js";
+import { cpbcUrls } from "../template/cpbc.js";
+import { wbsUrls } from "../template/wbs.js";
+import { kugakUrls } from "../template/kugak.js";
+import { afnUrls } from "../template/afn.js";
+import { commonUrls } from "../template/common.js";
+import { communityUrls } from "../template/community.js";
 
 export async function getUrl({
     station,

@@ -1,4 +1,4 @@
-import { getUrl } from "./getUrl.js";
+import { getUrl } from "./method/getUrl.js";
 
 const CACHE_TTL_SECONDS = 43140; // 약 11시간 59분
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;

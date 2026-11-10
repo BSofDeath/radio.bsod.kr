@@ -1,4 +1,4 @@
-import { getUrlCached } from "./getUrlCached.js";
+import { getUrlCached } from "./method/getUrlCached.js";
 
 export const onRequest = async (context) => {
     const { request } = context;
