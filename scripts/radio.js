@@ -323,7 +323,7 @@ function getNewWindowBtn(afterEl) {
         btn = document.createElement("button");
         btn.id = "newWindowBtn";
         btn.type = "button";
-        btn.innerText = "새 창 열기";
+        btn.innerText = "새 탭에서 재생";
         btn.className = afterEl.className; // 복사 버튼과 같은 스타일
         btn.style.display = "none";
         afterEl.parentNode.insertBefore(btn, afterEl.nextSibling);
@@ -399,9 +399,9 @@ function changeSource(opts) {
     function showError(reason, openUrl) {
         document.title = "라디오";
 
-        var msg = "현재 스트림을 이용할 수 없습니다.";
+        var msg = "이 채널은 현재 이용할 수 없습니다.";
         if (reason === "mixed") {
-            msg = "해당 채널은 새 창에서 재생할 수 있습니다.";
+            msg = "이 채널은 새 탭에서만 재생할 수 있습니다.";
             newWindowBtn.style.display = "inline-block";
             newWindowBtn.onclick = function () {
                 window.open(openUrl, "_blank");
@@ -416,7 +416,7 @@ function changeSource(opts) {
     }
 
     // 스트림 요청
-    var requestUrlStr = "/stream";
+    var requestUrlStr = "/api/url";
     var requestQuery = buildQueryString({ stn: stn, ch: ch, city: city, bora: bora, format: "json" });
     if (requestQuery) requestUrlStr += "?" + requestQuery;
 
@@ -428,6 +428,10 @@ function changeSource(opts) {
             return;
         }
 
+        nowPlayingUrl.style.display = "inline-block";
+        nowPlayingUrl.textContent = fetchedUrl;
+        nowPlayingUrl.href = fetchedUrl;
+
         // https 페이지에서 http 스트림이면 새 창 안내, 아니면 재생
         if (isMixedContent(fetchedUrl)) {
             showError("mixed", fetchedUrl);
@@ -437,10 +441,6 @@ function changeSource(opts) {
         playStream(fetchedUrl, bora, function () {
             if (mySeq === requestSeq) showError("generic");
         });
-
-        nowPlayingUrl.style.display = "inline-block";
-        nowPlayingUrl.textContent = fetchedUrl;
-        nowPlayingUrl.href = fetchedUrl;
 
         playingCopyBtn.style.display = "inline-block";
         playingCopyBtn.onclick = function () {
