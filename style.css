@@ -286,12 +286,14 @@ button:hover {
     margin-right: 0.35rem;
 }
 
-#newWindowBtn {
-    display: none;
-}
-
 #boraBtn {
     display: none;
+    margin-top: 0.35rem;
+}
+
+#newWindowBtn {
+    display: none;
+    margin-top: 0.35rem;
 }
 
 @media (min-width: 576px) {
