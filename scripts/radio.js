@@ -229,6 +229,13 @@ function playStream(url, bora, onFatalError) {
             // 이미 다른 채널로 전환되어 hls가 교체/destroy 되었다면 무시
             if (currentHls !== hls) return;
 
+            // 가장 높은 비트레이트 레벨로 고정
+            var best = 0;
+            for (var i = 1; i < data.levels.length; i++) {
+                if (data.levels[i].bitrate > data.levels[best].bitrate) best = i;
+            }
+            hls.currentLevel = best;
+
             var activePlayer = (bora === "true" || hasVideoLevel(data.levels)) ? vPlayer : player;
             activePlayer.style.display = "block";
             hls.attachMedia(activePlayer);
