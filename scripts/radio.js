@@ -215,11 +215,11 @@ function hasVideoLevel(levels) {
 
 // 스트림 재생 (hls.js / 네이티브 HLS / 일반 스트림 자동 판별)
 // onFatalError: 재생 중 복구 불가능한 HLS 오류가 났을 때 호출
-function playStream(url, contentType, bora, onFatalError) {
+function playStream(url, bora, onFatalError) {
     var player = document.getElementById("player");
     var vPlayer = document.getElementById("vPlayer");
 
-    var isHLS = (contentType || "").indexOf("mpegurl") !== -1 || url.indexOf(".m3u8") !== -1;
+    var isHLS = url.indexOf(".m3u8") !== -1;
 
     if (isHLS && typeof Hls !== "undefined" && Hls.isSupported()) {
         var hls = new Hls();
@@ -256,9 +256,9 @@ function playStream(url, contentType, bora, onFatalError) {
 // 스트림 요청
 // ============================================================
 
-// 스트림 정보 요청 (서버가 JSON으로 응답)
-// callback(err, { url: 스트림 URL, contentType: string })
-function fetchStreamInfo(url, callback) {
+// 스트림 URL 요청 (서버가 { "url": "..." } JSON으로 응답)
+// callback(err, 스트림 URL 문자열)
+function fetchStreamUrl(url, callback) {
     var xhr = new XMLHttpRequest();
     var done = false;
 
@@ -292,10 +292,7 @@ function fetchStreamInfo(url, callback) {
             return;
         }
 
-        finish(null, {
-            url: data.url,
-            contentType: typeof data.contentType === "string" ? data.contentType : ""
-        });
+        finish(null, data.url);
     };
 
     xhr.onerror = function () {
@@ -423,7 +420,7 @@ function changeSource(opts) {
     var requestQuery = buildQueryString({ stn: stn, ch: ch, city: city, bora: bora, format: "json" });
     if (requestQuery) requestUrlStr += "?" + requestQuery;
 
-    fetchStreamInfo(requestUrlStr, function (err, result) {
+    fetchStreamUrl(requestUrlStr, function (err, fetchedUrl) {
         if (mySeq !== requestSeq) return; // 이미 다른 채널로 전환/초기화됨
 
         if (err) {
@@ -431,14 +428,13 @@ function changeSource(opts) {
             return;
         }
 
-        var fetchedUrl = result.url;
-
+        // https 페이지에서 http 스트림이면 새 창 안내, 아니면 재생
         if (isMixedContent(fetchedUrl)) {
             showError("mixed", fetchedUrl);
             return;
         }
 
-        playStream(fetchedUrl, result.contentType, bora, function () {
+        playStream(fetchedUrl, bora, function () {
             if (mySeq === requestSeq) showError("generic");
         });
 
