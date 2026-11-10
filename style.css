@@ -213,7 +213,7 @@ header {
    gap 미지원 브라우저(iOS 9 Safari 등)를 위해 각 .channel에
    개별 margin을 주고, 컨테이너 양옆은 음수 margin으로 상쇄 */
 .channelContainer {
-    display: none;
+    display: none !important;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -webkit-flex-flow: row wrap;
@@ -222,9 +222,9 @@ header {
 }
 
 .visible {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: flex !important;
 }
 
 .channel {
