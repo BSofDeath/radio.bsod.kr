@@ -43,7 +43,7 @@ function getSecondsUntilNextKstMidnightOne(now = new Date()) {
     return Math.max(1, Math.ceil(diffMs / 1000));
 }
 
-export async function getCachedUrl(params, context) {
+export async function getUrlCached(params, context) {
     const { env, waitUntil } = context;
 
     if (!env.RADIO_CACHE) {
