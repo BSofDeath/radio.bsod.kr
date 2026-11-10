@@ -1,18 +1,18 @@
 import { getUrlCached } from "./getUrlCached.js";
-import { getName } from "./getName.js";
 
 export const onRequest = async (context) => {
     const { request, env, ctx } = context;
 
-    const params = new URL(request.url).searchParams;
-    const pathname = new URL(request.url).pathname;
+    const url = new URL(request.url);
+    const params = url.searchParams;
+    const pathname = url.pathname;
+
     const station = params.get("stn");
     const channel = params.get("ch");
     const city = params.get("city");
     const bora = params.get("bora");
 
     let location = null;
-    let channelTitle = null;
 
     if (station != null || channel != null || city != null) {
         try {
@@ -20,10 +20,8 @@ export const onRequest = async (context) => {
                 { station, channel, city, bora },
                 context
             );
-            channelTitle = await getName({ station, channel, city });
         } catch (e) {
             location = null;
-            channelTitle = null;
         }
     }
 
@@ -39,17 +37,14 @@ export const onRequest = async (context) => {
                     },
                 });
             case "/api/url":
-                // 대상 스트림 URL을 JSON으로 반환
-                if (params.get("format") === "json") {
-                    return new Response(JSON.stringify({ url: location }), {
-                        status: 200,
-                        headers: {
-                            "content-type": "application/json",
-                            "cache-control": "no-store",
-                            "Access-Control-Allow-Origin": "*",
-                        },
-                    });
-                }
+                return new Response(JSON.stringify({ url: location }), {
+                    status: 200,
+                    headers: {
+                        "content-type": "application/json",
+                        "cache-control": "no-store",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                });
         }
     }
 

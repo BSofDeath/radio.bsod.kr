@@ -417,7 +417,7 @@ function changeSource(opts) {
 
     // 스트림 요청
     var requestUrlStr = "/api/url";
-    var requestQuery = buildQueryString({ stn: stn, ch: ch, city: city, bora: bora, format: "json" });
+    var requestQuery = buildQueryString({ stn: stn, ch: ch, city: city, bora: bora });
     if (requestQuery) requestUrlStr += "?" + requestQuery;
 
     fetchStreamUrl(requestUrlStr, function (err, fetchedUrl) {
