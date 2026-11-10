@@ -313,26 +313,6 @@ function isMixedContent(url) {
 
 
 // ============================================================
-// 화면 요소
-// ============================================================
-
-// [새 창 열기] 버튼 (없으면 복사 버튼 옆에 생성)
-function getNewWindowBtn(afterEl) {
-    var btn = document.getElementById("newWindowBtn");
-    if (!btn) {
-        btn = document.createElement("button");
-        btn.id = "newWindowBtn";
-        btn.type = "button";
-        btn.innerText = "새 탭에서 재생";
-        btn.className = afterEl.className; // 복사 버튼과 같은 스타일
-        btn.style.display = "none";
-        afterEl.parentNode.insertBefore(btn, afterEl.nextSibling);
-    }
-    return btn;
-}
-
-
-// ============================================================
 // 스트림 변경 및 재생
 // ============================================================
 
@@ -348,7 +328,7 @@ function changeSource(opts) {
     var playingCopyBtn = document.getElementById("playingCopyBtn");
     var resetBtn = document.getElementById("resetBtn");
     var boraBtn = document.getElementById("boraBtn");
-    var newWindowBtn = getNewWindowBtn(playingCopyBtn);
+    var newWindowBtn = document.getElementById("newWindowBtn");
 
     var selectedChannel = findChannelElement(stn, ch, city);
     if (!selectedChannel) return;
