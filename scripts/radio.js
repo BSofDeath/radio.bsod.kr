@@ -432,6 +432,12 @@ function changeSource(opts) {
         nowPlayingUrl.textContent = fetchedUrl;
         nowPlayingUrl.href = fetchedUrl;
 
+        playingCopyBtn.style.display = "inline-block";
+        playingCopyBtn.onclick = function () {
+            copyTextToClipboard(fetchedUrl);
+            alert("URL이 클립보드에 복사되었습니다.");
+        };
+
         // https 페이지에서 http 스트림이면 새 창 안내, 아니면 재생
         if (isMixedContent(fetchedUrl)) {
             showError("mixed", fetchedUrl);
@@ -441,11 +447,5 @@ function changeSource(opts) {
         playStream(fetchedUrl, bora, function () {
             if (mySeq === requestSeq) showError("generic");
         });
-
-        playingCopyBtn.style.display = "inline-block";
-        playingCopyBtn.onclick = function () {
-            copyTextToClipboard(fetchedUrl);
-            alert("URL이 클립보드에 복사되었습니다.");
-        };
     });
 }
