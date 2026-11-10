@@ -256,14 +256,22 @@ button {
     background-color: #f3f3f3;
     color: black;
     cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent; /* 선택: 탭 시 회색 하이라이트 제거 */
+    -webkit-transition: filter 0.3s;
+    transition: filter 0.3s;
 }
 
-button:hover {
-    filter: brightness(90%);
-    transition: filter 0.3s;
+@media (hover: hover) {
+    button:hover {
+        filter: brightness(90%);
+        -webkit-filter: brightness(90%);
+    }
+}
 
+button:active {
+    filter: brightness(90%);
     -webkit-filter: brightness(90%);
-    -webkit-transition: filter 0.3s;
 }
 
 /* place-items(grid)는 구형 브라우저 미지원이므로 text-align으로 대체.
