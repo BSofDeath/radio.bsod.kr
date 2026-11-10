@@ -221,6 +221,9 @@ function playStream(url, bora, onFatalError) {
 
     var isHLS = url.indexOf(".m3u8") !== -1;
 
+    // 네이티브 HLS(iOS Safari 등) 지원 여부 확인
+    var nativeHls = isHls && player.canPlayType("application/vnd.apple.mpegurl") !== "";
+
     if (isHLS && typeof Hls !== "undefined" && Hls.isSupported()) {
         var hls = new Hls();
         currentHls = hls;
@@ -251,12 +254,19 @@ function playStream(url, bora, onFatalError) {
 
         hls.loadSource(url);
     } else {
-        // 네이티브 HLS(iOS Safari 등) 또는 일반 오디오 스트림
-        player.style.display = "block";
-        player.src = url;
-        safePlay(player);
+        var active = (bora === "true") ? vPlayer : player;
+        active.style.display = "block";
+
+        if (nativeHls && onFatalError) {
+            active.onerror = function () {
+                active.onerror = null;
+                onFatalError();
+            };    
+        }
+
+        active.src = url;
+        safePlay(active);
     }
-}
 
 
 // ============================================================
