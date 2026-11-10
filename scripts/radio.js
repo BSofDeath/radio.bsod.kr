@@ -202,7 +202,6 @@ function changeSource(opts) {
     nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
     nowPlayingUrl.style.display = "none";
     playingCopyBtn.style.display = "none";
-    boraBtn.style.display = "none";
 
     //초기화 버튼 이벤트 설정
     resetBtn.onclick = function () {
@@ -230,6 +229,45 @@ function changeSource(opts) {
         selectedChannel.className = selectedChannel.className.replace(/\btuned\b/g, "").replace(/\s+/g, " ").trim();
     };
 
+    /* [보이는 라디오] 버튼 표시 */
+    function setupBoraButton() {
+        var targetChannels = [
+            { stn: "kbs", ch: "1radio" },
+            { stn: "kbs", ch: "2radio" },
+            { stn: "kbs", ch: "3radio" },
+            { stn: "kbs", ch: "1fm" },
+            { stn: "kbs", ch: "2fm" },
+            { stn: "kbs", ch: "hanminjok" },
+            { stn: "sbs", ch: "lovefm" },
+            { stn: "sbs", ch: "powerfm" },
+            { stn: "cbs", ch: "sfm" },
+            { stn: "ifm", ch: null }
+        ];
+        var isTarget = false;
+        for (var t = 0; t < targetChannels.length; t++) {
+            var item = targetChannels[t];
+            if (item.ch != null) {
+                if (item.stn === stn && item.ch === ch) {
+                    isTarget = true;
+                    break;
+                }
+            } else if (item.stn === stn) {
+                isTarget = true;
+                break;
+            }
+        }
+
+        if (isTarget && city === "") {
+            boraBtn.style.display = "inline-block";
+            boraBtn.onclick = function () {
+                var isBora = bora === "true" ? "" : "true";
+                if (isBora === "true") boraBtn.innerText = "일반 라디오로 전환";
+                else boraBtn.innerText = "보이는 라디오로 전환";
+                changeSource({ stn: stn, ch: ch, city: city, bora: isBora });
+            };
+        }
+    }
+
     /* 스트림 가져오기 */
     function onStreamError() {
         document.title = "라디오";
@@ -248,43 +286,6 @@ function changeSource(opts) {
 
             var fetchedUrl = result.url;
             var contentType = result.contentType || "";
-
-            // [보이는 라디오] 버튼 표시 여부 결정
-            var targetChannels = [
-                { stn: "kbs", ch: "1radio" },
-                { stn: "kbs", ch: "2radio" },
-                { stn: "kbs", ch: "3radio" },
-                { stn: "kbs", ch: "1fm" },
-                { stn: "kbs", ch: "2fm" },
-                { stn: "kbs", ch: "hanminjok" },
-                { stn: "sbs", ch: "lovefm" },
-                { stn: "sbs", ch: "powerfm" },
-                { stn: "cbs", ch: "sfm" },
-                { stn: "ifm", ch: null }
-            ];
-            var isTarget = false;
-            for (var t = 0; t < targetChannels.length; t++) {
-                var item = targetChannels[t];
-                if (item.ch != null) {
-                    if (item.stn === stn && item.ch === ch) {
-                        isTarget = true;
-                        break;
-                    }
-                } else if (item.stn === stn) {
-                    isTarget = true;
-                    break;
-                }
-            }
-
-            if (isTarget && city === "") {
-                boraBtn.style.display = "inline-block";
-                boraBtn.onclick = function () {
-                    var isBora = bora === "true" ? "" : "true";
-                    if (isBora === "true") boraBtn.innerText = "일반 라디오로 전환";
-                    else boraBtn.innerText = "보이는 라디오로 전환";
-                    changeSource({ stn: stn, ch: ch, city: city, bora: isBora });
-                };
-            }
 
             // 스트림 재생 처리
             var isHLS = contentType.indexOf("mpegurl") !== -1 || fetchedUrl.indexOf(".m3u8") !== -1;
@@ -346,5 +347,6 @@ function changeSource(opts) {
         });
     }
 
+    setupBoraButton();
     proceedWithFetch();
 }
