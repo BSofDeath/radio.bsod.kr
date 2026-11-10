@@ -1,112 +1,61 @@
-// 페이지 로드
-document.addEventListener("DOMContentLoaded", function () {
-    var selector = document.getElementById("citySelector");
-    var lastSelectedCity = null;
-    try {
-        lastSelectedCity = localStorage.getItem("lastSelectedCity");
-    } catch (e) {
-        lastSelectedCity = null;
-    }
+// ============================================================
+// 상태
+// ============================================================
 
-    if (lastSelectedCity) selector.value = lastSelectedCity;
-
-    // 구형 브라우저는 new Event()의 두 번째 인자 없이도 동작하지만,
-    // 일부 구형 엔진은 Event 생성자 자체를 지원하지 않으므로 폴백 처리
-    var evt;
-    if (typeof Event === "function") {
-        try {
-            evt = new Event("change");
-        } catch (e) {
-            evt = document.createEvent("Event");
-            evt.initEvent("change", true, true);
-        }
-    } else {
-        evt = document.createEvent("Event");
-        evt.initEvent("change", true, true);
-    }
-    selector.dispatchEvent(evt);
-});
-
-// 도시 선택 기능
-document.getElementById("citySelector").addEventListener("change", function () {
-    var containers = document.getElementsByClassName("channelContainer");
-    var value = this.value;
-    for (var i = 0; i < containers.length; i++) {
-        var element = containers[i];
-        if (element.id === value) {
-            element.className = element.className.indexOf("visible") === -1
-                ? element.className + " visible"
-                : element.className;
-        } else {
-            element.className = element.className.replace(/\bvisible\b/g, "").replace(/\s+/g, " ").trim();
-        }
-    }
-    try {
-        localStorage.setItem("lastSelectedCity", value);
-    } catch (e) {
-        // localStorage 사용 불가 시 무시
-    }
-});
-
-// 현재 재생 중인 Hls 인스턴스를 추적 (채널 전환 시 반드시 destroy 후 새로 생성해야 함)
+// 현재 재생 중인 Hls.js 인스턴스 (있으면 destroy() 필요)
 var currentHls = null;
 
-// 간단한 XHR 기반 fetch 대체 함수
-// callback(err, { url: 최종 URL, contentType: string, status: number })
-function simpleXhrGet(url, callback) {
-    var xhr = new XMLHttpRequest();
-    var done = false;
+// 채널 전환/초기화 시 늦게 도착한 이전 응답을 무시하기 위한 요청 번호
+var requestSeq = 0;
 
-    xhr.open("GET", url, true);
+// [보이는 라디오] 버튼을 보여줄 채널 목록
+var BORA_CHANNELS = [
+    { stn: "kbs", ch: "1radio" },
+    { stn: "kbs", ch: "2radio" },
+    { stn: "kbs", ch: "3radio" },
+    { stn: "kbs", ch: "1fm" },
+    { stn: "kbs", ch: "2fm" },
+    { stn: "kbs", ch: "hanminjok" },
+    { stn: "sbs", ch: "lovefm" },
+    { stn: "sbs", ch: "powerfm" },
+    { stn: "cbs", ch: "sfm" },
+    { stn: "ifm", ch: null }
+];
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState !== 4 || done) return;
-        done = true;
 
-        if (xhr.status < 200 || xhr.status >= 400) {
-            callback(new Error("NETWORK_RESPONSE_NOT_OK"));
-            return;
-        }
+// ============================================================
+// 공용 유틸
+// ============================================================
 
-        // responseURL은 리다이렉트를 따라간 최종 URL (IE는 미지원 → url로 폴백)
-        var finalUrl = xhr.responseURL || url;
-        var contentType = "";
-        try {
-            contentType = xhr.getResponseHeader("Content-Type") || "";
-        } catch (e) {
-            contentType = "";
-        }
-
-        callback(null, { url: finalUrl, contentType: contentType });
-    };
-
-    xhr.onerror = function () {
-        if (done) return;
-        done = true;
-        callback(new Error("NETWORK_RESPONSE_NOT_OK"));
-    };
-
-    try {
-        xhr.send();
-    } catch (e) {
-        if (!done) {
-            done = true;
-            callback(e);
-        }
-    }
+function hasClass(el, name) {
+    return new RegExp("(^|\\s)" + name + "(\\s|$)").test(el.className);
 }
 
-// 클립보드 복사 (navigator.clipboard 미지원 브라우저 대응)
-function copyTextToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        try {
-            navigator.clipboard.writeText(text);
-            return;
-        } catch (e) {
-            // 아래 폴백으로 이어짐
-        }
-    }
+function addClass(el, name) {
+    if (!hasClass(el, name)) el.className = (el.className + " " + name).trim();
+}
 
+function removeClass(el, name) {
+    el.className = el.className
+        .replace(new RegExp("(^|\\s)" + name + "(?=\\s|$)", "g"), " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+// 쿼리스트링 수동 조립 (URLSearchParams 미지원 대응)
+function buildQueryString(params) {
+    var pairs = [];
+    for (var key in params) {
+        if (!Object.prototype.hasOwnProperty.call(params, key)) continue;
+        var value = params[key];
+        if (value === undefined || value === null || value === "") continue;
+        pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+    }
+    return pairs.join("&");
+}
+
+// 클립보드 복사 (navigator.clipboard 미지원/거부 시 execCommand로 폴백)
+function legacyCopy(text) {
     var textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.style.position = "fixed";
@@ -123,19 +72,250 @@ function copyTextToClipboard(text) {
     document.body.removeChild(textarea);
 }
 
-// 쿼리스트링 수동 조립 (URLSearchParams 미지원 대응)
-function buildQueryString(params) {
-    var pairs = [];
-    for (var key in params) {
-        if (!Object.prototype.hasOwnProperty.call(params, key)) continue;
-        var value = params[key];
-        if (value === undefined || value === null || value === "") continue;
-        pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+function copyTextToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+            navigator.clipboard.writeText(text).then(null, function () {
+                legacyCopy(text);
+            });
+            return;
+        } catch (e) {
+            // 아래 폴백으로 이어짐
+        }
     }
-    return pairs.join("&");
+    legacyCopy(text);
 }
 
-// 스트림 변경 및 재생 기능
+
+// ============================================================
+// 지역 선택
+// ============================================================
+
+// 페이지 로드
+document.addEventListener("DOMContentLoaded", function () {
+    var selector = document.getElementById("citySelector");
+    var lastSelectedCity = null;
+    try {
+        lastSelectedCity = localStorage.getItem("lastSelectedCity");
+    } catch (e) {
+        lastSelectedCity = null;
+    }
+
+    if (lastSelectedCity) selector.value = lastSelectedCity;
+
+    // 구형 웹브라우저 대응
+    var evt;
+    if (typeof Event === "function") {
+        try {
+            evt = new Event("change");
+        } catch (e) {
+            evt = document.createEvent("Event");
+            evt.initEvent("change", true, true);
+        }
+    } else {
+        evt = document.createEvent("Event");
+        evt.initEvent("change", true, true);
+    }
+    selector.dispatchEvent(evt);
+});
+
+// 지역 선택 기능
+document.getElementById("citySelector").addEventListener("change", function () {
+    var containers = document.getElementsByClassName("channelContainer");
+    var value = this.value;
+    for (var i = 0; i < containers.length; i++) {
+        var element = containers[i];
+        if (element.id === value) addClass(element, "visible");
+        else removeClass(element, "visible");
+    }
+    try {
+        localStorage.setItem("lastSelectedCity", value);
+    } catch (e) {
+        // localStorage 사용 불가 시 무시
+    }
+});
+
+
+// ============================================================
+// 채널 목록
+// ============================================================
+
+// 보이는 라디오 대상 채널 검증
+function isBoraTarget(stn, ch, city) {
+    if (city !== "") return false;
+    for (var i = 0; i < BORA_CHANNELS.length; i++) {
+        var item = BORA_CHANNELS[i];
+        if (item.stn !== stn) continue;
+        if (item.ch == null || item.ch === ch) return true;
+    }
+    return false;
+}
+
+// 목록에서 해당 채널의 <a> 요소 찾기
+function findChannelElement(stn, ch, city) {
+    var args = "stn:'" + stn + "'";
+    if (ch) args += ", ch:'" + ch + "'";
+    if (city) args += ", city:'" + city + "'";
+    var query = "a[href=\"javascript:changeSource({" + args + "})\"]";
+
+    var container = document.getElementsByClassName("visible")[0];
+    return container ? container.querySelector(query) : null;
+}
+
+// 선택한 채널만 강조 (null이면 전체 해제)
+function setTunedChannel(selected) {
+    var all = document.querySelectorAll(".channel");
+    for (var i = 0; i < all.length; i++) removeClass(all[i], "tuned");
+    if (selected) addClass(selected, "tuned");
+}
+
+
+// ============================================================
+// 플레이어
+// ============================================================
+
+// play()가 자동재생 정책 등으로 거부되어도 콘솔 오류가 나지 않도록 처리
+function safePlay(el) {
+    var result = el.play();
+    if (result && typeof result.then === "function") {
+        result.then(null, function () {});
+    }
+}
+
+// 모든 플레이어 정지 및 초기화
+function stopPlayers() {
+    if (currentHls) {
+        currentHls.destroy();
+        currentHls = null;
+    }
+    var mediaEls = [document.getElementById("player"), document.getElementById("vPlayer")];
+    for (var i = 0; i < mediaEls.length; i++) {
+        var el = mediaEls[i];
+        el.pause();
+        el.removeAttribute("src");
+        el.load();
+        el.style.display = "none";
+    }
+}
+
+// HLS 레벨 목록에 영상이 포함되어 있는지 확인
+function hasVideoLevel(levels) {
+    for (var i = 0; i < levels.length; i++) {
+        var level = levels[i];
+        if (
+            level.width > 0 ||
+            (level.videoCodec && level.videoCodec.indexOf("avc1") !== -1) ||
+            (level.attrs && level.attrs.VIDEO)
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// 스트림 재생 (hls.js / 네이티브 HLS / 일반 스트림 자동 판별)
+// onFatalError: 재생 중 복구 불가능한 HLS 오류가 났을 때 호출
+function playStream(url, bora, onFatalError) {
+    var player = document.getElementById("player");
+    var vPlayer = document.getElementById("vPlayer");
+
+    var isHLS = url.indexOf(".m3u8") !== -1;
+
+    if (isHLS && typeof Hls !== "undefined" && Hls.isSupported()) {
+        var hls = new Hls();
+        currentHls = hls;
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+            // 이미 다른 채널로 전환되어 hls가 교체/destroy 되었다면 무시
+            if (currentHls !== hls) return;
+
+            var activePlayer = (bora === "true" || hasVideoLevel(data.levels)) ? vPlayer : player;
+            activePlayer.style.display = "block";
+            hls.attachMedia(activePlayer);
+            safePlay(activePlayer);
+        });
+
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            if (currentHls !== hls || !data.fatal) return;
+            hls.destroy();
+            currentHls = null;
+            if (onFatalError) onFatalError();
+        });
+
+        hls.loadSource(url);
+    } else {
+        // 네이티브 HLS(iOS Safari 등) 또는 일반 오디오 스트림
+        player.style.display = "block";
+        player.src = url;
+        safePlay(player);
+    }
+}
+
+
+// ============================================================
+// 스트림 요청
+// ============================================================
+
+// 스트림 URL 요청 (서버가 { "url": "..." } JSON으로 응답)
+// callback(err, 스트림 URL 문자열)
+function fetchStreamUrl(url, callback) {
+    var xhr = new XMLHttpRequest();
+    var done = false;
+
+    function finish(err, result) {
+        if (done) return;
+        done = true;
+        callback(err, result);
+    }
+
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Accept", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4 || done) return;
+
+        if (xhr.status < 200 || xhr.status >= 300) {
+            finish(new Error("NETWORK_RESPONSE_NOT_OK"));
+            return;
+        }
+
+        var data;
+        try {
+            data = JSON.parse(xhr.responseText);
+        } catch (e) {
+            finish(new Error("INVALID_JSON_RESPONSE"));
+            return;
+        }
+
+        if (!data || typeof data.url !== "string" || !data.url) {
+            finish(new Error("INVALID_JSON_RESPONSE"));
+            return;
+        }
+
+        finish(null, data.url);
+    };
+
+    xhr.onerror = function () {
+        finish(new Error("NETWORK_RESPONSE_NOT_OK"));
+    };
+
+    try {
+        xhr.send();
+    } catch (e) {
+        finish(e);
+    }
+}
+
+// https 페이지에서 http 스트림은 브라우저가 차단함 (Mixed Content)
+function isMixedContent(url) {
+    return window.location.protocol === "https:" && /^http:/i.test(url);
+}
+
+
+// ============================================================
+// 스트림 변경 및 재생
+// ============================================================
+
 function changeSource(opts) {
     opts = opts || {};
     var stn = opts.stn;
@@ -143,232 +323,109 @@ function changeSource(opts) {
     var city = opts.city || "";
     var bora = opts.bora || "";
 
-    var player = document.getElementById("player");
-    var vPlayer = document.getElementById("vPlayer");
-
     var nowPlayingTitle = document.getElementById("nowPlayingTitle");
     var nowPlayingUrl = document.getElementById("nowPlayingUrl");
-    var staticUrl = document.getElementById("staticUrl");
-
     var playingCopyBtn = document.getElementById("playingCopyBtn");
-    var staticCopyBtn = document.getElementById("staticCopyBtn");
     var resetBtn = document.getElementById("resetBtn");
     var boraBtn = document.getElementById("boraBtn");
-    boraBtn.innerHTML = bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
+    var newWindowBtn = document.getElementById("newWindowBtn");
 
-    /* 채널 목록에서 새로 선택한 채널 강조표시 */
-    var innerHTMLQuery;
-    if (city) {
-        innerHTMLQuery = ch
-            ? "a[href=\"javascript:changeSource({stn:'" + stn + "', ch:'" + ch + "', city:'" + city + "'})\"]"
-            : "a[href=\"javascript:changeSource({stn:'" + stn + "', city:'" + city + "'})\"]";
-    } else {
-        innerHTMLQuery = ch
-            ? "a[href=\"javascript:changeSource({stn:'" + stn + "', ch:'" + ch + "'})\"]"
-            : "a[href=\"javascript:changeSource({stn:'" + stn + "'})\"]";
-    }
+    var selectedChannel = findChannelElement(stn, ch, city);
+    if (!selectedChannel) return;
 
-    var targetChannelContainer = document.getElementsByClassName("visible")[0];
-    var selectedChannel = targetChannelContainer.querySelector(innerHTMLQuery);
+    var mySeq = ++requestSeq;
 
-    var allChannels = document.querySelectorAll(".channel");
-    for (var i = 0; i < allChannels.length; i++) {
-        allChannels[i].className = allChannels[i].className.replace(/\btuned\b/g, "").replace(/\s+/g, " ").trim();
-    }
-    selectedChannel.className = selectedChannel.className.indexOf("tuned") === -1
-        ? (selectedChannel.className + " tuned").trim()
-        : selectedChannel.className;
+    // 이전 재생 정리 및 선택 채널 강조
+    stopPlayers();
+    setTunedChannel(selectedChannel);
 
-    /* 플레이어 초기화 */
-    if (currentHls) {
-        currentHls.destroy();
-        currentHls = null;
-    }
-    var mediaEls = [player, vPlayer];
-    for (var m = 0; m < mediaEls.length; m++) {
-        var p = mediaEls[m];
-        p.pause();
-        p.removeAttribute("src");
-        p.load();
-        p.style.display = "none";
-    }
-
-    /* 스트림 가져오기 준비 */
-    var requestUrlStr = "https://" + window.location.host + "/stream";
-    var requestParams = { stn: stn, ch: ch, city: city, bora: bora };
-    var requestQuery = buildQueryString(requestParams);
-    if (requestQuery) requestUrlStr += "?" + requestQuery;
-
-    /* 초기 정보 업데이트 */
-    document.title = selectedChannel.innerHTML + " | 라디오";
-    nowPlayingTitle.innerHTML = selectedChannel.innerHTML;
-    staticUrl.style.display = "inline-block";
-    staticUrl.innerHTML = requestUrlStr;
-    staticUrl.href = requestUrlStr;
-    staticCopyBtn.style.display = "inline-block";
-
+    // 초기 정보 업데이트
+    var channelName = selectedChannel.textContent;
+    document.title = channelName + " | 라디오";
+    nowPlayingTitle.textContent = channelName;
     nowPlayingUrl.style.display = "none";
     playingCopyBtn.style.display = "none";
-    boraBtn.style.display = "none";
+    newWindowBtn.style.display = "none";
 
-    //초기화 버튼 이벤트 설정
+    // [초기화] 버튼
     resetBtn.onclick = function () {
-        document.title = "라디오";
-        nowPlayingTitle.innerHTML = "채널을 선택해 주세요.";
+        requestSeq++; // 진행 중인 요청 무효화
 
-        nowPlayingUrl.innerHTML = "";
+        document.title = "라디오";
+        nowPlayingTitle.textContent = "채널을 선택해 주세요.";
+        nowPlayingUrl.textContent = "";
         nowPlayingUrl.href = "";
         nowPlayingUrl.style.display = "none";
-
-        staticUrl.innerHTML = "";
-        staticUrl.href = "";
-        staticUrl.style.display = "none";
-
         playingCopyBtn.style.display = "none";
-        staticCopyBtn.style.display = "none";
+        newWindowBtn.style.display = "none";
         boraBtn.style.display = "none";
 
-        if (currentHls) {
-            currentHls.destroy();
-            currentHls = null;
-        }
-        for (var r = 0; r < mediaEls.length; r++) {
-            var rp = mediaEls[r];
-            rp.pause();
-            rp.removeAttribute("src");
-            rp.load();
-            rp.style.display = "none";
-        }
-
-        selectedChannel.className = selectedChannel.className.replace(/\btuned\b/g, "").replace(/\s+/g, " ").trim();
+        stopPlayers();
+        removeClass(selectedChannel, "tuned");
     };
 
-    /* 스트림 가져오기 */
-    function onStreamError() {
+    // [보이는 라디오] 버튼
+    boraBtn.innerText = bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
+    if (isBoraTarget(stn, ch, city)) {
+        boraBtn.style.display = "inline-block";
+        boraBtn.onclick = function () {
+            changeSource({ stn: stn, ch: ch, city: city, bora: bora === "true" ? "" : "true" });
+        };
+    } else {
+        boraBtn.style.display = "none";
+    }
+
+    // 오류 표시 (reason: "mixed"이면 새 창 열기 안내)
+    function showError(reason, openUrl) {
         document.title = "라디오";
-        nowPlayingTitle.innerHTML +=
-            "<br><span style='color:#ff2b4b;'>현재 창에서 해당 채널을 재생할 수 없습니다.<br>브라우저 보안 정책으로 인한 오류일 수 있으니 아래의 <b>고정 URL</b>을 클릭하여 새 창에서 다시 시도해 주세요.</span>";
+
+        var msg = "이 채널은 현재 이용할 수 없습니다.";
+        if (reason === "mixed") {
+            msg = "이 채널은 새 탭에서만 재생할 수 있습니다.";
+            newWindowBtn.style.display = "inline-block";
+            newWindowBtn.onclick = function () {
+                window.open(openUrl, "_blank");
+            };
+        }
+
+        var span = document.createElement("span");
+        span.style.color = "#ff2b4b";
+        span.textContent = msg;
+        nowPlayingTitle.appendChild(document.createElement("br"));
+        nowPlayingTitle.appendChild(span);
     }
 
-    function proceedWithFetch() {
-        var fetchUrlStr = requestUrlStr;
+    // 스트림 요청
+    var requestUrlStr = "/api/url";
+    var requestQuery = buildQueryString({ stn: stn, ch: ch, city: city, bora: bora });
+    if (requestQuery) requestUrlStr += "?" + requestQuery;
 
-        simpleXhrGet(fetchUrlStr, function (err, result) {
-            if (err) {
-                onStreamError();
-                return;
-            }
+    fetchStreamUrl(requestUrlStr, function (err, fetchedUrl) {
+        if (mySeq !== requestSeq) return; // 이미 다른 채널로 전환/초기화됨
 
-            var fetchedUrl = result.url;
-            var contentType = result.contentType || "";
+        if (err) {
+            showError("generic");
+            return;
+        }
 
-            // [보이는 라디오] 버튼 표시 여부 결정
-            var targetChannels = [
-                { stn: "kbs", ch: "1radio" },
-                { stn: "kbs", ch: "2radio" },
-                { stn: "kbs", ch: "3radio" },
-                { stn: "kbs", ch: "1fm" },
-                { stn: "kbs", ch: "2fm" },
-                { stn: "kbs", ch: "hanminjok" },
-                { stn: "sbs", ch: "lovefm" },
-                { stn: "sbs", ch: "powerfm" },
-                { stn: "cbs", ch: "sfm" },
-                { stn: "ifm", ch: null }
-            ];
-            var isTarget = false;
-            for (var t = 0; t < targetChannels.length; t++) {
-                var item = targetChannels[t];
-                if (item.ch != null) {
-                    if (item.stn === stn && item.ch === ch) {
-                        isTarget = true;
-                        break;
-                    }
-                } else if (item.stn === stn) {
-                    isTarget = true;
-                    break;
-                }
-            }
+        nowPlayingUrl.style.display = "inline-block";
+        nowPlayingUrl.textContent = fetchedUrl;
+        nowPlayingUrl.href = fetchedUrl;
 
-            if (isTarget && city === "") {
-                boraBtn.style.display = "inline-block";
-                boraBtn.onclick = function () {
-                    var isBora = bora === "true" ? "" : "true";
-                    if (isBora === "true") boraBtn.innerText = "일반 라디오로 전환";
-                    else boraBtn.innerText = "보이는 라디오로 전환";
-                    changeSource({ stn: stn, ch: ch, city: city, bora: isBora });
-                };
-            }
+        playingCopyBtn.style.display = "inline-block";
+        playingCopyBtn.onclick = function () {
+            copyTextToClipboard(fetchedUrl);
+            alert("URL이 클립보드에 복사되었습니다.");
+        };
 
-            // 스트림 재생 처리
-            var isHLS = contentType.indexOf("mpegurl") !== -1 || fetchedUrl.indexOf(".m3u8") !== -1;
+        // https 페이지에서 http 스트림이면 새 창 안내, 아니면 재생
+        if (isMixedContent(fetchedUrl)) {
+            showError("mixed", fetchedUrl);
+            return;
+        }
 
-            // iOS Safari 등은 <audio>로 HLS를 네이티브 재생할 수 있으므로
-            // hls.js 없이도 바로 재생 가능한 경우 우선 사용
-            var nativeHlsSupported =
-                typeof player.canPlayType === "function" &&
-                player.canPlayType("application/vnd.apple.mpegurl") !== "";
-
-            if (isHLS && typeof Hls !== "undefined" && Hls.isSupported()) {
-                var hls = new Hls();
-                currentHls = hls;
-                hls.loadSource(fetchedUrl);
-
-                hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-                    // 이 콜백이 실행되는 시점에 이미 다른 채널로 전환되어 hls가 교체/destroy 되었다면 무시
-                    if (currentHls !== hls) return;
-
-                    var hasVideo = false;
-                    for (var lv = 0; lv < data.levels.length; lv++) {
-                        var level = data.levels[lv];
-                        if (
-                            level.width > 0 ||
-                            (level.videoCodec && level.videoCodec.indexOf("avc1") !== -1) ||
-                            (level.attrs && level.attrs.VIDEO)
-                        ) {
-                            hasVideo = true;
-                            break;
-                        }
-                    }
-                    var activePlayer = hasVideo || bora === "true" ? vPlayer : player;
-                    activePlayer.style.display = "block";
-                    hls.attachMedia(activePlayer);
-                    activePlayer.play();
-                });
-            } else if (isHLS && nativeHlsSupported) {
-                // hls.js 미지원(또는 로드 실패)이지만 네이티브 HLS 재생이 가능한 경우
-                player.style.display = "block";
-                player.src = fetchedUrl;
-                player.play();
-            } else {
-                player.style.display = "block";
-                player.src = fetchedUrl;
-                player.play();
-            }
-
-            // 스트림 가져온 후 정보 업데이트
-            nowPlayingUrl.style.display = "inline-block";
-            nowPlayingUrl.innerHTML = fetchedUrl.toString();
-            nowPlayingUrl.href = fetchedUrl;
-
-            // 복사 버튼 이벤트 설정
-            playingCopyBtn.style.display = "inline-block";
-            playingCopyBtn.onclick = function () {
-                copyTextToClipboard(fetchedUrl.toString());
-                alert("URL이 클립보드에 복사되었습니다.");
-                setTimeout(function () {
-                    playingCopyBtn.innerText = "실제 URL 복사";
-                }, 1000);
-            };
-            staticCopyBtn.style.display = "inline-block";
-            staticCopyBtn.onclick = function () {
-                copyTextToClipboard(requestUrlStr);
-                alert("URL이 클립보드에 복사되었습니다.");
-                setTimeout(function () {
-                    staticCopyBtn.innerText = "고정 URL 복사";
-                }, 1000);
-            };
+        playStream(fetchedUrl, bora, function () {
+            if (mySeq === requestSeq) showError("generic");
         });
-    }
-
-    proceedWithFetch();
+    });
 }
