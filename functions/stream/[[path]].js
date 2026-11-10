@@ -30,6 +30,19 @@ export const onRequest = async (context) => {
     if (location != null) {
         switch (pathname) {
             case "/stream":
+                // 원본 스트림 주소를 JSON으로 반환
+                if (params.get("format") === "json") {
+                    return new Response(JSON.stringify({ url: location }), {
+                        status: 200,
+                        headers: {
+                            "content-type": "application/json",
+                            "cache-control": "no-store",
+                            "Access-Control-Allow-Origin": "*",
+                        },
+                    });
+                }
+
+                // 원본 스트림 주소로 리다이렉트
                 return new Response(null, {
                     status: 302,
                     headers: {
