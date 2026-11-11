@@ -12,14 +12,18 @@ var requestSeq = 0;
 var BORA_CHANNELS = [
     { stn: "kbs", ch: "1radio" },
     { stn: "kbs", ch: "2radio" },
-    { stn: "kbs", ch: "3radio" },
     { stn: "kbs", ch: "1fm" },
     { stn: "kbs", ch: "2fm" },
-    { stn: "kbs", ch: "hanminjok" },
     { stn: "sbs", ch: "lovefm" },
+    { stn: "sbs", ch: "lovefm", city: "busan" },
     { stn: "sbs", ch: "powerfm" },
+    { stn: "sbs", ch: "powerfm", city: "busan" },
+    { stn: "ebs", ch: "fm" },
     { stn: "cbs", ch: "sfm" },
-    { stn: "ifm", ch: null }
+    { stn: "ifm", ch: null },
+    { stn: "tbs", ch: "fm" },
+    { stn: "tbs", ch: "efm" },
+    { stn: "arirang" }
 ];
 
 
