@@ -15,15 +15,9 @@ var BORA_CHANNELS = [
     { stn: "kbs", ch: "1fm" },
     { stn: "kbs", ch: "2fm" },
     { stn: "sbs", ch: "lovefm" },
-    { stn: "sbs", ch: "lovefm", city: "busan" },
     { stn: "sbs", ch: "powerfm" },
-    { stn: "sbs", ch: "powerfm", city: "busan" },
-    { stn: "ebs", ch: "fm" },
     { stn: "cbs", ch: "sfm" },
-    { stn: "ifm", ch: null },
-    { stn: "tbs", ch: "fm" },
-    { stn: "tbs", ch: "efm" },
-    { stn: "arirang" }
+    { stn: "ifm", ch: null }
 ];
 
 
@@ -146,10 +140,10 @@ document.getElementById("citySelector").addEventListener("change", function () {
 
 // 보이는 라디오 대상 채널 검증
 function isBoraTarget(stn, ch, city) {
-    if (city !== "") return false;
     for (var i = 0; i < BORA_CHANNELS.length; i++) {
         var item = BORA_CHANNELS[i];
         if (item.stn !== stn) continue;
+        if ((item.city || "") !== city) continue;
         if (item.ch == null || item.ch === ch) return true;
     }
     return false;
@@ -218,8 +212,12 @@ function hasVideoLevel(levels) {
 }
 
 // 스트림 재생 (hls.js / 네이티브 HLS / 일반 스트림 자동 판별)
-// onFatalError: 재생 중 복구 불가능한 HLS 오류가 났을 때 호출
-function playStream(url, bora, onFatalError) {
+// opts.onFatalError: 재생 중 복구 불가능한 HLS 오류가 났을 때 호출
+// opts.onVideoAvailable(toggle): 매니페스트에 영상 레벨이 있을 때 호출 (hls.js 경로만)
+//   toggle()을 호출하면 player(오디오) <-> vPlayer(영상)를 전환하고, 영상 표시 중이면 true를 반환
+function playStream(url, bora, opts) {
+    opts = opts || {};
+
     var player = document.getElementById("player");
     var vPlayer = document.getElementById("vPlayer");
 
@@ -243,17 +241,38 @@ function playStream(url, bora, onFatalError) {
             }
             hls.currentLevel = best;
 
-            var activePlayer = (bora === "true" || hasVideoLevel(data.levels)) ? vPlayer : player;
-            activePlayer.style.display = "block";
-            hls.attachMedia(activePlayer);
-            safePlay(activePlayer);
+            // 기본은 오디오, 보라 요청(bora=true)일 때만 영상으로 시작
+            var active = (bora === "true") ? vPlayer : player;
+            active.style.display = "block";
+            hls.attachMedia(active);
+            safePlay(active);
+
+            // 보라 전용 URL이 없는 채널: 영상 레벨이 있으면 같은 스트림으로 전환 가능
+            if (opts.onVideoAvailable && hasVideoLevel(data.levels)) {
+                opts.onVideoAvailable(function toggle() {
+                    if (currentHls !== hls) return false;
+
+                    var next = (active === player) ? vPlayer : player;
+
+                    active.pause();
+                    active.style.display = "none";
+                    hls.detachMedia();
+
+                    next.style.display = "block";
+                    hls.attachMedia(next);
+                    safePlay(next);
+
+                    active = next;
+                    return active === vPlayer; // 영상 표시 중이면 true
+                });
+            }
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
             if (currentHls !== hls || !data.fatal) return;
             hls.destroy();
             currentHls = null;
-            if (onFatalError) onFatalError();
+            if (opts.onFatalError) opts.onFatalError();
         });
 
         hls.loadSource(url);
@@ -261,11 +280,11 @@ function playStream(url, bora, onFatalError) {
         var active = (bora === "true") ? vPlayer : player;
         active.style.display = "block";
 
-        if (nativeHls && onFatalError) {
+        if (nativeHls && opts.onFatalError) {
             active.onerror = function () {
                 active.onerror = null;
-                onFatalError();
-            };    
+                opts.onFatalError();
+            };
         }
 
         active.src = url;
@@ -386,8 +405,11 @@ function changeSource(opts) {
     };
 
     // [보이는 라디오] 버튼
+    // - BORA_CHANNELS 대상: 보라 전용 URL로 재요청 (기존 방식)
+    // - 그 외 채널: 영상 레벨이 감지되면 아래 playStream 콜백에서 버튼을 켬
+    var isBora = isBoraTarget(stn, ch, city);
     boraBtn.innerText = bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
-    if (isBoraTarget(stn, ch, city)) {
+    if (isBora) {
         boraBtn.style.display = "inline-block";
         boraBtn.onclick = function () {
             changeSource({ stn: stn, ch: ch, city: city, bora: bora === "true" ? "" : "true" });
@@ -445,8 +467,19 @@ function changeSource(opts) {
             return;
         }
 
-        playStream(fetchedUrl, bora, function () {
-            if (mySeq === requestSeq) showError("generic");
+        playStream(fetchedUrl, bora, {
+            onFatalError: function () {
+                if (mySeq === requestSeq) showError("generic");
+            },
+            // BORA_CHANNELS 대상은 기존 방식이므로 자동 감지에서 제외
+            onVideoAvailable: isBora ? null : function (toggle) {
+                if (mySeq !== requestSeq) return;
+                boraBtn.innerText = "보이는 라디오로 전환";
+                boraBtn.style.display = "inline-block";
+                boraBtn.onclick = function () {
+                    boraBtn.innerText = toggle() ? "일반 라디오로 전환" : "보이는 라디오로 전환";
+                };
+            }
         });
     });
 }
