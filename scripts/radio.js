@@ -8,9 +8,6 @@ var currentHls = null;
 // 채널 전환/초기화 시 늦게 도착한 이전 응답을 무시하기 위한 요청 번호
 var requestSeq = 0;
 
-// 영상 감지/전환 콜백이 채널 전환 후 늦게 실행되지 않도록 하는 토큰
-var playToken = 0;
-
 // [보이는 라디오] 버튼을 보여줄 채널 목록
 var BORA_CHANNELS = [
     { stn: "kbs", ch: "1radio" },
@@ -19,8 +16,14 @@ var BORA_CHANNELS = [
     { stn: "kbs", ch: "2fm" },
     { stn: "sbs", ch: "lovefm" },
     { stn: "sbs", ch: "powerfm" },
+    { stn: "sbs", ch: "lovefm", city: "busan" },
+    { stn: "sbs", ch: "powerfm", city: "busan" },
+    { stn: "ebs", ch: "fm" },
     { stn: "cbs", ch: "sfm" },
-    { stn: "ifm", ch: null }
+    { stn: "ifm", ch: null },
+    { stn: "tbs", ch: "fm" },
+    { stn: "tbs", ch: "efm" },
+    { stn: "arirang" }
 ];
 
 
@@ -146,7 +149,7 @@ function isBoraTarget(stn, ch, city) {
     for (var i = 0; i < BORA_CHANNELS.length; i++) {
         var item = BORA_CHANNELS[i];
         if (item.stn !== stn) continue;
-        if ((item.city || "") !== city) continue;
+        if ((item.city || "") !== city) continue;   // 추가
         if (item.ch == null || item.ch === ch) return true;
     }
     return false;
@@ -185,8 +188,6 @@ function safePlay(el) {
 
 // 모든 플레이어 정지 및 초기화
 function stopPlayers() {
-    playToken++; // 진행 중인 영상 감지/전환 콜백 무효화
-
     if (currentHls) {
         currentHls.destroy();
         currentHls = null;
@@ -194,8 +195,6 @@ function stopPlayers() {
     var mediaEls = [document.getElementById("player"), document.getElementById("vPlayer")];
     for (var i = 0; i < mediaEls.length; i++) {
         var el = mediaEls[i];
-        el.onloadedmetadata = null;
-        el.onerror = null;
         el.pause();
         el.removeAttribute("src");
         el.load();
@@ -203,92 +202,15 @@ function stopPlayers() {
     }
 }
 
-// HLS 레벨 목록에 영상이 포함되어 있는지 확인
-function hasVideoLevel(levels) {
-    for (var i = 0; i < levels.length; i++) {
-        var level = levels[i];
-        if (
-            level.width > 0 ||
-            (level.videoCodec && level.videoCodec.indexOf("avc1") !== -1) ||
-            (level.attrs && level.attrs.VIDEO)
-        ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// 네이티브 HLS용 영상 포함 여부 감지 (화면에 붙이지 않는 임시 <video>로 확인)
-// done(hasVideo): 판정이 끝나면 한 번만 호출
-function detectNativeVideo(url, done) {
-    var probe = document.createElement("video");
-    var finished = false;
-    var timer = null;
-
-    function log(msg) {
-        if (window.console && console.log) console.log("[bora-probe] " + msg, "vw=" + probe.videoWidth);
-    }
-
-    function finish(result, reason) {
-        if (finished) return;
-        finished = true;
-        log(reason);
-        clearTimeout(timer);
-        probe.onloadedmetadata = null;
-        probe.onloadeddata = null;
-        probe.oncanplay = null;
-        probe.onresize = null;
-        probe.onerror = null;
-        probe.removeAttribute("src");
-        probe.load();
-        done(result);
-    }
-
-    // 영상이 확인되면 즉시 종료, 아니면 false
-    function hasVideoNow() {
-        var tracks = probe.videoTracks;
-        return probe.videoWidth > 0 || (tracks && tracks.length > 0);
-    }
-
-    probe.muted = true;
-    probe.setAttribute("playsinline", "");
-    probe.preload = "auto";
-
-    probe.onloadedmetadata = function () {
-        if (hasVideoNow()) finish(true, "loadedmetadata: video");
-        else log("loadedmetadata: no video yet");
-    };
-    // 첫 프레임이 준비된 시점에도 영상이 없으면 오디오 단독으로 판정
-    probe.onloadeddata = function () {
-        finish(hasVideoNow(), "loadeddata: " + (hasVideoNow() ? "video" : "audio only"));
-    };
-    probe.onresize = function () {
-        if (hasVideoNow()) finish(true, "resize: video");
-    };
-    probe.onerror = function () {
-        finish(false, "error code=" + (probe.error && probe.error.code));
-    };
-
-    timer = setTimeout(function () { finish(false, "timeout"); }, 8000);
-
-    probe.src = url;
-    safePlay(probe); // 음소거 재생으로 로드를 확실히 시작 (iOS의 preload 무시 대응)
-}
-
 // 스트림 재생 (hls.js / 네이티브 HLS / 일반 스트림 자동 판별)
-// opts.onFatalError: 재생 중 복구 불가능한 오류가 났을 때 호출
-// opts.onVideoAvailable(toggle): 스트림에 영상이 있을 때 호출 (hls.js, 네이티브 HLS 공통)
-//   toggle()을 호출하면 player(오디오) <-> vPlayer(영상)를 전환하고, 영상 표시 중이면 true를 반환
-function playStream(url, bora, opts) {
-    opts = opts || {};
-
+// onFatalError: 재생 중 복구 불가능한 HLS 오류가 났을 때 호출
+function playStream(url, bora, onFatalError) {
     var player = document.getElementById("player");
     var vPlayer = document.getElementById("vPlayer");
-    var myToken = ++playToken;
 
     var isHLS = url.indexOf(".m3u8") !== -1;
 
-    // 네이티브 HLS(iOS Safari, 최신 Chrome 등) 지원 여부 확인
+    // 네이티브 HLS(iOS Safari 등) 지원 여부 확인
     var nativeHls = isHLS && player.canPlayType("application/vnd.apple.mpegurl") !== "";
 
     if (isHLS && !nativeHls && typeof Hls !== "undefined" && Hls.isSupported()) {
@@ -306,86 +228,33 @@ function playStream(url, bora, opts) {
             }
             hls.currentLevel = best;
 
-            // 기본은 오디오, 보라 요청(bora=true)일 때만 영상으로 시작
-            var active = (bora === "true") ? vPlayer : player;
-            active.style.display = "block";
-            hls.attachMedia(active);
-            safePlay(active);
-
-            // 보라 전용 URL이 없는 채널: 영상 레벨이 있으면 같은 스트림으로 전환 가능
-            if (opts.onVideoAvailable && hasVideoLevel(data.levels)) {
-                opts.onVideoAvailable(function toggle() {
-                    if (currentHls !== hls) return false;
-
-                    var next = (active === player) ? vPlayer : player;
-
-                    active.pause();
-                    active.style.display = "none";
-                    hls.detachMedia();
-
-                    next.style.display = "block";
-                    hls.attachMedia(next);
-                    safePlay(next);
-
-                    active = next;
-                    return active === vPlayer; // 영상 표시 중이면 true
-                });
-            }
+            var activePlayer = (bora === "true") ? vPlayer : player;
+            activePlayer.style.display = "block";
+            hls.attachMedia(activePlayer);
+            safePlay(activePlayer);
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
             if (currentHls !== hls || !data.fatal) return;
             hls.destroy();
             currentHls = null;
-            if (opts.onFatalError) opts.onFatalError();
+            if (onFatalError) onFatalError();
         });
 
         hls.loadSource(url);
     } else {
         var active = (bora === "true") ? vPlayer : player;
-
-        // 네이티브 HLS 오류 처리 (전환한 요소에도 동일하게 적용)
-        var attachError = function (el) {
-            if (nativeHls && opts.onFatalError) {
-                el.onerror = function () {
-                    el.onerror = null;
-                    opts.onFatalError();
-                };
-            }
-        };
-
         active.style.display = "block";
-        attachError(active);
+
+        if (nativeHls && onFatalError) {
+            active.onerror = function () {
+                active.onerror = null;
+                onFatalError();
+            };    
+        }
+
         active.src = url;
         safePlay(active);
-
-        // 네이티브 HLS: <audio>는 영상 여부를 알 수 없으므로 임시 <video>로 감지
-        if (nativeHls && bora !== "true" && opts.onVideoAvailable) {
-            detectNativeVideo(url, function (hasVideo) {
-                if (myToken !== playToken || !hasVideo) return;
-
-                opts.onVideoAvailable(function toggle() {
-                    if (myToken !== playToken) return false;
-
-                    var next = (active === player) ? vPlayer : player;
-
-                    // 현재 요소 정리 (라이브 스트림이므로 다시 로드)
-                    active.onerror = null;
-                    active.pause();
-                    active.removeAttribute("src");
-                    active.load();
-                    active.style.display = "none";
-
-                    next.style.display = "block";
-                    attachError(next);
-                    next.src = url;
-                    safePlay(next);
-
-                    active = next;
-                    return active === vPlayer; // 영상 표시 중이면 true
-                });
-            });
-        }
     }
 }
 
@@ -502,11 +371,8 @@ function changeSource(opts) {
     };
 
     // [보이는 라디오] 버튼
-    // - BORA_CHANNELS 대상: 보라 전용 URL로 재요청 (기존 방식)
-    // - 그 외 채널: 영상 레벨이 감지되면 아래 playStream 콜백에서 버튼을 켬
-    var isBora = isBoraTarget(stn, ch, city);
     boraBtn.innerText = bora === "true" ? "일반 라디오로 전환" : "보이는 라디오로 전환";
-    if (isBora) {
+    if (isBoraTarget(stn, ch, city)) {
         boraBtn.style.display = "inline-block";
         boraBtn.onclick = function () {
             changeSource({ stn: stn, ch: ch, city: city, bora: bora === "true" ? "" : "true" });
@@ -564,19 +430,8 @@ function changeSource(opts) {
             return;
         }
 
-        playStream(fetchedUrl, bora, {
-            onFatalError: function () {
-                if (mySeq === requestSeq) showError("generic");
-            },
-            // BORA_CHANNELS 대상은 기존 방식이므로 자동 감지에서 제외
-            onVideoAvailable: isBora ? null : function (toggle) {
-                if (mySeq !== requestSeq) return;
-                boraBtn.innerText = "보이는 라디오로 전환";
-                boraBtn.style.display = "inline-block";
-                boraBtn.onclick = function () {
-                    boraBtn.innerText = toggle() ? "일반 라디오로 전환" : "보이는 라디오로 전환";
-                };
-            }
+        playStream(fetchedUrl, bora, function () {
+            if (mySeq === requestSeq) showError("generic");
         });
     });
 }
