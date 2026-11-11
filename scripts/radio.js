@@ -18,6 +18,7 @@ var BORA_CHANNELS = [
     { stn: "sbs", ch: "powerfm" },
     { stn: "sbs", ch: "lovefm", city: "busan" },
     { stn: "sbs", ch: "powerfm", city: "busan" },
+    { stn: "sbs", ch: "powerfm", city: "ulsan" },
     { stn: "ebs", ch: "fm" },
     { stn: "cbs", ch: "sfm" },
     { stn: "ifm", ch: null },
