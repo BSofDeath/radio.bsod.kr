@@ -218,6 +218,63 @@ function hasVideoLevel(levels) {
     return false;
 }
 
+// 네이티브 HLS용 영상 포함 여부 감지 (화면에 붙이지 않는 임시 <video>로 확인)
+// done(hasVideo): 판정이 끝나면 한 번만 호출
+function detectNativeVideo(url, done) {
+    var probe = document.createElement("video");
+    var finished = false;
+    var timer = null;
+
+    function log(msg) {
+        if (window.console && console.log) console.log("[bora-probe] " + msg, "vw=" + probe.videoWidth);
+    }
+
+    function finish(result, reason) {
+        if (finished) return;
+        finished = true;
+        log(reason);
+        clearTimeout(timer);
+        probe.onloadedmetadata = null;
+        probe.onloadeddata = null;
+        probe.oncanplay = null;
+        probe.onresize = null;
+        probe.onerror = null;
+        probe.removeAttribute("src");
+        probe.load();
+        done(result);
+    }
+
+    // 영상이 확인되면 즉시 종료, 아니면 false
+    function hasVideoNow() {
+        var tracks = probe.videoTracks;
+        return probe.videoWidth > 0 || (tracks && tracks.length > 0);
+    }
+
+    probe.muted = true;
+    probe.setAttribute("playsinline", "");
+    probe.preload = "auto";
+
+    probe.onloadedmetadata = function () {
+        if (hasVideoNow()) finish(true, "loadedmetadata: video");
+        else log("loadedmetadata: no video yet");
+    };
+    // 첫 프레임이 준비된 시점에도 영상이 없으면 오디오 단독으로 판정
+    probe.onloadeddata = function () {
+        finish(hasVideoNow(), "loadeddata: " + (hasVideoNow() ? "video" : "audio only"));
+    };
+    probe.onresize = function () {
+        if (hasVideoNow()) finish(true, "resize: video");
+    };
+    probe.onerror = function () {
+        finish(false, "error code=" + (probe.error && probe.error.code));
+    };
+
+    timer = setTimeout(function () { finish(false, "timeout"); }, 8000);
+
+    probe.src = url;
+    safePlay(probe); // 음소거 재생으로 로드를 확실히 시작 (iOS의 preload 무시 대응)
+}
+
 // 스트림 재생 (hls.js / 네이티브 HLS / 일반 스트림 자동 판별)
 // opts.onFatalError: 재생 중 복구 불가능한 오류가 났을 때 호출
 // opts.onVideoAvailable(toggle): 스트림에 영상이 있을 때 호출 (hls.js, 네이티브 HLS 공통)
@@ -231,7 +288,7 @@ function playStream(url, bora, opts) {
 
     var isHLS = url.indexOf(".m3u8") !== -1;
 
-    // 네이티브 HLS(iOS Safari 등) 지원 여부 확인
+    // 네이티브 HLS(iOS Safari, 최신 Chrome 등) 지원 여부 확인
     var nativeHls = isHLS && player.canPlayType("application/vnd.apple.mpegurl") !== "";
 
     if (isHLS && !nativeHls && typeof Hls !== "undefined" && Hls.isSupported()) {
@@ -302,17 +359,9 @@ function playStream(url, bora, opts) {
         active.src = url;
         safePlay(active);
 
-        // 네이티브 HLS: <audio>는 videoWidth를 알 수 없으므로,
-        // 숨긴 vPlayer로 메타데이터만 읽어 영상 포함 여부를 확인한다.
+        // 네이티브 HLS: <audio>는 영상 여부를 알 수 없으므로 임시 <video>로 감지
         if (nativeHls && bora !== "true" && opts.onVideoAvailable) {
-            vPlayer.preload = "metadata";
-            vPlayer.onloadedmetadata = function () {
-                // 확인이 끝나면 감지용 vPlayer는 바로 비움
-                var hasVideo = vPlayer.videoWidth > 0;
-                vPlayer.onloadedmetadata = null;
-                vPlayer.removeAttribute("src");
-                vPlayer.load();
-
+            detectNativeVideo(url, function (hasVideo) {
                 if (myToken !== playToken || !hasVideo) return;
 
                 opts.onVideoAvailable(function toggle() {
@@ -335,8 +384,7 @@ function playStream(url, bora, opts) {
                     active = next;
                     return active === vPlayer; // 영상 표시 중이면 true
                 });
-            };
-            vPlayer.src = url; // display:none 상태로 메타데이터만 로드
+            });
         }
     }
 }
