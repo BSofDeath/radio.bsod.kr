@@ -29,8 +29,7 @@ export const onRequest = async (context) => {
             status: 200,
             headers: {
                 "content-type": "application/json",
-                "cache-control": "no-store",
-                "Access-Control-Allow-Origin": "*",
+                "cache-control": "no-store"
             },
         });
     }

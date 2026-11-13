@@ -27,8 +27,7 @@ export const onRequest = async (context) => {
         return new Response(null, {
             status: 302,
             headers: {
-                Location: location,
-                "Access-Control-Allow-Origin": "*",
+                Location: location
             },
         });
     }
